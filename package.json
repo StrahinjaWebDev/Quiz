@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "animate.css": "^4.1.1",
+    "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0"
@@ -28,7 +29,6 @@
     "@types/testing-library__react": "^10.2.0",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
-    "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^8.8.0",
