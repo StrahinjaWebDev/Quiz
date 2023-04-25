@@ -1,15 +1,45 @@
-import React from 'react'
-import SignOutBtn from '../components/SignOutBtn'
+import React, {useState} from "react";
+import SignOutBtn from "../components/SignOutBtn";
+import { HiOutlineMail } from 'react-icons/hi'
+import INavbar from '../interfaces/interfaces'
 
-const Navbar = () => {
-  return (
-    <div className='flex justify-center items-center'>
-    <nav className='w-[90vw] h-[10vw] flex items-center justify-between '>
-      <h1 className='text-6xl text-secondary font-semibold'>Quizzy</h1>
-<SignOutBtn label='Sign Out' primary />
-    </nav>
-  </div>
-  )
+
+
+const Navbar = ({showMailIcon}:INavbar) => {
+
+const [seeInvitations, setSeeInvitations] = useState(false)
+
+const handleIvnitations = () => {
+  setSeeInvitations(!seeInvitations)
 }
 
-export default Navbar
+console.log(seeInvitations)
+
+  return (
+<>
+    <div className="flex justify-center items-center mt-8 tablet:mt-0">
+      <nav className="w-[90vw] h-[10vw] flex items-center justify-between ">
+        <h1 className="text-6xl text-secondary font-semibold">Quizzy</h1> 
+        {showMailIcon && <button><HiOutlineMail onClick={handleIvnitations} className="text-secondary" size={'2.4em'} /></button>}
+        <SignOutBtn label="Sign Out" primary />
+      </nav>
+    </div>
+    {seeInvitations === true && <div className="h-[60vh] w-screen absolute mt-8 flex justify-center">
+      <div className="bg-secondary w-[90%] h-[100%] flex justify-center">
+        <div className="flex flex-col mt-6 text-main font-bold w-[100%]">
+          <h1 className="text-3xl">Invintations</h1>
+          <div className="flex flex-row mt-3 w-[100%]">
+            <p className="w-[80%]">User invited you to play Football player quiz</p>
+            <div className="flex gap-3">
+              <button>✓</button>
+              <button>X</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>}
+    </>
+  );
+};
+
+export default Navbar;

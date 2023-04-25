@@ -1,20 +1,16 @@
-import React from 'react'
-import classNames from 'classnames';
-import IButtonProps from '../interfaces/interfaces'
+import React from "react";
+import classNames from "classnames";
+import IButtonProps from "../interfaces/interfaces";
 
-const Button: React.FC<IButtonProps> = ({primary}) => {
+const Button: React.FC<IButtonProps> = ({ primary }) => {
+  const primaryButtonClasses =
+    "bg-secondary hover:opacity-90 text-xl text-white font-semibold px-2 py-1 tablet:py-3 tablet:px-4 rounded-[60px] mt-5 tablet:mt-0";
 
-const primaryButtonClasses = 'bg-secondary hover:opacity-90 text-xl text-white font-semibold py-3 px-4 rounded-[60px]';
-
-const buttonClasses = classNames({
-    [primaryButtonClasses]: primary
+  const buttonClasses = classNames({
+    [primaryButtonClasses]: primary,
   });
 
-  return (
-    <button className={buttonClasses}>
-      Log Out
-    </button>
-  )
-}
+  return <button className={buttonClasses}>Log Out</button>;
+};
 
-export default Button
+export default Button;
