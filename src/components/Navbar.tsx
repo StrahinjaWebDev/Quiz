@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import SignOutBtn from "../components/SignOutBtn";
 import { HiOutlineMail } from "react-icons/hi";
 import INavbar from "../interfaces/interfaces";
+import Button from "./Button";
 
 const Navbar = ({ showMailIcon }: INavbar) => {
   const [seeInvitations, setSeeInvitations] = useState(false);
@@ -22,19 +22,22 @@ const Navbar = ({ showMailIcon }: INavbar) => {
               </button>
             )}
           </h1>
-          <SignOutBtn label="Sign Out" primary />
+          <Button label="Sign Out" secondary />
         </nav>
       </div>
       {seeInvitations === true && (
         <div className="h-[60vh] w-screen absolute mt-8 flex justify-center">
           <div className="bg-secondary w-[90%] h-[100%] flex justify-center">
             <div className="flex flex-col mt-6 text-main font-bold w-[100%]">
+              <button onClick={handleIvnitations} className="absolute ml-5 text-3xl text-red-500 top-[0.6em] right-[3em]">
+                X
+              </button>
               <h1 className="text-3xl flex justify-center desktop:text-5xl">Invitations</h1>
               <div className="flex flex-row mt-12 w-[100%] justify-center">
                 <p className="w-[80%] text-xl">User invited you to play Football player quiz</p>
-                <div className="flex gap-3">
-                  <button className="text-5xl">✓</button>
-                  <button className="text-5xl">X</button>
+                <div className="flex gap-8">
+                  <button className="text-3xl text-red-500">✓</button>
+                  <button className="text-3xl text-green-600">X</button>
                 </div>
               </div>
             </div>

@@ -6,9 +6,10 @@ import Flags from "../images/Flags.png";
 import Footbal from "../images/Football.png";
 import Planet from "../images/Planet.png";
 import Card from "../components/Card";
+import AdminMainComponent from "../components/AdminMainComponent";
 
 const Admin = () => {
-  const [admin, setAdmin] = useState(true);
+  const [admin, setAdmin] = useState(false);
   const [activeBoard, setActiveBoard] = useState("Create");
   const [selectedQuiz, setSelectedQuiz] = useState(false);
 
@@ -43,25 +44,13 @@ const Admin = () => {
             <Input label="search quiz" placeholder="Search quiz..." primary />
           </div>
           {activeBoard === "Create" && (
-            <div className="w-screen h-[50vh] flex justify-center items-center mt-12">
-              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
-                <div className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-                  <p className="text-sm text-main med:text-xl">Football player quiz</p>
-                  <Button label="Edit" primary />
-                  <Button label="Delete" primary />
-                </div>
-              </div>
+            <div className="w-screen h-[50vh] flex justify-center items-center mt-3">
+              <AdminMainComponent text={"Football quiz"} ActivateDeactivateBtn={true} />
             </div>
           )}
           {activeBoard === "Edit" && (
-            <div className="w-screen h-[50vh] flex justify-center items-center mt-12">
-              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
-                <div className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-                  <p className="text-sm text-main med:text-xl">Email@gmail.com</p>
-                  <Button label="Edit" primary />
-                  <Button label="Delete" primary />
-                </div>
-              </div>
+            <div className="w-screen h-[50vh] flex justify-center items-center mt-3">
+              <AdminMainComponent text={"johnjohnson@gmail.com"} />
             </div>
           )}
         </div>

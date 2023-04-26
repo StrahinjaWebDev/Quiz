@@ -18,3 +18,8 @@ export default interface ICard {
   quizDescription?: string;
   imgAlt?: string;
 }
+export default interface IAdminMainComponent {
+  text?: string;
+  ActivateDeactivateBtn?: boolean;
+  onClick?: () => void;
+}
