@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Navbar from "../components/Navbar";
 import Input from "../components/Input";
 import Button from "../components/Button";
@@ -7,10 +7,12 @@ import Footbal from "../images/Football.png";
 import Planet from "../images/Planet.png";
 import Card from "../components/Card";
 import AdminMainComponent from "../components/AdminMainComponent";
+import { appContext } from "../context/AppProvider";
 
-const Admin = () => {
-  const [admin, setAdmin] = useState(false);
+const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
+
+  const { user } = useContext(appContext);
 
   const cardData = {
     cards: [
