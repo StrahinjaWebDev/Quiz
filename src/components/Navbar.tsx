@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
-import INavbar from "../interfaces/interfaces";
 import Button from "./Button";
+
+interface INavbar {
+  showMailIcon?: boolean;
+}
 
 const Navbar = ({ showMailIcon }: INavbar) => {
   const [seeInvitations, setSeeInvitations] = useState(false);
@@ -22,7 +25,6 @@ const Navbar = ({ showMailIcon }: INavbar) => {
               </button>
             )}
           </h1>
-          <Button label="Sign Out" secondary />
         </nav>
       </div>
       {seeInvitations === true && (

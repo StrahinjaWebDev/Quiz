@@ -11,37 +11,62 @@ import AdminMainComponent from "../components/AdminMainComponent";
 const Admin = () => {
   const [admin, setAdmin] = useState(false);
   const [activeBoard, setActiveBoard] = useState("Create");
-  const [selectedQuiz, setSelectedQuiz] = useState(false);
 
-  const handleActiveBoard = () => {
-    setActiveBoard(activeBoard);
+  const cardData = {
+    cards: [
+      {
+        label: "Football",
+        images: Footbal,
+        imgAlt: "Footbal",
+        quizMainText: "Football",
+        quizDescription:
+          "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
+        onClick: "handleCardClick('Football')",
+      },
+      {
+        label: "Flag",
+        images: Flags,
+        imgAlt: "Footbal",
+        quizMainText: "Flag",
+        quizDescription:
+          "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
+      },
+      {
+        label: "planet",
+        images: Planet,
+        imgAlt: "Footbal",
+        quizMainText: "Planet",
+        quizDescription:
+          "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
+      },
+    ],
   };
 
   return (
     <>
-      {admin === true && <Navbar label="Admin Navbar" showMailIcon={false} />}
+      {admin === true && <Navbar showMailIcon={false} />}
       {admin === true && (
         <div className="w-screen h-[90vh] justify-center items-center mt-12">
           <div className="flex justify-evenly items-center desktop:mb-12">
             <button
               className="text-white text-xl"
               style={{ color: activeBoard === "Create" ? "#FFC93C" : "white" }}
-              onClick={(e) => setActiveBoard("Create")}
+              onClick={() => setActiveBoard("Create")}
             >
               Create quiz
             </button>
             <button
               style={{ color: activeBoard === "Edit" ? "#FFC93C" : "white" }}
               className=" text-white text-xl"
-              onClick={(e) => setActiveBoard("Edit")}
+              onClick={() => setActiveBoard("Edit")}
             >
               Edit Users
             </button>
           </div>
           <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-12">
-            {activeBoard === "Create" && <Button label="Create quizz" secondary placeholder="" />}
-            {activeBoard === "Edit" && <Button label="Add users" secondary placeholder="" />}
-            <Input label="search quiz" placeholder="Search quiz..." primary />
+            {activeBoard === "Create" && <Button label="Create quizz" secondary />}
+            {activeBoard === "Edit" && <Button label="Add users" secondary />}
+            <Input placeholder="Search quiz..." primary />
           </div>
           {activeBoard === "Create" && (
             <div className="w-screen h-[50vh] flex justify-center items-center mt-3">
@@ -55,37 +80,20 @@ const Admin = () => {
           )}
         </div>
       )}
-      {admin === false && <Navbar label="User Navbar" showMailIcon={true} />}
+      {admin === false && <Navbar showMailIcon={true} />}
       {admin === false && (
         <div className="w-screen flex justify-center items-center ">
           <div className="w-[80%] h-[100%]  grid grid-cols-3  grid-rows-3 justify-between mt-[4em] desktop:gap-3 tablet:grid-cols-3">
-            <Card
-              label="Football"
-              images={Footbal}
-              imgAlt={"Footbal"}
-              quizMainText={"Football"}
-              quizDescription={
-                "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field."
-              }
-            />
-            <Card
-              label="Flag"
-              images={Flags}
-              imgAlt={"Footbal"}
-              quizMainText={"Flag"}
-              quizDescription={
-                "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field."
-              }
-            />
-            <Card
-              label="planet"
-              images={Planet}
-              imgAlt={"Footbal"}
-              quizMainText={"Planet"}
-              quizDescription={
-                "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field."
-              }
-            />
+            {cardData.cards.map((card, index) => (
+              <Card
+                key={index}
+                label={card.label}
+                images={card.images}
+                imgAlt={card.imgAlt}
+                quizMainText={card.quizMainText}
+                quizDescription={card.quizDescription}
+              />
+            ))}
           </div>
         </div>
       )}

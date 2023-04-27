@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import Button from "./Button";
-import IAdminMainComponent from "../interfaces/interfaces";
+
+interface IAdminMainComponent {
+  text?: string;
+  ActivateDeactivateBtn?: boolean;
+  onClick?: () => void;
+}
 
 const AdminMainComponent = ({ text, ActivateDeactivateBtn }: IAdminMainComponent) => {
   const [labelText, setLabelText] = useState("Active");
