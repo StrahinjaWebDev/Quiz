@@ -23,7 +23,6 @@ const Admin = ({ admin }: any) => {
         quizMainText: "Football",
         quizDescription:
           "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
-        onClick: "handleCardClick('Football')",
       },
       {
         label: "Flag",

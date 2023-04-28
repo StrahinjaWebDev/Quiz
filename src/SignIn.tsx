@@ -35,7 +35,6 @@ const SignIn = () => {
           <h1 className="pl-3 tablet:pl-0 text-main text-4xl pb-12 font-semibold">Number 1. online quiz in the world</h1>
           <Input onChange={(e) => setUsername(e.target.value)} value={username} primary placeholder="Enter username..." />
           <Input onChange={(e) => setPassword(e.target.value)} value={password} primary placeholder="Enter a password..." />
-          {/* {loggedIn === false && <p>Wrong username or password</p>} */}
           <Button onClick={HandleSignIn} label="Sign In" primary />
           <button className="text-main font-semibold">Continue as guest</button>
         </div>
