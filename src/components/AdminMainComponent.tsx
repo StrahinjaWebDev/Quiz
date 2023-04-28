@@ -17,10 +17,6 @@ const AdminMainComponent = ({ text, ActivateDeactivateBtn }: IAdminMainComponent
 
   const centerDiv = "rounded-[60px] w-[20em] h-[2.2em] placeholder:pl-4";
 
-  //   const inputClasses = classNames({
-  //     [primaryInputClasses]: primary,
-  //   });
-
   return (
     <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
       <div className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
