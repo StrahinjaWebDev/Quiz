@@ -1,8 +1,7 @@
-import React, { createContext, useContext } from "react";
-import SignIn from "./SignIn";
+import React, { useContext } from "react";
+import SignIn from "./pages/SignIn";
 import Admin from "./pages/Admin";
-import UserPreQuiz from "./pages/UserPreQuiz";
-import AppProvider, { appContext } from "./context/AppProvider";
+import { appContext } from "./context/AppProvider";
 
 function App() {
   const { user } = useContext(appContext);

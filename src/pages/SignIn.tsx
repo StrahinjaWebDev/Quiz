@@ -1,7 +1,7 @@
-import React, { useEffect, useState, createContext, Dispatch, SetStateAction, useContext } from "react";
-import { appContext } from "./context/AppProvider";
-import Button from "./components/Button";
-import Input from "./components/Input";
+import React, { useState, useContext } from "react";
+import { appContext } from "../context/AppProvider";
+import Button from "../components/Button";
+import Input from "../components/Input";
 import { BsPatchQuestionFill } from "react-icons/bs";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
-  const { user, setUser } = useContext(appContext);
+  const { setUser } = useContext(appContext);
 
   const HandleSignIn = async () => {
     try {

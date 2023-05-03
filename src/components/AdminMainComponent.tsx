@@ -16,11 +16,9 @@ const AdminMainComponent = ({ text, ActivateDeactivateBtn }: IAdminMainComponent
     if (active === false) {
       setLabelText("Deactive");
     } else {
-      setLabelText("Active")
+      setLabelText("Active");
     }
   };
-
-  const centerDiv = "rounded-[60px] w-[20em] h-[2.2em] placeholder:pl-4";
 
   return (
     <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">

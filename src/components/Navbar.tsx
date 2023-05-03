@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
-import Button from "./Button";
 
 interface INavbar {
   showMailIcon?: boolean;

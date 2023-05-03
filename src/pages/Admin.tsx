@@ -4,12 +4,12 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import AdminMainComponent from "../components/AdminMainComponent";
 import { appContext } from "../context/AppProvider";
-import UserPreQuiz from "./UserPreQuiz";
+import UserPreQuiz from "./Quiz";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
 
-  const { cardData, quizes, handleSelectQuiz, selectedCard } = useContext(appContext);
+  const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
   useEffect(() => {
     quizes();

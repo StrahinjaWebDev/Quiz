@@ -5,6 +5,7 @@ interface IInputProps {
   primary?: boolean;
   placeholder?: string;
   value?: string;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
 }
 

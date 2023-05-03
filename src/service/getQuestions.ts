@@ -1,15 +1,13 @@
 import ApiClient from "../hooks/globalFetch";
 import { AxiosResponse, AxiosError } from "axios";
 import { Questions } from "../models/Questions";
-import { useContext } from "react";
-import { appContext } from "../context/AppProvider";
 interface ResponseType<T> {
   success: Boolean;
   data?: T;
   error?: string;
 }
 
-const getQuestions = async (selectedCard): Promise<ResponseType<Questions[]>> => {
+const getQuestions = async (selectedCard: object): Promise<ResponseType<Questions[]>> => {
   try {
     const { data, status }: AxiosResponse<Questions[]> = await ApiClient.get<Questions[]>(`/quizzes/${selectedCard}`);
 
