@@ -9,10 +9,15 @@ interface IAdminMainComponent {
 
 const AdminMainComponent = ({ text, ActivateDeactivateBtn }: IAdminMainComponent) => {
   const [labelText, setLabelText] = useState("Active");
+  const [active, setActive] = useState(false);
 
   const handleActivateClick = () => {
-    setLabelText("Deactivate");
-    //!TODO: make this button change label text onclikck
+    setActive(!active);
+    if (active === false) {
+      setLabelText("Deactive");
+    } else {
+      setLabelText("Active")
+    }
   };
 
   const centerDiv = "rounded-[60px] w-[20em] h-[2.2em] placeholder:pl-4";

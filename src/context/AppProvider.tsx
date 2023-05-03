@@ -8,11 +8,18 @@ export const appContext = React.createContext<{
   setUser?: Dispatch<SetStateAction<User | null>>;
   cardData?: Quizzes[] | undefined;
   quizes?: () => void;
+  selectedCard?: object;
 }>({});
 
 const AppProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | null>(null);
   const [cardData, setCardData] = useState<Quizzes[] | undefined>([]);
+  const [selectedCard, setSelectedCard] = useState<any>(null);
+
+  const handleSelectQuiz = (card: object) => {
+    setSelectedCard(card);
+    return undefined;
+  };
 
   const quizes = async () => {
     const quiz = await getQuizzes();
@@ -28,7 +35,7 @@ const AppProvider = ({ children }: any) => {
     }
   }, []);
 
-  return <appContext.Provider value={{ user, setUser, cardData, quizes }}>{children}</appContext.Provider>;
+  return <appContext.Provider value={{ user, setUser, cardData, quizes, selectedCard, handleSelectQuiz }}>{children}</appContext.Provider>;
 };
 
 export default AppProvider;

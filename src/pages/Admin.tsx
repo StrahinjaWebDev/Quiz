@@ -2,27 +2,19 @@ import React, { useState, useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import Card from "../components/Card";
 import AdminMainComponent from "../components/AdminMainComponent";
 import { appContext } from "../context/AppProvider";
 import UserPreQuiz from "./UserPreQuiz";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
-  const [selectedCard, setSelectedCard] = useState<any>("");
 
-  const { cardData, quizes } = useContext(appContext);
+  const { cardData, quizes, handleSelectQuiz, selectedCard } = useContext(appContext);
 
   useEffect(() => {
     quizes();
   }, []);
 
-  const handleSelectQuiz = (card: object) => {
-    setSelectedCard(card);
-    return undefined;
-  };
-
-  console.log(selectedCard);
   return (
     <>
       {admin === true && <Navbar showMailIcon={false} />}
@@ -64,7 +56,19 @@ const Admin = ({ admin }: any) => {
       {admin === false && <Navbar showMailIcon={true} />}
       {admin === false && (
         <div className="w-screen flex justify-center items-center">
-          {selectedCard ? (
+          {!selectedCard ? (
+            <div className="w-[80%] h-[100%] grid justify-between mt-[4em] desktop:gap-3 grid-cols-3">
+              {cardData?.map((card) => (
+                <button key={card.id} onClick={() => handleSelectQuiz(card)}>
+                  <div className="h-[12em] w-[20em] justify-around items-center bg-secondary rounded-[15px] flex flex-col">
+                    <span>{card.name}</span>
+                    <p>{card.description}</p>
+                    <span>{card.time}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : (
             <UserPreQuiz
               label={selectedCard.label}
               images={selectedCard.images}
@@ -73,19 +77,6 @@ const Admin = ({ admin }: any) => {
               quizDescription={selectedCard.quizDescription}
               selectedCard={selectedCard}
             />
-          ) : (
-            <div className="w-[80%] h-[100%] grid grid-cols-3 grid-rows-3 justify-between mt-[4em] desktop:gap-3 tablet:grid-cols-3">
-              {cardData?.map((card) => (
-                <Card
-                  key={card.id}
-                  label={card.category}
-                  quizTime={card.time}
-                  quizMainText={card.name}
-                  quizDescription={card.description}
-                  onClick={handleSelectQuiz(card)}
-                />
-              ))}
-            </div>
           )}
         </div>
       )}
