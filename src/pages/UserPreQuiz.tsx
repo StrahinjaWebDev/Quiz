@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import Card, { ICard } from "../components/Card";
+import Card from "../components/Card";
 import { getQuizzes } from "../service/getQuizzes";
 
-const UserPreQuiz = ({ selectedCard, start }: any) => {
+const UserPreQuiz = ({ selectedCard }: any) => {
   const quizes = async () => {
     const quiz = await getQuizzes();
     console.log(quiz.data);
@@ -12,16 +12,21 @@ const UserPreQuiz = ({ selectedCard, start }: any) => {
     quizes();
   }, []);
 
+  const handleStartQuiz = () => {};
+  console.log(selectedCard);
+
   return (
-    <>
+    <div>
       <Card
         start={true}
+        key={selectedCard.id}
+        label={selectedCard.category}
         images={selectedCard.images}
-        quizDescription={selectedCard.quizDescription}
-        label={selectedCard.label}
-        quizMainText={selectedCard.quizMainText}
+        quizMainText={selectedCard.name}
+        quizTime={selectedCard.time}
+        quizDescription={selectedCard.description}
       />
-    </>
+    </div>
   );
 };
 

@@ -2,9 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import Flags from "../images/Flags.png";
-import Footbal from "../images/Football.png";
-import Planet from "../images/Planet.png";
 import Card from "../components/Card";
 import AdminMainComponent from "../components/AdminMainComponent";
 import { appContext } from "../context/AppProvider";
@@ -14,39 +11,18 @@ const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
   const [selectedCard, setSelectedCard] = useState<any>("");
 
-  const { user } = useContext(appContext);
+  const { cardData, quizes } = useContext(appContext);
 
-  const cardData = {
-    cards: [
-      {
-        id: "aadsafgdg23149250432",
-        label: "Football",
-        images: Footbal,
-        imgAlt: "Footbal",
-        quizMainText: "Football",
-        quizDescription:
-          "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
-      },
-      {
-        id: "aads312fgdg23149250432",
-        label: "Flag",
-        images: Flags,
-        imgAlt: "Footbal",
-        quizMainText: "Flag",
-        quizDescription:
-          "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
-      },
-      {
-        id: "a21432534d34643safgdg23149250432",
-        label: "planet",
-        images: Planet,
-        imgAlt: "Footbal",
-        quizMainText: "Planet",
-        quizDescription:
-          "In a fast-paced football showdown, two teams went head-to-head, displaying their skills and tactics on the field.",
-      },
-    ],
+  useEffect(() => {
+    quizes();
+  }, []);
+
+  const handleSelectQuiz = (card: object) => {
+    setSelectedCard(card);
+    return undefined;
   };
+
+  console.log(selectedCard);
   return (
     <>
       {admin === true && <Navbar showMailIcon={false} />}
@@ -99,15 +75,14 @@ const Admin = ({ admin }: any) => {
             />
           ) : (
             <div className="w-[80%] h-[100%] grid grid-cols-3 grid-rows-3 justify-between mt-[4em] desktop:gap-3 tablet:grid-cols-3">
-              {cardData.cards.map((card, index) => (
+              {cardData?.map((card) => (
                 <Card
-                  key={index}
-                  label={card.label}
-                  images={card.images}
-                  imgAlt={card.imgAlt}
-                  quizMainText={card.quizMainText}
-                  quizDescription={card.quizDescription}
-                  onClick={setSelectedCard(card)}
+                  key={card.id}
+                  label={card.category}
+                  quizTime={card.time}
+                  quizMainText={card.name}
+                  quizDescription={card.description}
+                  onClick={handleSelectQuiz(card)}
                 />
               ))}
             </div>
