@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { BsLightbulb } from "react-icons/bs";
+import { FaStarHalfAlt } from "react-icons/fa";
 
 const Instruction = () => {
   const [instructions, setInstructions] = useState(false);
@@ -11,7 +13,7 @@ const Instruction = () => {
     <div className="flex flex-row h-[2em] w-[10em] items-center gap-6 mt-4 justify-center">
       <button onClick={handleInstructions}>Instructions</button>
       {instructions === true && (
-        <div className="absolute bg-third top-[10em] flex flex-col w-[18em]   gap-10">
+        <div className="absolute bg-third top-[10em] rounded-lg flex flex-col w-[18em]   gap-10">
           <div className="flex gap-4  justify-center">
             <span>In this quiz you will have 10:30 minutes to finish it, you have two types of help:</span>
             <button className="text-xl w-[2em] h-[2em] " onClick={handleInstructions}>
@@ -19,10 +21,16 @@ const Instruction = () => {
             </button>
           </div>
           <div className="flex">
-            <span>Help - hides two incorrect answers</span>
+            <span>
+              <FaStarHalfAlt />
+              Half/Half - hides two incorrect answers
+            </span>
           </div>
           <div className="flex">
-            <p>Hint - gives you a hint to right answers</p>
+            <p>
+              <BsLightbulb />
+              Hint - gives you a hint to right answers
+            </p>
           </div>
           <div className="flex">
             <p>Time - time left until end of the quiz</p>

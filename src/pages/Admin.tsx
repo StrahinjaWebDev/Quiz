@@ -57,10 +57,10 @@ const Admin = ({ admin }: any) => {
       {admin === false && (
         <div className="w-screen flex justify-center items-center">
           {!selectedCard ? (
-            <div className="w-[80%] h-[100%] grid justify-between mt-[4em] desktop:gap-3 grid-cols-3">
+            <div className="w-[80%] h-[100%] grid justify-between mt-[4em] gap-3 grid-cols-3 ">
               {cardData?.map((card) => (
                 <button key={card.id} onClick={() => handleSelectQuiz(card)}>
-                  <div className="h-[12em] w-[20em] justify-around items-center bg-secondary rounded-[15px] flex flex-col">
+                  <div className="h-[12em] w-[100%] justify-around items-center bg-secondary rounded-[15px] flex flex-col">
                     <span className="text-2xl">{card.name}</span>
                     <p className="text-sm">{card.description}</p>
                     <span>Time to finish the quiz: {card.time}</span>
