@@ -35,7 +35,6 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     const question = await getQuestions(selectedCard.id);
     setQuestion(question.data?.questions);
   };
-  console.log(question);
 
   const handleStartQuiz = () => {
     setStartQuiz(!startQuiz);

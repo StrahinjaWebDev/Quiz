@@ -2,24 +2,55 @@ import React, { useState, useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Input from "../components/Input";
 import Button from "../components/Button";
-import AdminMainComponent from "../components/AdminMainComponent";
 import { appContext } from "../context/AppProvider";
 import UserPreQuiz from "./Quiz";
+import { getQuizzes } from "../service/getQuizzes";
+import { getUsers } from "../service/getUser";
+import { deleteUser } from "../service/deleteUser";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
+  const [labelText, setLabelText] = useState("Active");
+  const [active, setActive] = useState(false);
+  const [quizz, setQuizz] = useState([]);
+  const [user, setUser] = useState([]);
 
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
+  const handleActivateClick = () => {
+    setActive(!active);
+    if (active === false) {
+      setLabelText("Deactive");
+    } else {
+      setLabelText("Active");
+    }
+  };
+  const users = async () => {
+    const user = await getUsers();
+    setUser(user.data);
+  };
+
+  const quiz = async () => {
+    const quiz = await getQuizzes();
+    setQuizz(quiz.data);
+  };
+
   useEffect(() => {
-    quizes?.();
+    quiz?.();
   }, []);
+
+  useEffect(() => {
+    users?.();
+  }, []);
+
+  // console.log(quizz);
+  console.log(user);
 
   return (
     <>
       {admin === true && <Navbar showMailIcon={false} />}
       {admin === true && (
-        <div className="w-screen h-[90vh] justify-center items-center mt-12">
+        <div className="w-screen min-h-[70vh] justify-center items-center mt-1">
           <div className="flex justify-evenly items-center desktop:mb-12">
             <button
               className="text-white text-xl"
@@ -42,13 +73,30 @@ const Admin = ({ admin }: any) => {
             <Input placeholder="Search quiz..." primary />
           </div>
           {activeBoard === "Create" && (
-            <div className="w-screen h-[50vh] flex justify-center items-center mt-3">
-              <AdminMainComponent text={"Football quiz"} ActivateDeactivateBtn={true} />
+            <div className="w-screen h-[50vh] flex justify-center items-center mt-3 overflow-y-auto">
+              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
+                {quizz.map((quiz) => (
+                  <div key={quiz.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
+                    <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
+                    <Button label="Edit" primary />
+                    <Button label="Delete" primary />
+                    <Button label={labelText} onClick={handleActivateClick} primary></Button>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
           {activeBoard === "Edit" && (
-            <div className="w-screen h-[50vh] flex justify-center items-center mt-3">
-              <AdminMainComponent text={"johnjohnson@gmail.com"} />
+            <div className="w-screen h-[50vh] flex justify-center items-center mt-3 overflow-y-auto">
+              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
+                {user.map((user) => (
+                  <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
+                    <p className="text-sm text-main med:text-xl w-[30%]">{user.username}</p>
+                    <Button label="Edit" primary />
+                    {/* <Button label="Delete" primary onClick={deleteUser(user.id)} /> */}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
