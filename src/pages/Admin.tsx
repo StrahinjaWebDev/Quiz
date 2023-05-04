@@ -12,7 +12,7 @@ const Admin = ({ admin }: any) => {
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
   useEffect(() => {
-    quizes();
+    quizes?.();
   }, []);
 
   return (
@@ -61,9 +61,9 @@ const Admin = ({ admin }: any) => {
               {cardData?.map((card) => (
                 <button key={card.id} onClick={() => handleSelectQuiz(card)}>
                   <div className="h-[12em] w-[20em] justify-around items-center bg-secondary rounded-[15px] flex flex-col">
-                    <span>{card.name}</span>
-                    <p>{card.description}</p>
-                    <span>{card.time}</span>
+                    <span className="text-2xl">{card.name}</span>
+                    <p className="text-sm">{card.description}</p>
+                    <span>Time to finish the quiz: {card.time}</span>
                   </div>
                 </button>
               ))}

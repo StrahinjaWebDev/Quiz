@@ -4,4 +4,5 @@ export interface Questions {
   type: string;
   text: string;
   hint: string;
+  answers: [];
 }

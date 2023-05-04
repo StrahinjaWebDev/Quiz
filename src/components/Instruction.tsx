@@ -8,7 +8,7 @@ const Instruction = () => {
   };
 
   return (
-    <div className="flex flex-row h-[2em] w-[10em] items-center gap-6 mt-4">
+    <div className="flex flex-row h-[2em] w-[10em] items-center gap-6 mt-4 justify-center">
       <button onClick={handleInstructions}>Instructions</button>
       {instructions === true && (
         <div className="absolute bg-third top-[10em] flex flex-col w-[18em]   gap-10">
