@@ -11,12 +11,12 @@ import Input from "../components/Input";
 const UserPreQuiz = ({ selectedCard }: any) => {
   const [startQuiz, setStartQuiz] = useState(false);
   const [question, setQuestion] = useState<Questions[]>([]);
-  const [check, setCheck] = useState([]);
-  const [hint, setHint] = useState(null);
+  const [checks, setChecks] = useState<string[] | []>([]);
+  const [hint, setHint] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [showHalfAnswer, setShowHalfAnswer] = useState(false);
-  const [halfAnswer, setHalfAnswer] = useState("");
-  const [selectedQuestionId, setSelectedQuestionId] = useState(null);
+  // const [showHalfAnswer, setShowHalfAnswer] = useState(false);
+  // const [halfAnswer, setHalfAnswer] = useState("");
+  // const [selectedQuestionId, setSelectedQuestionId] = useState(null);
 
   useEffect(() => {
     quizes();
@@ -40,26 +40,26 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     setStartQuiz(!startQuiz);
   };
 
-  const handleShowHint = (questionId) => {
+  const handleShowHint = (questionId: string) => {
     if (!hint) {
       setHint(questionId);
     }
   };
 
-  const handleCheckQuestion = (answer) => {
-    if (check.includes(answer)) {
-      setCheck((prev) => prev.filter((val) => val !== answer));
+  const handleCheckQuestion = (answer: string) => {
+    if (checks.includes(answer)) {
+      setChecks((prev) => prev.filter((val) => val !== answer));
     } else {
-      setCheck((prev) => [...prev, answer]);
+      setChecks((prev) => [...prev, answer]);
     }
   };
 
   const handleInputSubmit = () => {
-    setCheck((prev) => [...prev, inputValue]);
+    setChecks((prev) => [...prev, inputValue]);
     setInputValue("");
   };
 
-  console.log(check);
+  // console.log(checks);
   // console.log(hint);
 
   return (
@@ -107,7 +107,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                           <div className="pl-12 flex" key={answer.id}>
                             {question.type === "multi" && (
                               <button
-                                style={check.includes(answer.text) ? { border: "2px solid red" } : {}}
+                                style={checks.includes(answer.text) ? { border: "2px solid red" } : {}}
                                 onClick={() => handleCheckQuestion(answer.text)}
                                 className="w-[90%] flex text-sm  justify-center items-center border-dotted border-black border-2"
                               >
@@ -130,7 +130,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                             )}
                             {question.type === "single" && (
                               <button
-                                style={check.includes(answer.text) ? { border: "2px solid red" } : {}}
+                                style={checks.includes(answer.text) ? { border: "2px solid red" } : {}}
                                 onClick={() => handleCheckQuestion(answer.text)}
                                 className="w-[90%] flex text-sm justify-center items-center border-dotted border-black border-2"
                               >
