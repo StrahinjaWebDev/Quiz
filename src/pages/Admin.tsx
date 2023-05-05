@@ -7,6 +7,7 @@ import UserPreQuiz from "./Quiz";
 import { getQuizzes } from "../service/getQuizzes";
 import { getUsers } from "../service/getUser";
 import { deleteUser } from "../service/deleteUser";
+import { putUser } from "../service/putUser";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -14,8 +15,48 @@ const Admin = ({ admin }: any) => {
   const [active, setActive] = useState(false);
   const [quizz, setQuizz] = useState([]);
   const [user, setUser] = useState([]);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [openUserEditModal, setOpenUserEditModal] = useState(false);
+  const [password, setPassword] = useState("");
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
+
+  const handleSearchInputChange = (event) => {
+    const searchQuery = event.target.value.toLowerCase();
+    if (searchQuery === "") {
+      setFilteredUsers(user);
+    } else {
+      const filteredUsers = user.filter((user) => user.username.toLowerCase().includes(searchQuery));
+      setFilteredUsers(filteredUsers);
+      setSearchValue(searchQuery);
+    }
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+  console.log(user);
+
+  const handleEditPassword = () => {
+    const userToUpdatePassword = { ...user.find((u) => u.id === selectedUserId), password: password };
+    console.log(userToUpdatePassword);
+    putUser(selectedUserId, userToUpdatePassword).then((response) => {
+      if (response.success) {
+        const updatedUser = user.map((user) => (user.id === selectedUserId ? { ...user, password } : user));
+        setUser(updatedUser);
+        console.log(updatedUser);
+      } else {
+        alert(response.error);
+      }
+    });
+  };
+
+  const handleOpenEditUserEditModal = (userId) => {
+    setSelectedUserId(userId);
+    setOpenUserEditModal(true);
+  };
 
   const handleDeleteUser = async (userId) => {
     await deleteUser(userId);
@@ -51,7 +92,7 @@ const Admin = ({ admin }: any) => {
   }, []);
 
   // console.log(quizz);
-  console.log(user);
+  // console.log(user);
 
   return (
     <>
@@ -82,7 +123,8 @@ const Admin = ({ admin }: any) => {
             )}
             {activeBoard === "Edit" && (
               <div>
-                <Button label="Add users" secondary /> <Input placeholder="Search users.." primary />
+                <Button label="Add users" secondary />{" "}
+                <Input placeholder="Search users.." value={searchValue} onChange={handleSearchInputChange} primary />
               </div>
             )}
           </div>
@@ -103,13 +145,25 @@ const Admin = ({ admin }: any) => {
           {activeBoard === "Edit" && (
             <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
               <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto scroll-smooth">
-                {user.map((user) => (
-                  <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5 ">
-                    <p className="text-sm text-main med:text-xl w-[30%] font-semibold">{user.username}</p>
-                    <Button label="Edit" primary />
+                {filteredUsers.map((user) => (
+                  <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
+                    <p className="text-sm text-main med:text-xl w-[30%]">{user.username}</p>
+                    <Button label="Edit" primary onClick={() => handleOpenEditUserEditModal(user.id)} />
                     <Button label="Delete" primary onClick={() => handleDeleteUser(user.id)} />
                   </div>
                 ))}
+                {openUserEditModal && (
+                  <div className="absolute bg-main h-[20vh] w-[55vw] flex flex-col rounded-xl items-center gap-5 text-secondary">
+                    <p className="font-semibold">Name: {user.find((u) => u.id === selectedUserId)?.username}</p>
+                    <div className="flex justify-around  items-center w-[100%] gap-2">
+                      <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
+                      <button onClick={handleEditPassword}>Change password</button>
+                    </div>
+                    <button className="absolute right-4 text-xl" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
+                      X
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}
