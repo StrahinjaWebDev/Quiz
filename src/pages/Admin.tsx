@@ -8,6 +8,7 @@ import { getQuizzes } from "../service/getQuizzes";
 import { getUsers } from "../service/getUser";
 import { deleteUser } from "../service/deleteUser";
 import { putUser } from "../service/putUser";
+import { v4 as uuidv4 } from "uuid";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -20,8 +21,46 @@ const Admin = ({ admin }: any) => {
   const [password, setPassword] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [openAddUserModal, setOpenAddUserModal] = useState(false);
+  const [addPassword, setAddPassword] = useState("");
+  const [addUsername, setAddUsername] = useState("");
 
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
+
+  
+
+  //! 404 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const handleAddUser = () => {
+    const newUser = {
+      id: uuidv4(),
+      username: addUsername,
+      password: addPassword,
+      admin: false,
+    };
+    console.log(newUser);
+
+    putUser(newUser.id, newUser).then((response) => {
+      if (response.success) {
+        const updatedUsers = [...user, newUser];
+        setUser(updatedUsers);
+        console.log(updatedUsers);
+      } else {
+        alert(response.error);
+      }
+    });
+  };
+
+  const handleAddUsernameChange = (event) => {
+    setAddUsername(event.target.value);
+  };
+
+  const handleAddPasswordChange = (event) => {
+    setAddPassword(event.target.value);
+  };
+
+  const handleOpenAddUserModal = () => {
+    setOpenAddUserModal(!openAddUserModal);
+  };
 
   const handleSearchInputChange = (event) => {
     const searchQuery = event.target.value.toLowerCase();
@@ -123,8 +162,21 @@ const Admin = ({ admin }: any) => {
             )}
             {activeBoard === "Edit" && (
               <div>
-                <Button label="Add users" secondary />{" "}
+                <Button onClick={handleOpenAddUserModal} label="Add users" secondary />
                 <Input placeholder="Search users.." value={searchValue} onChange={handleSearchInputChange} primary />
+              </div>
+            )}
+            {openAddUserModal && (
+              <div className="ml-[5em] absolute bg-main h-[30vh] w-[55vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-white border-2">
+                <p className="font-semibold">Add User {user.find((u) => u.id === selectedUserId)?.username}</p>
+                <div className="flex justify-around  items-center w-[100%] gap-2 flex-col">
+                  <Input onChange={handleAddUsernameChange} value={addUsername} primary placeholder="Input username here..."></Input>
+                  <Input onChange={handleAddPasswordChange} value={addPassword} primary placeholder="Input password here..."></Input>
+                  <button onClick={handleAddUser}>Add user</button>
+                </div>
+                <button className="absolute right-4 text-xl" onClick={() => setOpenAddUserModal(!handleOpenAddUserModal)}>
+                  X
+                </button>
               </div>
             )}
           </div>

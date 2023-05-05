@@ -9,9 +9,8 @@ interface ResponseType<T> {
 }
 
 const putUser = async (userId: string, updatedUser: User): Promise<ResponseType<User[]>> => {
-    try {
+  try {
     const { data, status }: AxiosResponse<User[]> = await ApiClient.put<User[]>(`/users/${userId}`, updatedUser);
-    console.log(data)
     const response: ResponseType<User[]> = { success: true, data };
     return response;
   } catch (error) {
