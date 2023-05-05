@@ -10,6 +10,7 @@ import { deleteUser } from "../service/deleteUser";
 import { putUser } from "../service/putUser";
 import { v4 as uuidv4 } from "uuid";
 import { deleteQuiz } from "../service/deleteQuiz";
+import { getPostUser } from "../service/getPostUser";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -29,33 +30,52 @@ const Admin = ({ admin }: any) => {
 
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
-  const handleQuizSearchInputChange = (event) => {
+  const handleQuizSearchInputChange = (event: string) => {
     setSearchQuizValue(event.target.value);
   };
 
-  const handleAddUsernameChange = (event) => {
-    setAddUsername(event.target.value);
-  };
+  console.log(quizz);
+  // * CREATE QUIZ FUNCTIONALITY //*
 
-  const handleAddPasswordChange = (event) => {
-    setAddPassword(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleOpenAddUserModal = () => {
-    setOpenAddUserModal(!openAddUserModal);
-  };
-
-  const handleDeleteQuiz = async (quizId) => {
+  // * Delete Quiz
+  const handleDeleteQuiz = async (quizId: string) => {
     await deleteQuiz(quizId);
     const updatedUserList = user.filter((q) => q.id !== quizId);
     setQuizz(updatedUserList);
   };
 
-  //! 404 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // * Filtering quizzes for search
+  const quiz = async () => {
+    const quizzes = await getQuizzes();
+    const filteredQuizzes = quizzes.data.filter((q) => q.name.toLowerCase().includes(searchQuizValue.toLowerCase()));
+    setQuizz(filteredQuizzes);
+  };
+
+  // * EDIT USER FUNCIONALITY //*
+
+  // * Onchange for adding username
+  const handleAddUsernameChange = (event: string) => {
+    setAddUsername(event.target.value);
+  };
+
+  // * Onchange for password
+  const handleAddPasswordChange = (event: string) => {
+    setAddPassword(event.target.value);
+  };
+
+  // * Onchange for password
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  // * Open add user modal
+  const handleOpenAddUserModal = () => {
+    setOpenAddUserModal(!openAddUserModal);
+  };
+
+  // * Adding user
+
+  //! 405 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const handleAddUser = () => {
     const newUser = {
       id: uuidv4(),
@@ -63,7 +83,7 @@ const Admin = ({ admin }: any) => {
       password: addPassword,
       admin: false,
     };
-    putUser(newUser.id, newUser).then((response) => {
+    getPostUser(newUser).then((response) => {
       if (response.success) {
         const updatedUsers = [...user, newUser];
         setUser(updatedUsers);
@@ -73,6 +93,7 @@ const Admin = ({ admin }: any) => {
     });
   };
 
+  // * Searching user
   const handleSearchInputChange = (event) => {
     const searchQuery = event.target.value.toLowerCase();
     if (searchQuery === "") {
@@ -84,6 +105,7 @@ const Admin = ({ admin }: any) => {
     }
   };
 
+  // * Editing user password
   const handleEditPassword = () => {
     const userToUpdatePassword = { ...user.find((u) => u.id === selectedUserId), password: password };
     putUser(selectedUserId, userToUpdatePassword).then((response) => {
@@ -96,17 +118,20 @@ const Admin = ({ admin }: any) => {
     });
   };
 
+  // * Modal for editing user
   const handleOpenEditUserEditModal = (userId) => {
     setSelectedUserId(userId);
     setOpenUserEditModal(true);
   };
 
+  // * Function for deleting user
   const handleDeleteUser = async (userId) => {
     await deleteUser(userId);
     const updatedUserList = user.filter((u) => u.id !== userId);
     setUser(updatedUserList);
   };
 
+  // * Onclick label change function
   const handleActivateClick = () => {
     setActive(!active);
     if (active === false) {
@@ -116,24 +141,21 @@ const Admin = ({ admin }: any) => {
     }
   };
 
+  // * Setting users in the state
   const users = async () => {
     const user = await getUsers();
     setUser(user.data);
   };
 
-  const quiz = async () => {
-    const quizzes = await getQuizzes();
-    const filteredQuizzes = quizzes.data.filter((q) => q.name.toLowerCase().includes(searchQuizValue.toLowerCase()));
-    setQuizz(filteredQuizzes);
-  };
-
+  // * Useefect for geting quiz
   useEffect(() => {
     quiz?.();
   }, [searchQuizValue]);
 
+  // * Useefect for geting users
   useEffect(() => {
     users?.();
-  }, []);
+  }, [searchValue]);
 
   return (
     <>

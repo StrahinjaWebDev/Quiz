@@ -26,8 +26,13 @@ const AppProvider = ({ children }: any) => {
 
   const quizes = async () => {
     const quiz = await getQuizzes();
+    console.log(quiz);
     setCardData(quiz.data);
   };
+
+  useEffect(() => {
+    quizes();
+  }, []);
 
   useEffect(() => {
     const user = localStorage.getItem("user");
