@@ -25,7 +25,7 @@ const SignIn = () => {
 
   return (
     <>
-      <div className="w-screen h-[100vh] flex justify-center items-center flex-col gap-10 tablet:gap-12">
+      <div className="w-screen h-[96vh] flex justify-center items-center flex-col gap-10 tablet:gap-12">
         <h1 className=" text-6xl flex gap-6 text-secondary">
           <BsPatchQuestionFill />
           Quizzy
@@ -39,7 +39,6 @@ const SignIn = () => {
           <button className="text-main font-semibold">Continue as guest</button>
         </div>
       </div>
-      )
     </>
   );
 };

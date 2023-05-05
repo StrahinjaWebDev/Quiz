@@ -17,6 +17,12 @@ const Admin = ({ admin }: any) => {
 
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
+  const handleDeleteUser = async (userId) => {
+    await deleteUser(userId);
+    const updatedUserList = user.filter((u) => u.id !== userId);
+    setUser(updatedUserList);
+  };
+
   const handleActivateClick = () => {
     setActive(!active);
     if (active === false) {
@@ -25,6 +31,7 @@ const Admin = ({ admin }: any) => {
       setLabelText("Active");
     }
   };
+
   const users = async () => {
     const user = await getUsers();
     setUser(user.data);
@@ -53,28 +60,35 @@ const Admin = ({ admin }: any) => {
         <div className="w-screen min-h-[70vh] justify-center items-center mt-1">
           <div className="flex justify-evenly items-center desktop:mb-12">
             <button
-              className="text-white text-xl"
-              style={{ color: activeBoard === "Create" ? "#FFC93C" : "white" }}
+              className="text-white  bg-secondary  hover:opacity-90 text-sm tablet:text-xl py-2 px-2 desktop:w-[7em]  rounded-[60px]"
+              style={{ color: activeBoard === "Create" ? "#155263" : "white" }}
               onClick={() => setActiveBoard("Create")}
             >
               Create quiz
             </button>
             <button
-              style={{ color: activeBoard === "Edit" ? "#FFC93C" : "white" }}
-              className="text-white text-xl"
+              style={{ color: activeBoard === "Edit" ? "#155263" : "white" }}
+              className="text-white  bg-secondary  hover:opacity-90 text-sm tablet:text-xl py-2 px-2 desktop:w-[7em]  rounded-[60px]"
               onClick={() => setActiveBoard("Edit")}
             >
               Edit Users
             </button>
           </div>
-          <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-12">
-            {activeBoard === "Create" && <Button label="Create quiz" secondary />}
-            {activeBoard === "Edit" && <Button label="Add users" secondary />}
-            <Input placeholder="Search quiz..." primary />
+          <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-[10em]">
+            {activeBoard === "Create" && (
+              <div>
+                <Button label="Create quiz" secondary /> <Input placeholder="Search quiz.." primary />
+              </div>
+            )}
+            {activeBoard === "Edit" && (
+              <div>
+                <Button label="Add users" secondary /> <Input placeholder="Search users.." primary />
+              </div>
+            )}
           </div>
           {activeBoard === "Create" && (
-            <div className="w-screen h-[50vh] flex justify-center items-center mt-3 overflow-y-auto">
-              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
+            <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
+              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto overflow-hidden">
                 {quizz.map((quiz) => (
                   <div key={quiz.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
                     <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
@@ -87,13 +101,13 @@ const Admin = ({ admin }: any) => {
             </div>
           )}
           {activeBoard === "Edit" && (
-            <div className="w-screen h-[50vh] flex justify-center items-center mt-3 overflow-y-auto">
-              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center">
+            <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
+              <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto scroll-smooth">
                 {user.map((user) => (
-                  <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-                    <p className="text-sm text-main med:text-xl w-[30%]">{user.username}</p>
+                  <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5 ">
+                    <p className="text-sm text-main med:text-xl w-[30%] font-semibold">{user.username}</p>
                     <Button label="Edit" primary />
-                    {/* <Button label="Delete" primary onClick={deleteUser(user.id)} /> */}
+                    <Button label="Delete" primary onClick={() => handleDeleteUser(user.id)} />
                   </div>
                 ))}
               </div>
