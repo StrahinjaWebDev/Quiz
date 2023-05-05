@@ -9,6 +9,7 @@ import { getUsers } from "../service/getUser";
 import { deleteUser } from "../service/deleteUser";
 import { putUser } from "../service/putUser";
 import { v4 as uuidv4 } from "uuid";
+import { deleteQuiz } from "../service/deleteQuiz";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -20,6 +21,7 @@ const Admin = ({ admin }: any) => {
   const [openUserEditModal, setOpenUserEditModal] = useState(false);
   const [password, setPassword] = useState("");
   const [searchValue, setSearchValue] = useState("");
+  const [searchQuizValue, setSearchQuizValue] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [openAddUserModal, setOpenAddUserModal] = useState(false);
   const [addPassword, setAddPassword] = useState("");
@@ -27,27 +29,8 @@ const Admin = ({ admin }: any) => {
 
   const { cardData, quizes, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
-  
-
-  //! 404 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const handleAddUser = () => {
-    const newUser = {
-      id: uuidv4(),
-      username: addUsername,
-      password: addPassword,
-      admin: false,
-    };
-    console.log(newUser);
-
-    putUser(newUser.id, newUser).then((response) => {
-      if (response.success) {
-        const updatedUsers = [...user, newUser];
-        setUser(updatedUsers);
-        console.log(updatedUsers);
-      } else {
-        alert(response.error);
-      }
-    });
+  const handleQuizSearchInputChange = (event) => {
+    setSearchQuizValue(event.target.value);
   };
 
   const handleAddUsernameChange = (event) => {
@@ -58,8 +41,36 @@ const Admin = ({ admin }: any) => {
     setAddPassword(event.target.value);
   };
 
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
   const handleOpenAddUserModal = () => {
     setOpenAddUserModal(!openAddUserModal);
+  };
+
+  const handleDeleteQuiz = async (quizId) => {
+    await deleteQuiz(quizId);
+    const updatedUserList = user.filter((q) => q.id !== quizId);
+    setQuizz(updatedUserList);
+  };
+
+  //! 404 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  const handleAddUser = () => {
+    const newUser = {
+      id: uuidv4(),
+      username: addUsername,
+      password: addPassword,
+      admin: false,
+    };
+    putUser(newUser.id, newUser).then((response) => {
+      if (response.success) {
+        const updatedUsers = [...user, newUser];
+        setUser(updatedUsers);
+      } else {
+        alert(response.error);
+      }
+    });
   };
 
   const handleSearchInputChange = (event) => {
@@ -73,19 +84,12 @@ const Admin = ({ admin }: any) => {
     }
   };
 
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-  console.log(user);
-
   const handleEditPassword = () => {
     const userToUpdatePassword = { ...user.find((u) => u.id === selectedUserId), password: password };
-    console.log(userToUpdatePassword);
     putUser(selectedUserId, userToUpdatePassword).then((response) => {
       if (response.success) {
         const updatedUser = user.map((user) => (user.id === selectedUserId ? { ...user, password } : user));
         setUser(updatedUser);
-        console.log(updatedUser);
       } else {
         alert(response.error);
       }
@@ -118,20 +122,18 @@ const Admin = ({ admin }: any) => {
   };
 
   const quiz = async () => {
-    const quiz = await getQuizzes();
-    setQuizz(quiz.data);
+    const quizzes = await getQuizzes();
+    const filteredQuizzes = quizzes.data.filter((q) => q.name.toLowerCase().includes(searchQuizValue.toLowerCase()));
+    setQuizz(filteredQuizzes);
   };
 
   useEffect(() => {
     quiz?.();
-  }, []);
+  }, [searchQuizValue]);
 
   useEffect(() => {
     users?.();
   }, []);
-
-  // console.log(quizz);
-  // console.log(user);
 
   return (
     <>
@@ -157,7 +159,8 @@ const Admin = ({ admin }: any) => {
           <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-[10em]">
             {activeBoard === "Create" && (
               <div>
-                <Button label="Create quiz" secondary /> <Input placeholder="Search quiz.." primary />
+                <Button label="Create quiz" secondary />{" "}
+                <Input value={searchQuizValue} onChange={handleQuizSearchInputChange} placeholder="Search quiz.." primary />
               </div>
             )}
             {activeBoard === "Edit" && (
@@ -187,7 +190,7 @@ const Admin = ({ admin }: any) => {
                   <div key={quiz.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
                     <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
                     <Button label="Edit" primary />
-                    <Button label="Delete" primary />
+                    <Button onClick={() => handleDeleteQuiz(quiz.id)} label="Delete" primary />
                     <Button label={labelText} onClick={handleActivateClick} primary></Button>
                   </div>
                 ))}
