@@ -5,7 +5,7 @@ import Input from "../components/Input";
 import { BsPatchQuestionFill } from "react-icons/bs";
 import axios from "axios";
 
-const SignIn = () => {
+const SignIn = ({ onGuestClick }) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 
@@ -36,7 +36,9 @@ const SignIn = () => {
           <Input onChange={(e) => setUsername(e.target.value)} value={username} primary placeholder="Enter username..." />
           <Input onChange={(e) => setPassword(e.target.value)} value={password} primary placeholder="Enter a password..." />
           <Button onClick={HandleSignIn} label="Sign In" primary />
-          <button className="text-main font-semibold">Continue as guest</button>
+          <button onClick={onGuestClick} className="text-main font-semibold">
+            Continue as guest
+          </button>
         </div>
       </div>
     </>
