@@ -13,6 +13,13 @@ import { deleteQuiz } from "../service/deleteQuiz";
 import { getPostUser } from "../service/getPostUser";
 import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
+import { putQuiz } from "../service/putQuiz";
+import BoardSelection from "../components/BoardSelection";
+import QuizAddAndSearch from "../components/QuizzAddAndSearch";
+import QuizzAddAndSearch from "../components/QuizzAddAndSearch";
+import UsersAddAndSearch from "../components/UsersAddAndSearch";
+import AddUserModal from "../components/AddUserModal";
+import AreYouSureEditUser from "../components/AreYouSureEditUser";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -24,16 +31,26 @@ const Admin = ({ admin }: any) => {
   const [openUserEditModal, setOpenUserEditModal] = useState(false);
   const [password, setPassword] = useState("");
   const [searchQuizValue, setSearchQuizValue] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState<User[] | []>([]);
   const [openAddUserModal, setOpenAddUserModal] = useState(false);
   const [addPassword, setAddPassword] = useState("");
   const [addUsername, setAddUsername] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchUserValue, setSearchUserValue] = useState("");
+  const [areYouSureModalUserEdit, setAreYouSureModalUserEdit] = useState(false);
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
+  console.log(quizzes);
+
+  const handleAreYouSureUser = () => {
+    setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
+  };
+
   const handleQuizSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuizValue(event.target.value);
+  };
+
+  const handleUserSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchUserValue(event.target.value);
   };
 
   // * CREATE QUIZ FUNCTIONALITY //*
@@ -96,18 +113,12 @@ const Admin = ({ admin }: any) => {
     });
   };
 
-  useEffect(() => {
-    setFilteredUsers(users);
-  }, [searchQuery]);
-
   // * Searching user
-  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value.toLowerCase());
-    if (searchQuery === "") {
-      setFilteredUsers(users);
-    } else {
-      const filteredUsers = users.filter((user) => user.username && user.username.toLowerCase().includes(searchQuery));
-      setFilteredUsers(filteredUsers);
+  const getUser = async () => {
+    const users = await initialGetUsers();
+    if (users.data) {
+      const filteredUsers = users.data.filter((u) => u.username?.toLowerCase().includes(searchUserValue.toLowerCase()));
+      setUsers(filteredUsers);
     }
   };
 
@@ -124,6 +135,7 @@ const Admin = ({ admin }: any) => {
         }
       });
     }
+    setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
   };
 
   // * Modal for editing user
@@ -149,12 +161,6 @@ const Admin = ({ admin }: any) => {
     }
   };
 
-  // * Setting users in the state
-  const getUsers = async () => {
-    const user = await initialGetUsers();
-    if (user.data) setUsers(user.data);
-  };
-
   // * Useefect for geting quiz
   useEffect(() => {
     getQuizzes();
@@ -162,8 +168,12 @@ const Admin = ({ admin }: any) => {
 
   // * Useefect for geting users
   useEffect(() => {
-    getUsers();
-  }, [searchQuery]);
+    getUser();
+  }, [searchQuizValue]);
+
+  useEffect(() => {
+    getUser();
+  }, [searchUserValue]);
 
   return (
     <>
@@ -171,48 +181,29 @@ const Admin = ({ admin }: any) => {
         <>
           <Navbar showMailIcon={false} />
           <div className="w-screen min-h-[70vh] justify-center items-center mt-1">
-            <div className="flex justify-evenly items-center desktop:mb-12">
-              <button
-                className={`text-white  bg-secondary  hover:opacity-90 text-sm tablet:text-xl py-2 px-2 desktop:w-[7em] rounded-[60px] ${
-                  activeBoard === "Create" ? "text-main" : "text-white" //? Sto ne radi?
-                }`}
-                onClick={() => setActiveBoard("Create")}
-              >
-                Create quiz
-              </button>
-              <button
-                style={{ color: activeBoard === "Edit" ? "#155263" : "white" }} //TODO: conditional classNames
-                className="text-white  bg-secondary  hover:opacity-90 text-sm tablet:text-xl py-2 px-2 desktop:w-[7em]  rounded-[60px]"
-                onClick={() => setActiveBoard("Edit")}
-              >
-                Edit Users
-              </button>
-            </div>
+            <BoardSelection activeBoard={activeBoard} setActiveBoard={setActiveBoard} />
             <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-[10em]">
               {activeBoard === "Create" && (
-                <div>
-                  <Button label="Create quiz" secondary />
-                  <Input value={searchQuizValue} onChange={handleQuizSearchInputChange} placeholder="Search quiz.." primary />
-                </div>
+                <QuizzAddAndSearch searchQuizValue={searchQuizValue} handleQuizSearchInputChange={handleQuizSearchInputChange} />
               )}
               {activeBoard === "Edit" && (
-                <div>
-                  <Button onClick={handleOpenAddUserModal} label="Add users" secondary />
-                  <Input placeholder="Search users.." value={searchQuery} onChange={handleSearchInputChange} primary />
-                </div>
+                <UsersAddAndSearch
+                  handleOpenAddUserModal={handleOpenAddUserModal}
+                  handleUserSearchInputChange={handleUserSearchInputChange}
+                  searchUserValue={searchUserValue}
+                />
               )}
               {openAddUserModal && (
-                <div className="ml-[5em] absolute bg-main h-[30vh] w-[55vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-white border-2">
-                  <p className="font-semibold">Add User {users.find((user) => user.id === selectedUserId)?.username}</p>
-                  <div className="flex justify-around  items-center w-[100%] gap-2 flex-col">
-                    <Input onChange={handleAddUsernameChange} value={addUsername} primary placeholder="Input username here..."></Input>
-                    <Input onChange={handleAddPasswordChange} value={addPassword} primary placeholder="Input password here..."></Input>
-                    <button onClick={handleAddUser}>Add user</button>
-                  </div>
-                  <button className="absolute right-4 text-xl" onClick={() => setOpenAddUserModal(!handleOpenAddUserModal)}>
-                    X
-                  </button>
-                </div>
+                <AddUserModal
+                  addPassword={addPassword}
+                  addUsername={addUsername}
+                  handleAddPasswordChange={handleAddPasswordChange}
+                  handleAddUser={handleAddUser}
+                  handleAddUsernameChange={handleAddUsernameChange}
+                  handleOpenAddUserModal={handleOpenAddUserModal}
+                  selectedUserId={selectedUserId}
+                  setOpenAddUserModal={setOpenAddUserModal}
+                />
               )}
             </div>
             {activeBoard === "Create" && (
@@ -232,9 +223,9 @@ const Admin = ({ admin }: any) => {
             {activeBoard === "Edit" && (
               <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
                 <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto scroll-smooth">
-                  {filteredUsers.map((user) => (
+                  {users.map((user) => (
                     <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-                      <p className="text-sm text-main med:text-xl w-[30%]">{user.username}</p>
+                      <p className="text-sm text-main med:text-xl w-[30%] font-serif">{user.username}</p>
                       <Button label="Edit" primary onClick={() => handleOpenEditUserEditModal(user.id)} />
                       <Button label="Delete" primary onClick={() => handleDeleteUser(user.id)} />
                     </div>
@@ -244,7 +235,10 @@ const Admin = ({ admin }: any) => {
                       <p className="font-semibold">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
                       <div className="flex justify-around  items-center w-[100%] gap-2">
                         <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
-                        <button onClick={handleEditPassword}>Change password</button>
+                        <button onClick={handleAreYouSureUser}>Change password</button>{" "}
+                        {areYouSureModalUserEdit && (
+                          <AreYouSureEditUser handleAreYouSureUser={handleAreYouSureUser} handleEditPassword={handleEditPassword} />
+                        )}
                       </div>
                       <button className="absolute right-4 text-xl" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
                         X
