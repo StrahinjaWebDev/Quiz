@@ -39,6 +39,20 @@ const Admin = ({ admin }: any) => {
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
+  //* Is Active quiz button
+  const handleIsActiveQuiz = async (quizId: string) => {
+    const quiz = quizzes.find((q) => q.id === quizId);
+    if (quiz) {
+      const updatedQuiz = { ...quiz, active: !quiz.active };
+      const response = await putQuiz(quizId, updatedQuiz);
+      if (response.success) {
+        setQuizzes(quizzes.map((q) => (q.id === quizId ? updatedQuiz : q)));
+      } else {
+        console.log(response.error);
+      }
+    }
+  };
+
   console.log(quizzes);
 
   const handleAreYouSureUser = () => {
@@ -214,7 +228,7 @@ const Admin = ({ admin }: any) => {
                       <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
                       <Button label="Edit" primary />
                       <Button onClick={() => handleDeleteQuiz(quiz.id)} label="Delete" primary />
-                      <Button label={labelText} onClick={handleActivateClick} primary></Button>
+                      <Button label={labelText} onClick={() => handleIsActiveQuiz(quiz.id)} primary></Button>
                     </div>
                   ))}
                 </div>
