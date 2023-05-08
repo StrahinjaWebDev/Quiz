@@ -59,8 +59,6 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     setInputValue("");
   };
 
-  // console.log(checks);
-  // console.log(hint);
 
   return (
     <>

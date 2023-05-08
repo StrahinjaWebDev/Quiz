@@ -15,16 +15,15 @@ import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
 import { putQuiz } from "../service/putQuiz";
 import BoardSelection from "../components/BoardSelection";
-import QuizAddAndSearch from "../components/QuizzAddAndSearch";
 import QuizzAddAndSearch from "../components/QuizzAddAndSearch";
 import UsersAddAndSearch from "../components/UsersAddAndSearch";
 import AddUserModal from "../components/AddUserModal";
 import AreYouSureEditUser from "../components/AreYouSureEditUser";
+import { Questions } from "../models/Questions";
+import { getQuestions } from "../service/getQuestions";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
-  const [labelText, setLabelText] = useState("Active");
-  const [active, setActive] = useState(false);
   const [quizzes, setQuizzes] = useState<Quiz[] | []>([]);
   const [users, setUsers] = useState<User[] | []>([]);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -36,14 +35,28 @@ const Admin = ({ admin }: any) => {
   const [addUsername, setAddUsername] = useState("");
   const [searchUserValue, setSearchUserValue] = useState("");
   const [areYouSureModalUserEdit, setAreYouSureModalUserEdit] = useState(false);
+  const [openEditQuizModal, setOpenEditQuizModal] = useState(false);
+  const [openQuizModalId, setOpenQuizModalId] = useState("");
+  const [quizQuestions, setQuizQuestions] = useState<Questions[] | []>([]);
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
+  const handleOpenEditQuizModal = async (quizId: string) => {
+    setOpenEditQuizModal(!openEditQuizModal);
+    console.log(quizId);
+    setOpenQuizModalId(quizId);
+    const question = await getQuestions(quizId);
+    if (Array.isArray(question.data.questions)) {
+      setQuizQuestions(question.data.questions);
+    }
+  };
+  console.log(quizQuestions);
+
   //* Is Active quiz button
-  const handleIsActiveQuiz = async (quizId: string) => {
+  const handleIsActiveQuiz = async (quizId: string, isActive: boolean) => {
     const quiz = quizzes.find((q) => q.id === quizId);
     if (quiz) {
-      const updatedQuiz = { ...quiz, active: !quiz.active };
+      const updatedQuiz = { ...quiz, active: !isActive };
       const response = await putQuiz(quizId, updatedQuiz);
       if (response.success) {
         setQuizzes(quizzes.map((q) => (q.id === quizId ? updatedQuiz : q)));
@@ -52,8 +65,6 @@ const Admin = ({ admin }: any) => {
       }
     }
   };
-
-  console.log(quizzes);
 
   const handleAreYouSureUser = () => {
     setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
@@ -165,16 +176,6 @@ const Admin = ({ admin }: any) => {
     setUsers(updatedUserList);
   };
 
-  // * Onclick label change function
-  const handleActivateClick = () => {
-    setActive(!active);
-    if (active === false) {
-      setLabelText("Deactive");
-    } else {
-      setLabelText("Active");
-    }
-  };
-
   // * Useefect for geting quiz
   useEffect(() => {
     getQuizzes();
@@ -188,6 +189,10 @@ const Admin = ({ admin }: any) => {
   useEffect(() => {
     getUser();
   }, [searchUserValue]);
+
+  useEffect(() => {
+    getQuestions(openQuizModalId);
+  }, [openQuizModalId]);
 
   return (
     <>
@@ -226,12 +231,38 @@ const Admin = ({ admin }: any) => {
                   {quizzes.map((quiz) => (
                     <div key={quiz.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
                       <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
-                      <Button label="Edit" primary />
+                      <Button onClick={() => handleOpenEditQuizModal(quiz.id)} label="Edit" primary />
+                      {openEditQuizModal && quiz.id === openQuizModalId && (
+                        <div
+                          className="absolute flex justify-center w-[90vw] h-[60vh] bg-third top-1/2 left-1/2 	transform -translate-x-1/2 -translate-y-1/2 rounded-xl"
+                          key={quiz.id}
+                        >
+                          <div className="w-4/5 mt-7 flex flex-col items-center ">
+                            <div>
+                              <p>Edit: {quiz.name}</p>
+                            </div>
+                            <div>
+                              {quizQuestions.map((question) => (
+                                <div key={question.id}>
+                                  <p>{question.text}</p>
+                                  <p>{question.type}</p>
+                                  <p>{question.hint}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <Button onClick={() => handleDeleteQuiz(quiz.id)} label="Delete" primary />
-                      <Button label={labelText} onClick={() => handleIsActiveQuiz(quiz.id)} primary></Button>
+                      {quiz.active ? (
+                        <Button label="Activate" onClick={() => handleIsActiveQuiz(quiz.id, true)} primary></Button>
+                      ) : (
+                        <Button label="Deactivate" onClick={() => handleIsActiveQuiz(quiz.id, false)} primary></Button>
+                      )}
                     </div>
                   ))}
                 </div>
+                <p></p>
               </div>
             )}
             {activeBoard === "Edit" && (
@@ -249,7 +280,7 @@ const Admin = ({ admin }: any) => {
                       <p className="font-semibold">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
                       <div className="flex justify-around  items-center w-[100%] gap-2">
                         <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
-                        <button onClick={handleAreYouSureUser}>Change password</button>{" "}
+                        <button onClick={handleAreYouSureUser}>Change password</button>
                         {areYouSureModalUserEdit && (
                           <AreYouSureEditUser handleAreYouSureUser={handleAreYouSureUser} handleEditPassword={handleEditPassword} />
                         )}

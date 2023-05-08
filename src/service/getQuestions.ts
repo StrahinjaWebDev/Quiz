@@ -7,11 +7,12 @@ interface ResponseType<T> {
   error?: string;
 }
 
-const getQuestions = async (selectedCard: object): Promise<ResponseType<Questions[]>> => {
+const getQuestions = async (selectedCard: object | string): Promise<ResponseType<Questions[]>> => {
   try {
     const { data, status }: AxiosResponse<Questions[]> = await ApiClient.get<Questions[]>(`/quizzes/${selectedCard}`);
 
     const response: ResponseType<Questions[]> = { success: true, data };
+    
     return response;
   } catch (error) {
     const { message } = error as AxiosError;
