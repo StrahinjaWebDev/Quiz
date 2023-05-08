@@ -38,19 +38,26 @@ const Admin = ({ admin }: any) => {
   const [openEditQuizModal, setOpenEditQuizModal] = useState(false);
   const [openQuizModalId, setOpenQuizModalId] = useState("");
   const [quizQuestions, setQuizQuestions] = useState<Questions[] | []>([]);
+  const [createQuizModal, setCreateQuizModal] = useState(false);
+  const [questionTypeDropdown, setQuestionTypeDropdown] = useState(false);
+  const [selectedQuestionType, setSelectedQuestionType] = useState("");
+  const [answersDropdown, setAnswersDropdown] = useState(false);
+  const [selectedNumberOfAnswers, setSelectedNumberOfAnswers] = useState("");
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
+  const handleOpenCreateQuizModal = () => {
+    setCreateQuizModal(!createQuizModal);
+  };
+
   const handleOpenEditQuizModal = async (quizId: string) => {
     setOpenEditQuizModal(!openEditQuizModal);
-    console.log(quizId);
     setOpenQuizModalId(quizId);
     const question = await getQuestions(quizId);
     if (Array.isArray(question.data.questions)) {
       setQuizQuestions(question.data.questions);
     }
   };
-  console.log(quizQuestions);
 
   //* Is Active quiz button
   const handleIsActiveQuiz = async (quizId: string, isActive: boolean) => {
@@ -203,7 +210,92 @@ const Admin = ({ admin }: any) => {
             <BoardSelection activeBoard={activeBoard} setActiveBoard={setActiveBoard} />
             <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-[10em]">
               {activeBoard === "Create" && (
-                <QuizzAddAndSearch searchQuizValue={searchQuizValue} handleQuizSearchInputChange={handleQuizSearchInputChange} />
+                <div className="flex flex-row gap-12 items-center ml-12">
+                  <Button label="Create quiz" secondary onClick={handleOpenCreateQuizModal} />
+                  <Input value={searchQuizValue} onChange={handleQuizSearchInputChange} placeholder="Search quiz.." primary />
+                  {createQuizModal && (
+                    <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">
+                      <div className="flex flex-col ml-12 mt-8 gap-4">
+                        <p>General Information</p>
+                        <Input primary placeholder="Quiz name..." />
+                        <Input primary placeholder="Quiz time..." />
+                        <Input primary placeholder="Quiz category..." />
+                        <textarea
+                          className="block p-2.5 w-2/3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder="Quiz description..."
+                        ></textarea>
+                      </div>
+                      <div className="flex justify-center mt-10">
+                        <div className="w-[90%] h-full flex flex-col bg-main items-center gap-4">
+                          <div className="text-xl flex gap-4  mt-8">
+                            <p>Questions & Anwers</p>
+                            <button>+</button>
+                          </div>
+                          <button
+                            className=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                            onClick={() => setQuestionTypeDropdown(true)}
+                          >
+                            {selectedQuestionType || "Question type"}
+                          </button>
+                          {questionTypeDropdown && (
+                            <div className="flex flex-col">
+                              <div className="flex gap-3 items-center">
+                                <label htmlFor="radio-input">Single choise</label>
+                                <input type="checkbox" id="radio-input"></input>
+                              </div>
+                              <div className="flex gap-3 items-center">
+                                <label htmlFor="radio-input">Multiple choise</label>
+                                <input type="checkbox" id="radio-input"></input>
+                              </div>
+                              <div className="flex gap-3 items-center">
+                                <label htmlFor="radio-input">Text answer</label>
+                                <input type="checkbox" id="radio-input"></input>
+                              </div>
+                            </div>
+                          )}
+                          <button
+                            className=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+                            onClick={() => setAnswersDropdown(true)}
+                          >
+                            {selectedNumberOfAnswers || "Number of answers"}
+                          </button>
+                          {answersDropdown && (
+                            <ul className="py-2 text-sm text-gray-300 dark:text-gray-200">
+                              <div className="flex flex-col">
+                                <div className="flex gap-3 items-center">
+                                  <label htmlFor="radio-input">1</label>
+                                  <input type="checkbox" id="radio-input"></input>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <label htmlFor="radio-input">2</label>
+                                  <input type="checkbox" id="radio-input"></input>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <label htmlFor="radio-input">3</label>
+                                  <input type="checkbox" id="radio-input"></input>
+                                </div>
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="flex gap-3 items-center">
+                                  <label htmlFor="radio-input">4</label>
+                                  <input type="checkbox" id="radio-input"></input>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <label htmlFor="radio-input">5</label>
+                                  <input type="checkbox" id="radio-input"></input>
+                                </div>
+                                <div className="flex gap-3 items-center">
+                                  <label htmlFor="radio-input">6</label>
+                                  <input type="checkbox" id="radio-input"></input>
+                                </div>
+                              </div>
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
               {activeBoard === "Edit" && (
                 <UsersAddAndSearch
@@ -227,7 +319,7 @@ const Admin = ({ admin }: any) => {
             </div>
             {activeBoard === "Create" && (
               <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
-                <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto overflow-hidden">
+                <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto ">
                   {quizzes.map((quiz) => (
                     <div key={quiz.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
                       <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
@@ -238,15 +330,17 @@ const Admin = ({ admin }: any) => {
                           key={quiz.id}
                         >
                           <div className="w-4/5 mt-7 flex flex-col items-center ">
-                            <div>
-                              <p>Edit: {quiz.name}</p>
+                            <div className="flex gap-4 items-center">
+                              <p className="text-xl font-serif">Edit: {quiz.name}</p>
+                              <Input placeholder="Input new quiz name..." primary />
+                              <Button primary label="Set new name" />
                             </div>
                             <div>
                               {quizQuestions.map((question) => (
                                 <div key={question.id}>
                                   <p>{question.text}</p>
-                                  <p>{question.type}</p>
-                                  <p>{question.hint}</p>
+                                  <p>Question type: {question.type}</p>
+                                  <p>Question hint: {question.hint}</p>
                                 </div>
                               ))}
                             </div>
