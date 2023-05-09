@@ -15,12 +15,15 @@ import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
 import { putQuiz } from "../service/putQuiz";
 import BoardSelection from "../components/BoardSelection";
-import QuizzAddAndSearch from "../components/QuizzAddAndSearch";
+// import QuizzAddAndSearch from "../components/QuizzAddAndSearch";
 import UsersAddAndSearch from "../components/UsersAddAndSearch";
 import AddUserModal from "../components/AddUserModal";
 import AreYouSureEditUser from "../components/AreYouSureEditUser";
-import { Questions } from "../models/Questions";
+import { Question } from "../models/Question";
 import { getQuestions } from "../service/getQuestions";
+import AnswersDropdown from "../components/dropdowns/AnswersDropdown";
+import QuestionTypeDropdown from "../components/dropdowns/QuestionTypeDropdown";
+import CreateQuizModal from "../components/modals/CreateQuizModal";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -37,7 +40,7 @@ const Admin = ({ admin }: any) => {
   const [areYouSureModalUserEdit, setAreYouSureModalUserEdit] = useState(false);
   const [openEditQuizModal, setOpenEditQuizModal] = useState(false);
   const [openQuizModalId, setOpenQuizModalId] = useState("");
-  const [quizQuestions, setQuizQuestions] = useState<Questions[] | []>([]);
+  const [quizQuestions, setQuizQuestions] = useState<Question | null>();
   const [createQuizModal, setCreateQuizModal] = useState(false);
   const [questionTypeDropdown, setQuestionTypeDropdown] = useState(false);
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
@@ -54,9 +57,10 @@ const Admin = ({ admin }: any) => {
     setOpenEditQuizModal(!openEditQuizModal);
     setOpenQuizModalId(quizId);
     const question = await getQuestions(quizId);
-    if (Array.isArray(question.data.questions)) {
-      setQuizQuestions(question.data.questions);
+    if (Array.isArray(question.data?.questions)) {
+      setQuizQuestions(question.data?.questions);
     }
+    console.log(question);
   };
 
   //* Is Active quiz button
@@ -214,86 +218,14 @@ const Admin = ({ admin }: any) => {
                   <Button label="Create quiz" secondary onClick={handleOpenCreateQuizModal} />
                   <Input value={searchQuizValue} onChange={handleQuizSearchInputChange} placeholder="Search quiz.." primary />
                   {createQuizModal && (
-                    <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">
-                      <div className="flex flex-col ml-12 mt-8 gap-4">
-                        <p>General Information</p>
-                        <Input primary placeholder="Quiz name..." />
-                        <Input primary placeholder="Quiz time..." />
-                        <Input primary placeholder="Quiz category..." />
-                        <textarea
-                          className="block p-2.5 w-2/3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          placeholder="Quiz description..."
-                        ></textarea>
-                      </div>
-                      <div className="flex justify-center mt-10">
-                        <div className="w-[90%] h-full flex flex-col bg-main items-center gap-4">
-                          <div className="text-xl flex gap-4  mt-8">
-                            <p>Questions & Anwers</p>
-                            <button>+</button>
-                          </div>
-                          <button
-                            className=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                            onClick={() => setQuestionTypeDropdown(true)}
-                          >
-                            {selectedQuestionType || "Question type"}
-                          </button>
-                          {questionTypeDropdown && (
-                            <div className="flex flex-col">
-                              <div className="flex gap-3 items-center">
-                                <label htmlFor="radio-input">Single choise</label>
-                                <input type="checkbox" id="radio-input"></input>
-                              </div>
-                              <div className="flex gap-3 items-center">
-                                <label htmlFor="radio-input">Multiple choise</label>
-                                <input type="checkbox" id="radio-input"></input>
-                              </div>
-                              <div className="flex gap-3 items-center">
-                                <label htmlFor="radio-input">Text answer</label>
-                                <input type="checkbox" id="radio-input"></input>
-                              </div>
-                            </div>
-                          )}
-                          <button
-                            className=" bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-                            onClick={() => setAnswersDropdown(true)}
-                          >
-                            {selectedNumberOfAnswers || "Number of answers"}
-                          </button>
-                          {answersDropdown && (
-                            <ul className="py-2 text-sm text-gray-300 dark:text-gray-200">
-                              <div className="flex flex-col">
-                                <div className="flex gap-3 items-center">
-                                  <label htmlFor="radio-input">1</label>
-                                  <input type="checkbox" id="radio-input"></input>
-                                </div>
-                                <div className="flex gap-3 items-center">
-                                  <label htmlFor="radio-input">2</label>
-                                  <input type="checkbox" id="radio-input"></input>
-                                </div>
-                                <div className="flex gap-3 items-center">
-                                  <label htmlFor="radio-input">3</label>
-                                  <input type="checkbox" id="radio-input"></input>
-                                </div>
-                              </div>
-                              <div className="flex flex-col">
-                                <div className="flex gap-3 items-center">
-                                  <label htmlFor="radio-input">4</label>
-                                  <input type="checkbox" id="radio-input"></input>
-                                </div>
-                                <div className="flex gap-3 items-center">
-                                  <label htmlFor="radio-input">5</label>
-                                  <input type="checkbox" id="radio-input"></input>
-                                </div>
-                                <div className="flex gap-3 items-center">
-                                  <label htmlFor="radio-input">6</label>
-                                  <input type="checkbox" id="radio-input"></input>
-                                </div>
-                              </div>
-                            </ul>
-                          )}
-                        </div>
-                      </div>
-                    </div>
+                    <CreateQuizModal
+                      answersDropdown={answersDropdown}
+                      questionTypeDropdown={questionTypeDropdown}
+                      selectedNumberOfAnswers={selectedNumberOfAnswers}
+                      selectedQuestionType={selectedQuestionType}
+                      setAnswersDropdown={setAnswersDropdown}
+                      setQuestionTypeDropdown={setQuestionTypeDropdown}
+                    />
                   )}
                 </div>
               )}
@@ -336,13 +268,14 @@ const Admin = ({ admin }: any) => {
                               <Button primary label="Set new name" />
                             </div>
                             <div>
-                              {quizQuestions.map((question) => (
-                                <div key={question.id}>
-                                  <p>{question.text}</p>
-                                  <p>Question type: {question.type}</p>
-                                  <p>Question hint: {question.hint}</p>
-                                </div>
-                              ))}
+                              {quizQuestions &&
+                                quizQuestions.map((question) => (
+                                  <div key={question.id}>
+                                    <p>{question.text}</p>
+                                    <p>Question type: {question.type}</p>
+                                    <p>Question hint: {question.hint}</p>
+                                  </div>
+                                ))}
                             </div>
                           </div>
                         </div>
