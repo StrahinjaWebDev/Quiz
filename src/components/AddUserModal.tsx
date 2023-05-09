@@ -3,6 +3,17 @@ import Input from "./Input";
 import { appContext } from "../context/AppProvider";
 import { User } from "../models/User";
 
+interface Props {
+  handleAddUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectedUserId: string | null;
+  handleAddUser: () => void;
+  addPassword: string;
+  addUsername: string;
+  handleAddPasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setOpenAddUserModal: (isOpen: boolean) => void;
+  handleOpenAddUserModal: (isOpen: boolean) => void;
+}
+
 const AddUserModal = ({
   handleAddUsernameChange,
   addUsername,
@@ -12,7 +23,7 @@ const AddUserModal = ({
   handleAddPasswordChange,
   setOpenAddUserModal,
   handleOpenAddUserModal,
-}) => {
+}: Props) => {
   const [users, setUsers] = useState<User[] | []>([]);
 
   return (

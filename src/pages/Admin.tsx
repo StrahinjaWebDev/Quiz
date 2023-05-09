@@ -6,44 +6,36 @@ import { appContext } from "../context/AppProvider";
 import UserPreQuiz from "./Quiz";
 import { getQuizzes as initialGetQuizzes } from "../service/getQuizzes";
 import { getUsers as initialGetUsers } from "../service/getUser";
-import { deleteUser } from "../service/deleteUser";
-import { putUser } from "../service/putUser";
 import { v4 as uuidv4 } from "uuid";
-import { deleteQuiz } from "../service/deleteQuiz";
 import { getPostUser } from "../service/getPostUser";
 import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
-import { putQuiz } from "../service/putQuiz";
 import BoardSelection from "../components/BoardSelection";
-// import QuizzAddAndSearch from "../components/QuizzAddAndSearch";
 import UsersAddAndSearch from "../components/UsersAddAndSearch";
 import AddUserModal from "../components/AddUserModal";
-import AreYouSureEditUser from "../components/AreYouSureEditUser";
 import { Question } from "../models/Question";
 import { getQuestions } from "../service/getQuestions";
 import CreateQuizModal from "../components/modals/CreateQuizModal";
 import QuizLayout from "../components/QuizLayout";
+import EditBoard from "../components/EditBoard";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
   const [quizzes, setQuizzes] = useState<Quiz[] | []>([]);
   const [users, setUsers] = useState<User[] | []>([]);
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-  const [openUserEditModal, setOpenUserEditModal] = useState(false);
-  const [password, setPassword] = useState("");
+  const [selectedUserId] = useState<string | null>(null);
   const [searchQuizValue, setSearchQuizValue] = useState("");
   const [openAddUserModal, setOpenAddUserModal] = useState(false);
   const [addPassword, setAddPassword] = useState("");
   const [addUsername, setAddUsername] = useState("");
   const [searchUserValue, setSearchUserValue] = useState("");
-  const [areYouSureModalUserEdit, setAreYouSureModalUserEdit] = useState(false);
-  const [openQuizModalId, setOpenQuizModalId] = useState("");
+  const [openQuizModalId] = useState("");
   const [quizQuestions, setQuizQuestions] = useState<Question[] | null>();
   const [createQuizModal, setCreateQuizModal] = useState(false);
   const [questionTypeDropdown, setQuestionTypeDropdown] = useState(false);
-  const [selectedQuestionType, setSelectedQuestionType] = useState("");
+  const [selectedQuestionType] = useState("");
   const [answersDropdown, setAnswersDropdown] = useState(false);
-  const [selectedNumberOfAnswers, setSelectedNumberOfAnswers] = useState("");
+  const [selectedNumberOfAnswers] = useState("");
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
@@ -76,11 +68,6 @@ const Admin = ({ admin }: any) => {
     setAddPassword(event.target.value);
   };
 
-  // * Onchange for password
-  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-  };
-
   // * Open add user modal
   const handleOpenAddUserModal = () => {
     setOpenAddUserModal(!openAddUserModal);
@@ -88,7 +75,7 @@ const Admin = ({ admin }: any) => {
 
   // * Adding user
 
-  //! 405 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //? 405 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const handleAddUser = () => {
     const newUser = {
       id: uuidv4(),
@@ -115,33 +102,8 @@ const Admin = ({ admin }: any) => {
     }
   };
 
-  // * Editing user password
-  const handleEditPassword = async () => {
-    const userToUpdatePassword = { ...users.find((user) => user.id === selectedUserId), password: password };
-    if (selectedUserId !== null && userToUpdatePassword) {
-      putUser(selectedUserId, userToUpdatePassword).then((response) => {
-        if (response.success) {
-          const updatedUser = users.map((user) => (user.id === selectedUserId ? { ...user, password } : user));
-          setUsers(updatedUser);
-        } else {
-          alert(response.error);
-        }
-      });
-    }
-    setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
-  };
-
-  // * Modal for editing user
-  const handleOpenEditUserEditModal = (userId: string) => {
-    setSelectedUserId(userId);
-    setOpenUserEditModal(true);
-  };
-
-  // * Function for deleting user
-  const handleDeleteUser = async (userId: string) => {
-    await deleteUser(userId);
-    const updatedUserList = users.filter((user) => user.id !== userId);
-    setUsers(updatedUserList);
+  const handleAddUserModal = (isOpen: boolean) => {
+    setOpenAddUserModal(isOpen);
   };
 
   // * Useefect for geting quiz
@@ -202,7 +164,7 @@ const Admin = ({ admin }: any) => {
                   handleAddUsernameChange={handleAddUsernameChange}
                   handleOpenAddUserModal={handleOpenAddUserModal}
                   selectedUserId={selectedUserId}
-                  setOpenAddUserModal={setOpenAddUserModal}
+                  setOpenAddUserModal={(state: boolean) => handleAddUserModal(state)}
                 />
               )}
             </div>
@@ -225,37 +187,7 @@ const Admin = ({ admin }: any) => {
                 <p></p>
               </div>
             )}
-            {activeBoard === "Edit" && (
-              <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
-                <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto scroll-smooth">
-                  {users.map((user) => (
-                    <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-                      <p className="text-sm text-main med:text-xl w-[30%] font-serif">{user.username}</p>
-                      <Button label="Edit" primary onClick={() => handleOpenEditUserEditModal(user.id)} />
-                      <Button label="Delete" primary onClick={() => handleDeleteUser(user.id)} />
-                    </div>
-                  ))}
-                  {openUserEditModal && (
-                    <div className="absolute bg-main h-[20vh] w-[55vw] flex flex-col rounded-xl items-center gap-5 text-secondary">
-                      <p className="font-semibold">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
-                      <div className="flex justify-around  items-center w-[100%] gap-2">
-                        <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
-                        <button onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}>Change password</button>
-                        {areYouSureModalUserEdit && (
-                          <AreYouSureEditUser
-                            handleAreYouSureUser={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}
-                            handleEditPassword={handleEditPassword}
-                          />
-                        )}
-                      </div>
-                      <button className="absolute right-4 text-xl" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
-                        X
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
+            {activeBoard === "Edit" && <EditBoard setUsers={setUsers} users={users} />}
           </div>
         </>
       )}
