@@ -1,16 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Input from "./Input";
-import { appContext } from "../context/AppProvider";
 import { User } from "../models/User";
 
 interface Props {
+  // eslint-disable-next-line no-unused-vars
   handleAddUsernameChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   selectedUserId: string | null;
   handleAddUser: () => void;
   addPassword: string;
   addUsername: string;
+  // eslint-disable-next-line no-unused-vars
   handleAddPasswordChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  // eslint-disable-next-line no-unused-vars
   setOpenAddUserModal: (isOpen: boolean) => void;
+  // eslint-disable-next-line no-unused-vars
   handleOpenAddUserModal: (isOpen: boolean) => void;
 }
 
@@ -24,7 +27,7 @@ const AddUserModal = ({
   setOpenAddUserModal,
   handleOpenAddUserModal,
 }: Props) => {
-  const [users, setUsers] = useState<User[] | []>([]);
+  const [users] = useState<User[] | []>([]);
 
   return (
     <div className="ml-[17em] mt-[5em] absolute bg-main min-h-[44vh] w-[50vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-white border-2 ">

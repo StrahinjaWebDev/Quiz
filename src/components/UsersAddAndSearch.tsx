@@ -2,8 +2,14 @@ import React from "react";
 import Button from "./Button";
 import Input from "./Input";
 
-const UsersAddAndSearch = ({ handleOpenAddUserModal, searchUserValue, handleUserSearchInputChange }) => {
-  
+interface Props {
+  handleOpenAddUserModal: () => void;
+  searchUserValue: string;
+  // eslint-disable-next-line no-unused-vars
+  handleUserSearchInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const UsersAddAndSearch = ({ handleOpenAddUserModal, searchUserValue, handleUserSearchInputChange }: Props) => {
   return (
     <div className="flex flex-row gap-12 items-center ml-12">
       <Button onClick={handleOpenAddUserModal} label="Add users" secondary />

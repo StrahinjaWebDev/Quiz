@@ -8,6 +8,7 @@ import { putUser } from "../service/putUser";
 
 interface Props {
   users: User[];
+  // eslint-disable-next-line no-unused-vars
   setUsers: (users: User[]) => void;
 }
 

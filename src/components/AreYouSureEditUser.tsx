@@ -1,6 +1,11 @@
 import React from "react";
 
-const AreYouSureEditUser = ({handleEditPassword,handleAreYouSureUser}) => {
+interface Props {
+  handleEditPassword: () => void;
+  handleAreYouSureUser: () => void;
+}
+
+const AreYouSureEditUser = ({ handleEditPassword, handleAreYouSureUser }: Props) => {
   return (
     <div className="absolute bg-third h-[6em] w-[10em] flex flex-col rounded-2xl right-7 justify-around">
       <p className="font-semibold">Are you sure you want to change it?</p>

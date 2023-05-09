@@ -10,10 +10,12 @@ import { putQuiz } from "../service/putQuiz";
 interface Props {
   id: string;
   name: string;
-  quizQuestions: Question[];
+  quizQuestions: Question[] | null | undefined;
   active: boolean;
   quizzes: IQuiz[];
+  // eslint-disable-next-line no-unused-vars
   setQuizzes: (quizzes: IQuiz[]) => void;
+  // eslint-disable-next-line no-unused-vars
   setQuizQuestions: (questions: Question[]) => void;
 }
 

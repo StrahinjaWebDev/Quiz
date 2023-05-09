@@ -1,6 +1,11 @@
 import React from "react";
 
-const BoardSelection = ({ activeBoard, setActiveBoard }) => {
+interface Props {
+  activeBoard: string;
+  setActiveBoard: (active: string) => void;
+}
+
+const BoardSelection = ({ activeBoard, setActiveBoard }: Props) => {
   return (
     <div className="flex justify-evenly items-center desktop:mb-12">
       <button
