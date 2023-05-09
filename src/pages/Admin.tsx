@@ -21,9 +21,8 @@ import AddUserModal from "../components/AddUserModal";
 import AreYouSureEditUser from "../components/AreYouSureEditUser";
 import { Question } from "../models/Question";
 import { getQuestions } from "../service/getQuestions";
-import AnswersDropdown from "../components/dropdowns/AnswersDropdown";
-import QuestionTypeDropdown from "../components/dropdowns/QuestionTypeDropdown";
 import CreateQuizModal from "../components/modals/CreateQuizModal";
+import QuizLayout from "../components/QuizLayout";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");
@@ -38,9 +37,8 @@ const Admin = ({ admin }: any) => {
   const [addUsername, setAddUsername] = useState("");
   const [searchUserValue, setSearchUserValue] = useState("");
   const [areYouSureModalUserEdit, setAreYouSureModalUserEdit] = useState(false);
-  const [openEditQuizModal, setOpenEditQuizModal] = useState(false);
   const [openQuizModalId, setOpenQuizModalId] = useState("");
-  const [quizQuestions, setQuizQuestions] = useState<Question | null>();
+  const [quizQuestions, setQuizQuestions] = useState<Question[] | null>();
   const [createQuizModal, setCreateQuizModal] = useState(false);
   const [questionTypeDropdown, setQuestionTypeDropdown] = useState(false);
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
@@ -49,53 +47,12 @@ const Admin = ({ admin }: any) => {
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
-  const handleOpenCreateQuizModal = () => {
-    setCreateQuizModal(!createQuizModal);
-  };
-
-  const handleOpenEditQuizModal = async (quizId: string) => {
-    setOpenEditQuizModal(!openEditQuizModal);
-    setOpenQuizModalId(quizId);
-    const question = await getQuestions(quizId);
-    if (Array.isArray(question.data?.questions)) {
-      setQuizQuestions(question.data?.questions);
-    }
-    console.log(question);
-  };
-
-  //* Is Active quiz button
-  const handleIsActiveQuiz = async (quizId: string, isActive: boolean) => {
-    const quiz = quizzes.find((q) => q.id === quizId);
-    if (quiz) {
-      const updatedQuiz = { ...quiz, active: !isActive };
-      const response = await putQuiz(quizId, updatedQuiz);
-      if (response.success) {
-        setQuizzes(quizzes.map((q) => (q.id === quizId ? updatedQuiz : q)));
-      } else {
-        console.log(response.error);
-      }
-    }
-  };
-
-  const handleAreYouSureUser = () => {
-    setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
-  };
-
   const handleQuizSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuizValue(event.target.value);
   };
 
   const handleUserSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchUserValue(event.target.value);
-  };
-
-  // * CREATE QUIZ FUNCTIONALITY //*
-
-  // * Delete Quiz
-  const handleDeleteQuiz = async (quizId: string) => {
-    await deleteQuiz(quizId);
-    const updatedQuizzes = quizzes.filter((quiz) => quiz.id !== quizId);
-    setQuizzes(updatedQuizzes);
   };
 
   // * Filtering quizzes for search
@@ -215,7 +172,7 @@ const Admin = ({ admin }: any) => {
             <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-[10em]">
               {activeBoard === "Create" && (
                 <div className="flex flex-row gap-12 items-center ml-12">
-                  <Button label="Create quiz" secondary onClick={handleOpenCreateQuizModal} />
+                  <Button label="Create quiz" secondary onClick={() => setCreateQuizModal(!createQuizModal)} />
                   <Input value={searchQuizValue} onChange={handleQuizSearchInputChange} placeholder="Search quiz.." primary />
                   {createQuizModal && (
                     <CreateQuizModal
@@ -253,40 +210,16 @@ const Admin = ({ admin }: any) => {
               <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
                 <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto ">
                   {quizzes.map((quiz) => (
-                    <div key={quiz.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-                      <p className="text-sm text-main med:text-xl w-[30%]">{quiz.name}</p>
-                      <Button onClick={() => handleOpenEditQuizModal(quiz.id)} label="Edit" primary />
-                      {openEditQuizModal && quiz.id === openQuizModalId && (
-                        <div
-                          className="absolute flex justify-center w-[90vw] h-[60vh] bg-third top-1/2 left-1/2 	transform -translate-x-1/2 -translate-y-1/2 rounded-xl"
-                          key={quiz.id}
-                        >
-                          <div className="w-4/5 mt-7 flex flex-col items-center ">
-                            <div className="flex gap-4 items-center">
-                              <p className="text-xl font-serif">Edit: {quiz.name}</p>
-                              <Input placeholder="Input new quiz name..." primary />
-                              <Button primary label="Set new name" />
-                            </div>
-                            <div>
-                              {quizQuestions &&
-                                quizQuestions.map((question) => (
-                                  <div key={question.id}>
-                                    <p>{question.text}</p>
-                                    <p>Question type: {question.type}</p>
-                                    <p>Question hint: {question.hint}</p>
-                                  </div>
-                                ))}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      <Button onClick={() => handleDeleteQuiz(quiz.id)} label="Delete" primary />
-                      {quiz.active ? (
-                        <Button label="Activate" onClick={() => handleIsActiveQuiz(quiz.id, true)} primary></Button>
-                      ) : (
-                        <Button label="Deactivate" onClick={() => handleIsActiveQuiz(quiz.id, false)} primary></Button>
-                      )}
-                    </div>
+                    <QuizLayout
+                      active={quiz.active}
+                      id={quiz.id}
+                      name={quiz.name}
+                      quizQuestions={quizQuestions}
+                      quizzes={quizzes}
+                      setQuizQuestions={setQuizQuestions}
+                      setQuizzes={setQuizzes}
+                      key={quiz.id}
+                    />
                   ))}
                 </div>
                 <p></p>
@@ -307,9 +240,12 @@ const Admin = ({ admin }: any) => {
                       <p className="font-semibold">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
                       <div className="flex justify-around  items-center w-[100%] gap-2">
                         <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
-                        <button onClick={handleAreYouSureUser}>Change password</button>
+                        <button onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}>Change password</button>
                         {areYouSureModalUserEdit && (
-                          <AreYouSureEditUser handleAreYouSureUser={handleAreYouSureUser} handleEditPassword={handleEditPassword} />
+                          <AreYouSureEditUser
+                            handleAreYouSureUser={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}
+                            handleEditPassword={handleEditPassword}
+                          />
                         )}
                       </div>
                       <button className="absolute right-4 text-xl" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
