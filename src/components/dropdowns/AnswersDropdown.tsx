@@ -6,13 +6,12 @@ interface Props {
   setQuizQuestion: React.Dispatch<React.SetStateAction<string>>;
   setQuizHint: React.Dispatch<React.SetStateAction<string>>;
   // eslint-disable-next-line no-unused-vars
-  setAnswer: (event: string[]) => void;
+  setAnswer: React.Dispatch<React.SetStateAction<{ value: string; correct: boolean }[]>>;
 }
 
 const AnswersDropdown = ({ selectedType, setQuizQuestion, setAnswer, setQuizHint }: Props) => {
   const [numOfAnswers, setNumOfAnswers] = useState<number>(0);
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
-  const [isCorrect, setisCorrect] = useState(false);
+  const [selectedValues, setSelectedValues] = useState<{ value: string; correct: boolean }[]>([]);
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(e.target.value);

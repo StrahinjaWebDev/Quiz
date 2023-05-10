@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "../Input";
 import AnswersDropdown from "../dropdowns/AnswersDropdown";
 import QuestionTypeDropdown from "../dropdowns/QuestionTypeDropdown";
+import Button from "../Button";
+import { getPostQuizzes } from "../../service/getPostQuestions";
+import { Quiz } from "../../models/Quiz";
+import { getQuizzes as initialGetQuizzes } from "../../service/getQuizzes";
 
 interface Props {
   selectedQuestionType: string;
@@ -14,19 +18,11 @@ interface Props {
   setSelectedQuestionType: (type: string) => void;
 }
 
-const CreateQuizModal = ({
-  selectedQuestionType,
-  questionTypeDropdown,
-  selectedNumberOfAnswers,
-  answersDropdown,
-  setQuestionTypeDropdown,
-  setAnswersDropdown,
-  selectedTypeOfQuestion,
-  setSelectedQuestionType,
-}: Props) => {
+const CreateQuizModal = () => {
   const [numOfQuestions, setNumOfQuestions] = useState(1);
   const [questionType, setQuestionType] = useState("question");
   const [answerType, setAnswerType] = useState("answer");
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
   const [quizName, setQuizName] = useState("");
   const [quizTime, setQuizTime] = useState(0);
   const [quizCategory, setQuizCategory] = useState("");
@@ -34,13 +30,52 @@ const CreateQuizModal = ({
   const [selectedType, setSelectedType] = useState("");
   const [quizQuestion, setQuizQuestion] = useState("");
   const [quizHint, setQuizHint] = useState("");
-  const [answer, setAnswer] = useState<string[]>([]);
+  const [answer, setAnswer] = useState<{ value: string; correct: boolean }[]>([]);
+
+  const handleAddQuiz = () => {
+    const answerObjects = answer.map(({ value, correct }) => ({
+      text: value,
+      correct: correct,
+    }));
+    const newQuiz = {
+      name: quizName,
+      time: quizTime,
+      category: quizCategory,
+      active: true,
+      description: quizDescription,
+      questions: [
+        {
+          type: selectedType,
+          text: quizQuestion,
+          hint: quizHint,
+          answers: answerObjects,
+        },
+      ],
+    };
+    getPostQuizzes(newQuiz).then((response) => {
+      if (response.success) {
+        const updatedQuizzes = [...quizzes, newQuiz];
+        setQuizzes(updatedQuizzes);
+      } else {
+        alert(response.error);
+      }
+    });
+  };
 
   const addQuestion = () => {
     setNumOfQuestions(numOfQuestions + 1);
   };
 
-  console.log(answer);
+  const getQuizzes = async () => {
+    const quizzes = await initialGetQuizzes();
+    if (quizzes.data) {
+      setQuizzes(quizzes.data);
+    }
+  };
+
+  useEffect(() => {
+    getQuizzes();
+  }, []);
 
   return (
     <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">
@@ -87,13 +122,15 @@ const CreateQuizModal = ({
                     setAnswer={setAnswer}
                     setQuizQuestion={setQuizQuestion}
                     setQuizHint={setQuizHint}
-                    answer={answer}
                   />
                 )}
               </div>
             </div>
           ))}
         </div>
+      </div>
+      <div className="w-full h-[4em] flex justify-center items-center pb-3">
+        <Button onClick={handleAddQuiz} primary label="Create quiz" />
       </div>
     </div>
   );

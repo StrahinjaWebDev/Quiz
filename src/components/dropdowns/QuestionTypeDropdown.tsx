@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 interface Props {
   setSelectedType: React.Dispatch<React.SetStateAction<string>>;

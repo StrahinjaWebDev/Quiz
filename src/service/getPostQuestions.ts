@@ -1,15 +1,15 @@
 import ApiClient from "../hooks/globalFetch";
 import { AxiosResponse, AxiosError } from "axios";
-import { Quizzes } from "../models/Quiz";
+import { Quiz, Quizzes } from "../models/Quiz";
 interface ResponseType<T> {
   success: Boolean;
   data?: T;
   error?: string;
 }
 
-const getPostQuizzes = async (): Promise<ResponseType<Quizzes[]>> => {
+const getPostQuizzes = async (newQuiz: Quiz[]): Promise<ResponseType<Quizzes[]>> => {
   try {
-    const { data, status }: AxiosResponse<Quizzes[]> = await ApiClient.post<Quizzes[]>("/quizzes");
+    const { data, status }: AxiosResponse<Quizzes[]> = await ApiClient.post<Quizzes[]>("/quizzes", newQuiz);
 
     const response: ResponseType<Quizzes[]> = { success: true, data };
     return response;
