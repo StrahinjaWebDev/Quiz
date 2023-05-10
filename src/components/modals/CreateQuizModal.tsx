@@ -10,6 +10,8 @@ interface Props {
   answersDropdown: boolean;
   setQuestionTypeDropdown: (isOpen: boolean) => void;
   setAnswersDropdown: (isOpen: boolean) => void;
+  selectedTypeOfQuestion: string;
+  setSelectedQuestionType: (type: string) => void;
 }
 
 const CreateQuizModal = ({
@@ -19,10 +21,16 @@ const CreateQuizModal = ({
   answersDropdown,
   setQuestionTypeDropdown,
   setAnswersDropdown,
+  selectedTypeOfQuestion,
+  setSelectedQuestionType,
 }: Props) => {
   const [numOfQuestions, setNumOfQuestions] = useState(1);
   const [questionType, setQuestionType] = useState("question");
   const [answerType, setAnswerType] = useState("answer");
+  const [selectedType, setSelectedType] = useState("");
+  const [quizName, setQuizName] = useState("");
+  const [quizTime, setQuizTime] = useState(0);
+  const [quizCategory, setQuizCategory] = useState("");
 
   const addQuestion = () => {
     setNumOfQuestions(numOfQuestions + 1);
@@ -59,14 +67,14 @@ const CreateQuizModal = ({
                 >
                   Question type
                 </button>
-                {questionType && <QuestionTypeDropdown />}
+                {questionType && <QuestionTypeDropdown setSelectedType={setSelectedType} selectedType={selectedType} />}
                 <button
                   className="bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
                   onClick={() => setAnswerType("answer")}
                 >
                   Number of answers
                 </button>
-                {answerType && <AnswersDropdown />}
+                {answerType && <AnswersDropdown selectedType={selectedType} />}
               </div>
             </div>
           ))}

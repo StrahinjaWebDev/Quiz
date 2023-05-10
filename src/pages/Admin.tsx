@@ -75,7 +75,6 @@ const Admin = ({ admin }: any) => {
 
   // * Adding user
 
-  //? 405 when adding !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const handleAddUser = () => {
     const newUser = {
       id: uuidv4(),
