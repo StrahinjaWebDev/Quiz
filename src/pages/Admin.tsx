@@ -6,7 +6,6 @@ import { appContext } from "../context/AppProvider";
 import UserPreQuiz from "./Quiz";
 import { getQuizzes as initialGetQuizzes } from "../service/getQuizzes";
 import { getUsers as initialGetUsers } from "../service/getUser";
-import { v4 as uuidv4 } from "uuid";
 import { getPostUser } from "../service/getPostUser";
 import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
@@ -77,7 +76,6 @@ const Admin = ({ admin }: any) => {
 
   const handleAddUser = () => {
     const newUser = {
-      id: uuidv4(),
       username: addUsername,
       password: addPassword,
       admin: false,

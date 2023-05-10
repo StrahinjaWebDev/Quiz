@@ -27,25 +27,32 @@ const CreateQuizModal = ({
   const [numOfQuestions, setNumOfQuestions] = useState(1);
   const [questionType, setQuestionType] = useState("question");
   const [answerType, setAnswerType] = useState("answer");
-  const [selectedType, setSelectedType] = useState("");
   const [quizName, setQuizName] = useState("");
   const [quizTime, setQuizTime] = useState(0);
   const [quizCategory, setQuizCategory] = useState("");
+  const [quizDescription, setQuizDescription] = useState("");
+  const [selectedType, setSelectedType] = useState("");
+  const [quizQuestion, setQuizQuestion] = useState("");
+  const [quizHint, setQuizHint] = useState("");
+  const [answer, setAnswer] = useState<string[]>([]);
 
   const addQuestion = () => {
     setNumOfQuestions(numOfQuestions + 1);
   };
 
+  console.log(answer);
+
   return (
     <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">
       <div className="flex flex-col ml-12 mt-8 gap-4">
         <p>General Information</p>
-        <Input primary placeholder="Quiz name..." />
-        <Input primary placeholder="Quiz time..." />
-        <Input primary placeholder="Quiz category..." />
+        <Input primary placeholder="Quiz name..." onChange={(event) => setQuizName(event.target.value)} />
+        <Input primary placeholder="Quiz time..." onChange={(event) => setQuizTime(event.target.value)} />
+        <Input primary placeholder="Quiz category..." onChange={(event) => setQuizCategory(event.target.value)} />
         <textarea
           className="block p-2.5 w-2/3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Quiz description..."
+          onChange={(event) => setQuizDescription(event.target.value)}
         ></textarea>
       </div>
       <div className="flex justify-center mt-10">
@@ -74,7 +81,15 @@ const CreateQuizModal = ({
                 >
                   Number of answers
                 </button>
-                {answerType && <AnswersDropdown selectedType={selectedType} />}
+                {answerType && (
+                  <AnswersDropdown
+                    selectedType={selectedType}
+                    setAnswer={setAnswer}
+                    setQuizQuestion={setQuizQuestion}
+                    setQuizHint={setQuizHint}
+                    answer={answer}
+                  />
+                )}
               </div>
             </div>
           ))}
