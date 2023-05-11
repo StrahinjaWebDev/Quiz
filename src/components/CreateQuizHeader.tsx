@@ -1,12 +1,14 @@
 import React from "react";
 import Input from "./Input";
 
-// interface Props {
-//   setName: (event: string) => void;
-//   setTime: 
-// }
+interface Props {
+  setName: (event: string) => void;
+  setTime: (event: string) => void;
+  setCategory: (event: string) => void;
+  setDescription: (event: string) => void;
+}
 
-const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription }) => {
+const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription }: Props) => {
   return (
     <div className="flex flex-col ml-12 mt-8 gap-4">
       <p>General Information</p>

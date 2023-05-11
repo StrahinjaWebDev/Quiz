@@ -7,6 +7,8 @@ import QuestionInfo from "../dropdowns/QuestionInfo";
 import { v4 as uuid } from "uuid";
 import QuestionListItems from "../QuestionListItem";
 import Input from "../Input";
+import { Question } from "../../models/Question";
+import { Answers } from "../../models/Answers";
 
 interface Props {
   selectedQuestionType: string;
@@ -30,12 +32,12 @@ const CreateQuizModal = () => {
 
   const [selectedType, setSelectedType] = useState("");
 
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<Question[] | []>([]);
   const [hint, setHint] = useState("");
   const [questionText, setQuestionText] = useState("");
 
   const [numOfAnswers, setNumOfAnswers] = useState<number>(0);
-  const [answers, setAnswers] = useState([]);
+  const [answers, setAnswers] = useState<Answers[] | []>([]);
   const [writtenAnswer, setWrittenAnswer] = useState("");
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,8 +70,53 @@ const CreateQuizModal = () => {
   //? validacija i question dodavanje u niz stejt
 
   const addQuestion = () => {
-    setQuestions((prev) => [...prev]);
+    const newQuestion = {
+      type: selectedType,
+      text: questionText,
+      hint: hint,
+      answers: answers,
+    };
+
+    if (validation(newQuestion)) {
+      setQuestions((prev) => [...prev, newQuestion]);
+      clearAll();
+    }
   };
+
+  const clearAll = () => {
+    let clearInputs = setAnswers([]);
+    setHint("");
+    setSelectedType("");
+    setQuestionText("");
+    return clearInputs;
+  };
+
+  const validation = (question: Question) => {
+    let isValid = true;
+    if (question.text === "" || question.hint === "" || question.type === "" || question.answers.length === 0) {
+      isValid = false;
+    }
+    question.answers.forEach((answer) => {
+      if (answer.text === "") {
+        isValid = false;
+      }
+    });
+
+    let hasCorrectAnswer = question.answers.some((answer) => answer.correct === true);
+    if (!hasCorrectAnswer) isValid = false;
+    return isValid;
+  };
+
+  //? const some = (array, dispatch) => {
+  // ?  for (let i = 0; i < array.length; i++) {
+  //  ?   if (dispatch(array[i])) return true;
+  //   ?}
+  //   ?return false;
+  // ?};
+
+  // ?useEffect(() => {
+  //  ? console.log(some([1, 2, 3, 4], (item) => item === 2));
+  // ?}, []);
 
   useEffect(() => {
     let array = [];
@@ -81,13 +128,10 @@ const CreateQuizModal = () => {
       });
     }
     setAnswers(array);
-    // setAnswers(
-    //   Array(numOfAnswers).map(() => ()
-    // );
   }, [numOfAnswers]);
 
   console.log(answers);
-  console.log(writtenAnswer);
+  console.log(questions);
 
   return (
     <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">

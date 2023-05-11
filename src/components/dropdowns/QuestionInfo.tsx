@@ -17,7 +17,7 @@ const QuestionInfo = ({ setSelectedType, selectedType, setQuestionText, setHint,
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-row gap-4">
         <div className="flex gap-3 items-center justify-between">
           <label htmlFor="radio-input">Single choice</label>
           <input type="radio" name="type" value="Single" checked={selectedType === "Single"} onChange={handleOptionChange}></input>
@@ -35,9 +35,11 @@ const QuestionInfo = ({ setSelectedType, selectedType, setQuestionText, setHint,
       {selectedType !== "Text" && (
         <>
           {[1, 2, 3, 4, 5, 6].map((value) => (
-            <div key={value} className="flex gap-3 items-center">
-              <label>{value}</label>
-              <input type="radio" name="numOfAnswers" value={value} onChange={handleCheckBoxChange} />
+            <div key={value} className="flex flex-row">
+              <div className="flex flex-row gap-3 items-center">
+                <label>{value}</label>
+                <input type="radio" name="numOfAnswers" value={value} onChange={handleCheckBoxChange} />
+              </div>
             </div>
           ))}
         </>

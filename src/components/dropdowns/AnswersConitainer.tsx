@@ -4,10 +4,13 @@ import QuestionListItem from "../QuestionListItem";
 
 interface Props {
   answers: Answers[];
+  selectedType: string;
+  // eslint-disable-next-line no-unused-vars
+  setAnswers: (answers: Answers[]) => void;
 }
 
 const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
-  const setAnswerText = (event, id) => {
+  const setAnswerText = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
     setAnswers((prev) => {
       let newArray = prev.map((answer) => {
         if (answer.id === id) {
@@ -21,9 +24,9 @@ const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
     });
   };
 
-  const setCorrectAnwer = (selection, id) => {
+  const setCorrectAnwer = (selection: boolean, id: string) => {
     setAnswers((prev) => {
-      let newArray = prev.map((answer) => {
+      let newArray = prev.map((answer: Answers) => {
         if (answer.id === id) {
           return {
             ...answer,
@@ -50,8 +53,8 @@ const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
       {answers.map((answer) => (
         <div key={answer.id}>
           <QuestionListItem
-            onTextChange={(event) => setAnswerText(event, answer.id)}
-            onSelectionChage={(selection) => setCorrectAnwer(selection, answer.id)}
+            onTextChange={(event: string) => setAnswerText(event, answer.id)}
+            onSelectionChage={(selection: boolean) => setCorrectAnwer(selection, answer.id)}
             isSelected={answer.correct}
             value={answer.text}
           />
