@@ -102,7 +102,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                       {question.answers.map((answer: Questions) => {
                         return (
                           <div className="pl-12 flex" key={answer.id}>
-                            {question.type === "multi" && (
+                            {question.type.toLowerCase() === "multiple" && (
                               <button
                                 style={checks.includes(answer.text) ? { border: "2px solid red" } : {}}
                                 onClick={() => handleCheckQuestion(answer.text)}
@@ -111,7 +111,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                                 {answer.text}
                               </button>
                             )}
-                            {question.type === "text" && (
+                            {question.type.toLowerCase() === "text" && (
                               <div className="flex">
                                 <Input
                                   primary
@@ -125,7 +125,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                                 </button>
                               </div>
                             )}
-                            {question.type === "single" && (
+                            {question.type.toLowerCase() === "single" && (
                               <button
                                 style={checks.includes(answer.text) ? { border: "2px solid red" } : {}}
                                 onClick={() => handleCheckQuestion(answer.text)}
