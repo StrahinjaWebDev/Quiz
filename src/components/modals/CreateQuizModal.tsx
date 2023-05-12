@@ -9,6 +9,7 @@ import Input from "../Input/Input";
 import { Question } from "../../models/Question";
 import { Answers } from "../../models/Answers";
 import { Quiz } from "../../models/Quiz";
+import AreYouSureModal from "./AreYouSureModal";
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
@@ -33,6 +34,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
   const [writtenAnswer, setWrittenAnswer] = useState("");
   const [addQuestionModal, setAddQuestionModal] = useState(false);
   const [numOfQuestions, setNumOfQuestions] = useState(0);
+  const [addQuizModal, setAddQuizModal] = useState(false);
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(e.target.value);
@@ -51,6 +53,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
     postQuizzes(newQuiz).then((response) => {
       if (response.success) {
         setQuizzes((prev) => [...prev, newQuiz]);
+        setAddQuizModal(!addQuizModal)
       } else {
         alert(response.error);
       }
@@ -68,7 +71,8 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
 
     if (validation(newQuestion)) {
       setQuestions((prev) => [...prev, newQuestion]);
-      setNumOfQuestions((prev) => prev + 1); // increment the number of questions
+      setNumOfQuestions((prev) => prev + 1);
+      setAddQuestionModal(false);
       clearAll();
     }
   };
@@ -135,16 +139,15 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
             <p className="text-secondary text-4xl " onClick={addQuestion}>
               Add question:
             </p>
-            <button className="text-secondary text-4xl " onClick={addQuestion}>
+            <button className="text-secondary text-4xl " onClick={() => setAddQuestionModal(true)}>
               +
             </button>
             {addQuestionModal && (
-              <div className="bg-black absolute w-[20em] h-[20em] top-[90%] left-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                <p className="text-white">You successfully added a new question to your quiz!</p>
-                <Button secondary onClick={() => setAddQuestionModal(!addQuestionModal)}>
-                  Close this modal
-                </Button>
-              </div>
+              <AreYouSureModal
+                message="Are you sure you want to add question?"
+                onConfirm={addQuestion}
+                onCancel={() => setAddQuestionModal(!addQuestionModal)}
+              />
             )}
           </div>
           <div className="flex flex-col gap-2 items-center">
@@ -169,7 +172,14 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
         </div>
       </div>
       <div className="w-full h-[4em] flex justify-center items-center pb-3">
-        <Button onClick={handleAddQuiz} primary label="Create quiz" />
+        <Button onClick={() => setAddQuizModal(!addQuizModal)} primary label="Create quiz" />
+        {addQuizModal && (
+          <AreYouSureModal
+            message="Are you sure you want to add a quiz?"
+            onConfirm={handleAddQuiz}
+            onCancel={() => setAddQuizModal(!addQuizModal)}
+          />
+        )}
       </div>
     </div>
   );

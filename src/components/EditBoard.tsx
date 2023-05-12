@@ -3,8 +3,9 @@ import { User } from "../models/User";
 import Button from "./Button/Button";
 import Input from "./Input/Input";
 import { deleteUser } from "../service/deleteUser";
-import AreYouSureEditUser from "./modals/AreYouSureEditUser";
+import AreYouSureEditUser from "./modals/AreYouSureModal";
 import { putUser } from "../service/putUser";
+import AreYouSureModal from "./modals/AreYouSureModal";
 
 interface Props {
   users: User[];
@@ -66,9 +67,10 @@ const EditBoard = ({ users, setUsers }: Props) => {
               <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
               <button onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}>Change password</button>
               {areYouSureModalUserEdit && (
-                <AreYouSureEditUser
-                  handleAreYouSureUser={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}
-                  handleEditPassword={handleEditPassword}
+                <AreYouSureModal
+                  message="Are you sure you want to edit user password?"
+                  onCancel={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}
+                  onConfirm={handleEditPassword}
                 />
               )}
             </div>
