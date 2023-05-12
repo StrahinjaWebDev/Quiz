@@ -9,22 +9,17 @@ import QuestionListItems from "../QuestionListItem";
 import Input from "../Input";
 import { Question } from "../../models/Question";
 import { Answers } from "../../models/Answers";
+import { Quiz } from "../../models/Quiz";
+import { clear } from "console";
 
 interface Props {
-  selectedQuestionType: string;
-  questionTypeDropdown: boolean;
-  selectedNumberOfAnswers: string;
-  answersDropdown: boolean;
+  createQuizModal: boolean;
   // eslint-disable-next-line no-unused-vars
-  setQuestionTypeDropdown: (isOpen: boolean) => void;
-  // eslint-disable-next-line no-unused-vars
-  setAnswersDropdown: (isOpen: boolean) => void;
-  selectedTypeOfQuestion: string;
-  // eslint-disable-next-line no-unused-vars
-  setSelectedQuestionType: (type: string) => void;
+  setCreateQuizModal: () => void;
 }
 
-const CreateQuizModal = () => {
+const CreateQuizModal = ({ createQuizModal, setCreateQuizModal }: Props) => {
+  const [quizzes, setQuizzes] = useState<Quiz[] | []>([]);
   const [name, setName] = useState("");
   const [time, setTime] = useState(0);
   const [category, setCategory] = useState("");
@@ -47,21 +42,17 @@ const CreateQuizModal = () => {
 
   const handleAddQuiz = () => {
     const newQuiz = {
-      name: quizName,
-      time: quizTime,
-      category: quizCategory,
+      name: name,
+      time: time,
+      category: category,
       active: true,
-      description: quizDescription,
-      questions: [
-        {
-          type: selectedType,
-          text: quizQuestion,
-          hint: quizHint,
-        },
-      ],
+      description: description,
+      questions: questions,
     };
     postQuizzes(newQuiz).then((response) => {
       if (response.success) {
+        setQuizzes((prev) => [...prev, newQuiz]);
+        alert("Added Quiz");
       } else {
         alert(response.error);
       }
@@ -78,17 +69,16 @@ const CreateQuizModal = () => {
     };
 
     if (validation(newQuestion)) {
+      alert("Added question");
       setQuestions((prev) => [...prev, newQuestion]);
-      clearAll();
     }
   };
 
   const clearAll = () => {
-    let clearInputs = setAnswers([]);
+    setAnswers([]);
     setHint("");
     setSelectedType("");
     setQuestionText("");
-    return clearInputs;
   };
 
   const validation = (question: Question) => {
@@ -130,17 +120,29 @@ const CreateQuizModal = () => {
     setAnswers(array);
   }, [numOfAnswers]);
 
-  console.log(answers);
-  console.log(questions);
+  // console.log(answers);
+  // console.log(questions);
 
   return (
     <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">
-      <CreateQuizHeader setCategory={setCategory} setDescription={setDescription} setName={setName} setTime={setTime} />
+      <CreateQuizHeader
+        setCategory={setCategory}
+        setDescription={setDescription}
+        setName={setName}
+        setTime={setTime}
+        createQuizModal={createQuizModal}
+        setCreateQuizModal={setCreateQuizModal}
+      />
       <div className="flex justify-center mt-10">
         <div className="w-[90%] h-full flex flex-col bg-main items-center gap-4">
           <div className="text-xl flex gap-4  mt-8">
-            <p className="text-white">Questions & Anwers</p>
-            <button onClick={addQuestion}>+</button>
+            <p className="text-white text-4xl ">Questions & Anwers</p>
+            <p className="text-secondary text-4xl " onClick={addQuestion}>
+              Add question:
+            </p>
+            <button className="text-secondary text-4xl " onClick={addQuestion}>
+              +
+            </button>
           </div>
           <div className="flex flex-col gap-2">
             <label className="text-gray-500 dark:text-gray-300 font-bold">Question </label>

@@ -2,16 +2,26 @@ import React from "react";
 import Input from "./Input";
 
 interface Props {
+  // eslint-disable-next-line no-unused-vars
   setName: (event: string) => void;
-  setTime: (event: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  setTime: (event: number) => void;
+  // eslint-disable-next-line no-unused-vars
   setCategory: (event: string) => void;
+  // eslint-disable-next-line no-unused-vars
   setDescription: (event: string) => void;
+  setCreateQuizModal: () => void;
 }
 
-const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription }: Props) => {
+const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription, setCreateQuizModal }: Props) => {
   return (
     <div className="flex flex-col ml-12 mt-8 gap-4">
-      <p>General Information</p>
+      <div className="flex justify-between">
+        <p className="text-4xl text-main font-medium">General Information</p>
+        <button className="text-4xl text-red-500 mr-3 mb-4 font-bold" onClick={() => setCreateQuizModal()}>
+          X
+        </button>
+      </div>
       <Input primary placeholder="Quiz name..." onChange={(event) => setName(event.target.value)} />
       <Input primary placeholder="Quiz time..." onChange={(event) => setTime(event.target.value)} />
       <Input primary placeholder="Quiz category..." onChange={(event) => setCategory(event.target.value)} />

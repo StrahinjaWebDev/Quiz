@@ -10,7 +10,7 @@ interface IInputProps {
 }
 
 const Input = ({ primary, placeholder, onChange }: IInputProps) => {
-  const primaryInputClasses = "rounded-[60px] w-[20em] h-[2.2em] placeholder:pl-4";
+  const primaryInputClasses = "rounded-[60px] w-[20em] h-[2.2em] placeholder:pl-4 pl-2";
 
   const inputClasses = classNames({
     [primaryInputClasses]: primary,

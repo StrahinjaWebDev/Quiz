@@ -141,6 +141,8 @@ const Admin = ({ admin }: any) => {
                       selectedQuestionType={selectedQuestionType}
                       setAnswersDropdown={setAnswersDropdown}
                       setQuestionTypeDropdown={setQuestionTypeDropdown}
+                      setCreateQuizModal={setCreateQuizModal}
+                      createQuizModal={createQuizModal}
                     />
                   )}
                 </div>
