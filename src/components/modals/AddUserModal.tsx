@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Input from "./Input";
-import { User } from "../models/User";
+import Input from "../Input/Input";
+import { User } from "../../models/User";
 
 interface Props {
   // eslint-disable-next-line no-unused-vars

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
+import Button from "./Button/Button";
+import Input from "./Input/Input";
 import { Question } from "../models/Question";
 
 interface Props {

@@ -48,18 +48,23 @@ const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
     });
   };
 
+  console.log(answers);
+
   return (
-    <div>
-      {answers.map((answer) => (
-        <div key={answer.id}>
-          <QuestionListItem
-            onTextChange={(event: string) => setAnswerText(event, answer.id)}
-            onSelectionChage={(selection: boolean) => setCorrectAnwer(selection, answer.id)}
-            isSelected={answer.correct}
-            value={answer.text}
-          />
-        </div>
-      ))}
+    <div className="flex flex-col items-center">
+      <h1 className="text-3xl text-white">Answers</h1>
+      <div className="grid grid-cols-2 gap-12">
+        {answers.map((answer) => (
+          <div key={answer.id}>
+            <QuestionListItem
+              onTextChange={(event: string) => setAnswerText(event, answer.id)}
+              onSelectionChage={(selection: boolean) => setCorrectAnwer(selection, answer.id)}
+              isSelected={answer.correct}
+              value={answer.text}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

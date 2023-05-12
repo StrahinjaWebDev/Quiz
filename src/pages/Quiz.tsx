@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { getQuizzes } from "../service/getQuizzes";
-import Button from "../components/Button";
+import Button from "../components/Button/Button";
 import Instruction from "../components/Instruction";
 import { getQuestions } from "../service/getQuestions";
 import { BsLightbulb } from "react-icons/bs";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { Questions } from "../models/Question";
-import Input from "../components/Input";
+import Input from "../components/Input/Input";
 
 const UserPreQuiz = ({ selectedCard }: any) => {
   const [startQuiz, setStartQuiz] = useState(false);

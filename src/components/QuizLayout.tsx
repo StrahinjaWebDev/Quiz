@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Question } from "../models/Question";
-import Button from "./Button";
+import Button from "./Button/Button";
 import { deleteQuiz } from "../service/deleteQuiz";
-import Input from "./Input";
+import Input from "./Input/Input";
 import { Quiz as IQuiz } from "../models/Quiz";
 import { getQuestions } from "../service/getQuestions";
 import { putQuiz } from "../service/putQuiz";

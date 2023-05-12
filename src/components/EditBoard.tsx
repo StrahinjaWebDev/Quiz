@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { User } from "../models/User";
-import Button from "./Button";
-import Input from "./Input";
+import Button from "./Button/Button";
+import Input from "./Input/Input";
 import { deleteUser } from "../service/deleteUser";
-import AreYouSureEditUser from "./AreYouSureEditUser";
+import AreYouSureEditUser from "./modals/AreYouSureEditUser";
 import { putUser } from "../service/putUser";
 
 interface Props {

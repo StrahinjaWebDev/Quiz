@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import Input from "../components/Input/Input";
+import Button from "../components/Button/Button";
 import { appContext } from "../context/AppProvider";
 import UserPreQuiz from "./Quiz";
 import { getQuizzes as initialGetQuizzes } from "../service/getQuizzes";
@@ -11,7 +11,7 @@ import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
 import BoardSelection from "../components/BoardSelection";
 import UsersAddAndSearch from "../components/UsersAddAndSearch";
-import AddUserModal from "../components/AddUserModal";
+import AddUserModal from "../components/modals/AddUserModal";
 import { Question } from "../models/Question";
 import { getQuestions } from "../service/getQuestions";
 import CreateQuizModal from "../components/modals/CreateQuizModal";

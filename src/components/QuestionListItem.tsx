@@ -1,21 +1,23 @@
 import React from "react";
-import Input from "./Input";
+import Input from "./Input/Input";
 
 interface Props {
   value: string;
   isSelected: boolean;
   // eslint-disable-next-line no-unused-vars
-  onTextChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onTextChange: (text: string) => void;
   // eslint-disable-next-line no-unused-vars
   onSelectionChage: (isSelected: boolean) => void;
 }
-
 const QuestionListItem = ({ value, isSelected, onTextChange, onSelectionChage }: Props) => {
   return (
-    <div className="flex ">
+    <div className="flex mt-5 items-center gap-2">
       <Input value={value} onChange={onTextChange} primary placeholder=" Type your answer here..." />
-      <div className="w-[20px] h-[20px] bg-white flex justify-center items-center" onClick={() => onSelectionChage(!isSelected)}>
-        {isSelected && <div className="w-[10px] h-[10px] bg-black"></div>}
+      <div
+        className="w-[10px] h-[10px] bg-white flex justify-center items-center rounded-full"
+        onClick={() => onSelectionChage(!isSelected)}
+      >
+        {isSelected && <div className="w-[7px] h-[7px] bg-black rounded-full"></div>}
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ interface ResponseType<T> {
 const patchActivateQuiz = async (quizId: string, updatedQuiz: Quiz): Promise<ResponseType<Quiz[]>> => {
   try {
     // eslint-disable-next-line no-unused-vars
-    const { data, status }: AxiosResponse<Quiz[]> = await ApiClient.put<Quiz[]>(`/quizzes/activate/${quizId}`, updatedQuiz);
+    const { data, status }: AxiosResponse<Quiz[]> = await ApiClient.patch<Quiz[]>(`/quizzes/activate/${quizId}`, updatedQuiz);
     const response: ResponseType<Quiz[]> = { success: true, data };
     return response;
   } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { appContext } from "../context/AppProvider";
-import Button from "../components/Button";
-import Input from "../components/Input";
+import Button from "../components/Button/Button";
+import Input from "../components/Input/Input";
 import { BsPatchQuestionFill } from "react-icons/bs";
 import axios from "axios";
 
