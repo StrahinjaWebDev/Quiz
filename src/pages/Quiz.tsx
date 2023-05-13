@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import Button from "../components/Button/Button";
-import Instruction from "../components/Instruction";
+import Button from "../components/ReusableComponents/Button";
+import Instruction from "../components/QuizPage/Instruction";
 import { getQuestions } from "../service/getQuestions";
 import { BsLightbulb } from "react-icons/bs";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { Question } from "../models/Question";
-import Input from "../components/Input/Input";
+import Input from "../components/ReusableComponents/Input";
 import { appContext } from "../context/AppProvider";
 import { Answers } from "../models/Answers";
+import { endQuiz } from "../service/endQuiz";
 
 const UserPreQuiz = ({ selectedCard }: any) => {
   const [startQuiz, setStartQuiz] = useState(false);
@@ -50,6 +51,16 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const handleInputSubmit = () => {
     setCheckedAnswers((prev) => [...prev, inputValue]);
     setInputValue("");
+  };
+
+  const handleEndQuiz = () => {
+    endQuiz(checkedAnswers).then((res) => {
+      if (res.success) {
+        alert("sent");
+      } else {
+        alert(res.error);
+      }
+    });
   };
 
   useEffect(() => {
@@ -145,6 +156,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                 </div>
               </div>
             ))}
+          <Button secondary label="End quiz" onClick={handleEndQuiz} />
         </div>
       )}
     </>

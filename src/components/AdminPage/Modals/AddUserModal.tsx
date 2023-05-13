@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Input from "../Input/Input";
-import { User } from "../../models/User";
-import AreYouSureModal from "./AreYouSureModal";
+import Input from "../../ReusableComponents/Input";
+import { User } from "../../../models/User";
+import AreYouSureModal from "../../ReusableComponents/AreYouSureModal";
 
 interface Props {
   // eslint-disable-next-line no-unused-vars

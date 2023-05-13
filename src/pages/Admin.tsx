@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import Input from "../components/Input/Input";
-import Button from "../components/Button/Button";
+import Navbar from "../components/ReusableComponents/Navbar";
+import Input from "../components/ReusableComponents/Input";
+import Button from "../components/ReusableComponents/Button";
 import { appContext } from "../context/AppProvider";
 import UserPreQuiz from "./Quiz";
 import { getQuizzes as initialGetQuizzes } from "../service/getQuizzes";
@@ -9,14 +9,14 @@ import { getUsers as initialGetUsers } from "../service/getUser";
 import { getPostUser } from "../service/getPostUser";
 import { User } from "../models/User";
 import { Quiz } from "../models/Quiz";
-import BoardSelection from "../components/BoardSelection";
-import UsersAddAndSearch from "../components/UsersAddAndSearch";
-import AddUserModal from "../components/modals/AddUserModal";
+import BoardSelection from "../components/AdminPage/BoardSelection";
+import UsersAddAndSearch from "../components/AdminPage/UsersAddAndSearch";
+import AddUserModal from "../components/AdminPage/Modals/AddUserModal";
 import { Question } from "../models/Question";
 import { getQuestions } from "../service/getQuestions";
-import CreateQuizModal from "../components/modals/CreateQuizModal";
-import QuizLayout from "../components/QuizLayout";
-import EditBoard from "../components/EditBoard";
+import CreateQuizModal from "../components/AdminPage/Modals/CreateQuizModal";
+import QuizLayout from "../components/AdminPage/QuizLayout";
+import EditBoard from "../components/AdminPage/EditBoard";
 
 const Admin = ({ admin }: any) => {
   const [activeBoard, setActiveBoard] = useState("Create");

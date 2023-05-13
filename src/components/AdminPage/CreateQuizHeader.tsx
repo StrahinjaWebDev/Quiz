@@ -1,5 +1,5 @@
 import React from "react";
-import Input from "./Input/Input";
+import Input from "../ReusableComponents/Input";
 
 interface Props {
   // eslint-disable-next-line no-unused-vars

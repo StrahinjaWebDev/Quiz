@@ -1,6 +1,6 @@
 import React from "react";
 import { Answers } from "../../models/Answers";
-import QuestionListItem from "../QuestionListItem";
+import QuestionListItem from "./QuestionListItem";
 
 interface Props {
   answers: Answers[];

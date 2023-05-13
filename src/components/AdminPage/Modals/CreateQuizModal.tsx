@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import Button from "../Button/Button";
-import { postQuizzes } from "../../service/postQuestions";
+import Button from "../../ReusableComponents/Button";
+import { postQuizzes } from "../../../service/postQuestions";
 import CreateQuizHeader from "../CreateQuizHeader";
-import AnswersConitainer from "../dropdowns/AnswersConitainer";
-import QuestionInfo from "../dropdowns/QuestionInfo";
+import AnswersConitainer from "../AnswersConitainer";
+import QuestionInfo from "../QuestionInfo";
 import { v4 as uuid } from "uuid";
-import Input from "../Input/Input";
-import { Question } from "../../models/Question";
-import { Answers } from "../../models/Answers";
-import { Quiz } from "../../models/Quiz";
-import AreYouSureModal from "./AreYouSureModal";
+import Input from "../../ReusableComponents/Input";
+import { Question } from "../../../models/Question";
+import { Answers } from "../../../models/Answers";
+import { Quiz } from "../../../models/Quiz";
+import AreYouSureModal from "../../ReusableComponents/AreYouSureModal";
 
 interface Props {
   // eslint-disable-next-line no-unused-vars

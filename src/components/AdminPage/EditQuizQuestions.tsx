@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Button from "./Button/Button";
-import Input from "./Input/Input";
-import { Question } from "../models/Question";
+import Button from "../ReusableComponents/Button";
+import Input from "../ReusableComponents/Input";
+import { Question } from "../../models/Question";
 
 interface Props {
   quizQuestions: Question[];

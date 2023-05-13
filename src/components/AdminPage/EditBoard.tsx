@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { User } from "../models/User";
-import Button from "./Button/Button";
-import Input from "./Input/Input";
-import { deleteUser } from "../service/deleteUser";
-import { putUser } from "../service/putUser";
-import AreYouSureModal from "./modals/AreYouSureModal";
+import { User } from "../../models/User";
+import Button from "../ReusableComponents/Button";
+import Input from "../ReusableComponents/Input";
+import { deleteUser } from "../../service/deleteUser";
+import { putUser } from "../../service/putUser";
+import AreYouSureModal from "../ReusableComponents/AreYouSureModal";
 
 interface Props {
   users: User[];

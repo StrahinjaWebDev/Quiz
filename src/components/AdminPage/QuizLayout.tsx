@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Question } from "../models/Question";
-import Button from "./Button/Button";
-import { deleteQuiz } from "../service/deleteQuiz";
-import Input from "./Input/Input";
-import { Quiz as IQuiz } from "../models/Quiz";
-import { getQuestions } from "../service/getQuestions";
-import { putQuiz } from "../service/putQuiz";
+import { Question } from "../../models/Question";
+import Button from "../ReusableComponents/Button";
+import { deleteQuiz } from "../../service/deleteQuiz";
+import Input from "../ReusableComponents/Input";
+import { Quiz as IQuiz } from "../../models/Quiz";
+import { getQuestions } from "../../service/getQuestions";
+import { putQuiz } from "../../service/putQuiz";
 import EditQuizQuestions from "./EditQuizQuestions";
-import { patchActivateQuiz } from "../service/patchActivateQuiz";
+import { patchActivateQuiz } from "../../service/patchActivateQuiz";
 
 interface Props {
   id: string;
