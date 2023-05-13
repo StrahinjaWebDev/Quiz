@@ -11,13 +11,13 @@ interface Props {
 }
 const QuestionListItem = ({ value, isSelected, onTextChange, onSelectionChage }: Props) => {
   return (
-    <div className="flex mt-5 items-center gap-2">
+    <div className="flex  items-center gap-2">
       <Input value={value} onChange={onTextChange} primary placeholder=" Type your answer here..." />
       <div
         className="w-[10px] h-[10px] bg-white flex justify-center items-center rounded-full"
         onClick={() => onSelectionChage(!isSelected)}
       >
-        {isSelected && <div className="w-[7px] h-[7px] bg-black rounded-full"></div>}
+        {isSelected && <div className="w-[7px] h-[7px] bg-black rounded-full justify-center items-center flex text-center"></div>}
       </div>
     </div>
   );

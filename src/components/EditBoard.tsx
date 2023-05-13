@@ -3,7 +3,6 @@ import { User } from "../models/User";
 import Button from "./Button/Button";
 import Input from "./Input/Input";
 import { deleteUser } from "../service/deleteUser";
-import AreYouSureEditUser from "./modals/AreYouSureModal";
 import { putUser } from "../service/putUser";
 import AreYouSureModal from "./modals/AreYouSureModal";
 
@@ -48,14 +47,13 @@ const EditBoard = ({ users, setUsers }: Props) => {
     }
     setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
   };
-  console.log(users);
 
   return (
     <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
       <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto scroll-smooth">
         {users.map((user) => (
           <div key={user.id} className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-            <p className="text-sm text-main med:text-xl w-[30%] font-serif">{user.username}</p>
+            <p className="text-sm text-main med:text-xl w-[30%] font-semibold">{user.username}</p>
             <Button label="Edit" primary onClick={() => handleOpenEditUserEditModal(user.id)} />
             <Button label="Delete" primary onClick={() => handleDeleteUser(user.id)} />
           </div>

@@ -35,6 +35,7 @@ const Admin = ({ admin }: any) => {
   const [selectedQuestionType] = useState("");
   const [answersDropdown, setAnswersDropdown] = useState(false);
   const [selectedNumberOfAnswers] = useState("");
+  const [areYouSure, setAreYouSure] = useState(false);
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
@@ -84,6 +85,7 @@ const Admin = ({ admin }: any) => {
       if (response.success) {
         const updatedUsers = [...users, newUser];
         setUsers(updatedUsers);
+        setAreYouSure(!areYouSure);
       } else {
         alert(response.error);
       }
@@ -164,6 +166,8 @@ const Admin = ({ admin }: any) => {
                   handleOpenAddUserModal={handleOpenAddUserModal}
                   selectedUserId={selectedUserId}
                   setOpenAddUserModal={(state: boolean) => handleAddUserModal(state)}
+                  areYouSure={areYouSure}
+                  setAreYouSure={setAreYouSure}
                 />
               )}
             </div>

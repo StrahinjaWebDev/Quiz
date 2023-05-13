@@ -11,12 +11,16 @@ export const appContext = React.createContext<{
   selectedCard?: Quiz;
   // eslint-disable-next-line no-unused-vars
   handleSelectQuiz?: (card: Quiz) => void;
+  handleLogout?: () => void;
+  guest?: boolean;
+  setGuest?: React.Dispatch<React.SetStateAction<boolean>>;
 }>({});
 
 const AppProvider = ({ children }: any) => {
   const [user, setUser] = useState<User | null>(null);
   const [cardData, setCardData] = useState<Quiz[]>();
   const [selectedCard, setSelectedCard] = useState<Quiz>();
+  const [guest, setGuest] = useState(false);
 
   const handleSelectQuiz = (card: Quiz) => {
     setSelectedCard(card);
@@ -41,7 +45,16 @@ const AppProvider = ({ children }: any) => {
     }
   }, []);
 
-  return <appContext.Provider value={{ user, setUser, cardData, quizes, selectedCard, handleSelectQuiz }}>{children}</appContext.Provider>;
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
+  return (
+    <appContext.Provider value={{ user, setUser, cardData, quizes, selectedCard, handleSelectQuiz, handleLogout, guest, setGuest }}>
+      {children}
+    </appContext.Provider>
+  );
 };
 
 export default AppProvider;

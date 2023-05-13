@@ -10,7 +10,7 @@ interface Props {
   setCategory: (event: string) => void;
   // eslint-disable-next-line no-unused-vars
   setDescription: (event: string) => void;
-  setCreateQuizModal: () => void;
+  setCreateQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription, setCreateQuizModal }: Props) => {

@@ -13,7 +13,7 @@ import AreYouSureModal from "./AreYouSureModal";
 
 interface Props {
   // eslint-disable-next-line no-unused-vars
-  setCreateQuizModal: () => void;
+  setCreateQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
@@ -53,7 +53,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
     postQuizzes(newQuiz).then((response) => {
       if (response.success) {
         setQuizzes((prev) => [...prev, newQuiz]);
-        setAddQuizModal(!addQuizModal)
+        setAddQuizModal(!addQuizModal);
       } else {
         alert(response.error);
       }

@@ -52,10 +52,10 @@ const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-3xl text-white">Answers</h1>
-      <div className="grid grid-cols-2 gap-12">
+      <div className="grid grid-cols-2 gap-12 mt-12">
         {answers.map((answer) => (
-          <div key={answer.id}>
+          <div key={answer.id} className="flex items-center gap-3 justify-center ">
+            <h1 className="text-3xl text-white">Answer</h1>
             <QuestionListItem
               onTextChange={(event: string) => setAnswerText(event, answer.id)}
               onSelectionChage={(selection: boolean) => setCorrectAnwer(selection, answer.id)}

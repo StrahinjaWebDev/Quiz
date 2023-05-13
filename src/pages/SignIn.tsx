@@ -5,7 +5,11 @@ import Input from "../components/Input/Input";
 import { BsPatchQuestionFill } from "react-icons/bs";
 import axios from "axios";
 
-const SignIn = ({ onGuestClick }) => {
+interface Props {
+  onGuestClick: () => void;
+}
+
+const SignIn = ({ onGuestClick }: Props) => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
 

@@ -73,7 +73,7 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
 
   return (
     <div className="flex flex-row w-[80%] h-[10%] items-center justify-between mt-5">
-      <p className="text-sm text-main med:text-xl w-[30%]">{name}</p>
+      <p className="text-sm text-main med:text-xl w-[30%] font-medium">{name}</p>
       <Button onClick={() => handleEditQuizModal(id)} label="Edit" primary />
       {editQuizModal && id === editQuizModalId && (
         <div className="absolute flex justify-center w-[90vw] h-[60vh] bg-third top-1/2 left-1/2 	transform -translate-x-1/2 -translate-y-1/2 rounded-xl   overflow-y-auto">

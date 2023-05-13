@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
+import { appContext } from "../context/AppProvider";
+import Button from "./Button/Button";
 
 interface INavbar {
   showMailIcon?: boolean;
@@ -7,6 +9,8 @@ interface INavbar {
 
 const Navbar = ({ showMailIcon }: INavbar) => {
   const [seeInvitations, setSeeInvitations] = useState(false);
+
+  const { handleLogout, guest } = useContext(appContext);
 
   const handleIvnitations = () => {
     setSeeInvitations(!seeInvitations);
@@ -17,13 +21,14 @@ const Navbar = ({ showMailIcon }: INavbar) => {
       <div className="flex justify-center items-center mt-8 tablet:mt-0">
         <nav className="w-[90vw] h-[10vw] flex items-center justify-between ">
           <h1 className="text-6xl text-secondary font-semibold">
-            Quizzy{" "}
+            Quizzy
             {showMailIcon && (
               <button>
                 <HiOutlineMail onClick={handleIvnitations} className="text-secondary " size={"0.5em"} />
               </button>
             )}
           </h1>
+          {!guest && <Button secondary label="Logout" onClick={handleLogout} />}
         </nav>
       </div>
       {seeInvitations === true && (
