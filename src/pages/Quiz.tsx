@@ -1,43 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { getQuizzes } from "../service/getQuizzes";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "../components/Button/Button";
 import Instruction from "../components/Instruction";
 import { getQuestions } from "../service/getQuestions";
 import { BsLightbulb } from "react-icons/bs";
 import { FaStarHalfAlt } from "react-icons/fa";
-import { Questions } from "../models/Question";
+import { Question } from "../models/Question";
 import Input from "../components/Input/Input";
+import { appContext } from "../context/AppProvider";
+import { Answers } from "../models/Answers";
 
 const UserPreQuiz = ({ selectedCard }: any) => {
   const [startQuiz, setStartQuiz] = useState(false);
-  const [question, setQuestion] = useState<Questions[]>([]);
-  const [checks, setChecks] = useState<string[] | []>([]);
+  const [question, setQuestion] = useState<Question[]>([]);
+  const [checkedAnswers, setCheckedAnswers] = useState<Answers[] | []>([]);
   const [hint, setHint] = useState("");
   const [inputValue, setInputValue] = useState("");
-  // const [showHalfAnswer, setShowHalfAnswer] = useState(false);
-  // const [halfAnswer, setHalfAnswer] = useState("");
-  // const [selectedQuestionId, setSelectedQuestionId] = useState(null);
+  const [highlightedAnswerId, setHighlightedAnswerId] = useState("");
 
-  useEffect(() => {
-    quizes();
-  }, []);
-
-  useEffect(() => {
-    questions();
-  }, []);
-
-  const quizes = async () => {
-    // eslint-disable-next-line no-unused-vars
-    const quiz = await getQuizzes();
-  };
+  const { quizes } = useContext(appContext);
 
   const questions = async () => {
     const question = await getQuestions(selectedCard.id);
     setQuestion(question.data?.questions);
-  };
-
-  const handleStartQuiz = () => {
-    setStartQuiz(!startQuiz);
   };
 
   const handleShowHint = (questionId: string) => {
@@ -46,19 +30,37 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     }
   };
 
-  const handleCheckQuestion = (answer: string) => {
-    if (checks.includes(answer)) {
-      setChecks((prev) => prev.filter((val) => val !== answer));
+  const handleCheckedAnswer = (answer: string, id: string, questionId: string, correct: boolean) => {
+    const checkedAnswer: Answers = {
+      id: id,
+      questionId: questionId,
+      text: answer,
+      correct: correct,
+    };
+
+    if (checkedAnswers.find((question) => question.id === id)) {
+      setCheckedAnswers((prev) => prev.filter((question) => question.id !== id));
+      setHighlightedAnswerId((prev) => prev.filter((answerId) => answerId !== id));
     } else {
-      setChecks((prev) => [...prev, answer]);
+      setCheckedAnswers((prev) => [...prev, checkedAnswer]);
+      setHighlightedAnswerId((prev) => [...prev, id]);
     }
   };
 
   const handleInputSubmit = () => {
-    setChecks((prev) => [...prev, inputValue]);
+    setCheckedAnswers((prev) => [...prev, inputValue]);
     setInputValue("");
   };
 
+  useEffect(() => {
+    quizes?.();
+  }, []);
+
+  useEffect(() => {
+    questions();
+  }, []);
+
+  console.log(checkedAnswers);
   return (
     <>
       {!startQuiz && (
@@ -70,14 +72,14 @@ const UserPreQuiz = ({ selectedCard }: any) => {
           <h1 className="text-3xl">{selectedCard.name}</h1>
           <p className="text-base">{selectedCard.description}</p>
           <span className="text-xl">Time to finish the quiz: {selectedCard.time}</span>
-          <Button primary label="Start" onClick={handleStartQuiz}></Button>
+          <Button primary label="Start" onClick={() => setStartQuiz(!startQuiz)}></Button>
           <Button secondary label="Back to quizzies"></Button>
         </div>
       )}
       {startQuiz && (
         <div className="flex flex-col gap-12 min-h-[100vh] mt-12">
           {question &&
-            question.map((question: Questions) => (
+            question.map((question: Question) => (
               <div className="flex justify-center items-center h-[18em] w-[40em] bg-secondary" key={question.id}>
                 <div className="w-[80%] h-[80%]">
                   <div className="w-[100%] h-[25%]">
@@ -91,7 +93,6 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                           <BsLightbulb onClick={() => handleShowHint(question.id)} size={"1.7em"} />
                         </button>
                         <button>
-                          {" "}
                           <FaStarHalfAlt size={"1.7em"} />
                         </button>
 
@@ -99,14 +100,15 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                       </div>
                     </div>
                     <div className="h-[65%] w[100%]  grid grid-cols-2 gap-2">
-                      {question.answers.map((answer: Questions) => {
+                      {question.answers.map((answer: Answers) => {
                         return (
                           <div className="pl-12 flex" key={answer.id}>
                             {question.type.toLowerCase() === "multiple" && (
                               <button
-                                style={checks.includes(answer.text) ? { border: "2px solid red" } : {}}
-                                onClick={() => handleCheckQuestion(answer.text)}
-                                className="w-[90%] flex text-sm  justify-center items-center border-dotted border-black border-2"
+                                onClick={() => handleCheckedAnswer(answer.text, answer.id, answer.questionId, answer.correct)}
+                                className={`w-[90%] flex text-sm  justify-center items-center border-dotted border-black border-2 ${
+                                  highlightedAnswerId.includes(answer.id) ? "border-red-500" : ""
+                                }`}
                               >
                                 {answer.text}
                               </button>
@@ -127,9 +129,10 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                             )}
                             {question.type.toLowerCase() === "single" && (
                               <button
-                                style={checks.includes(answer.text) ? { border: "2px solid red" } : {}}
-                                onClick={() => handleCheckQuestion(answer.text)}
-                                className="w-[90%] flex text-sm justify-center items-center border-dotted border-black border-2"
+                                onClick={() => handleCheckedAnswer(answer.text, answer.id, answer.questionId, answer.correct)}
+                                className={`w-[90%] flex text-sm  justify-center items-center border-dotted border-black border-2 ${
+                                  highlightedAnswerId.includes(answer.id) ? "border-red-500" : ""
+                                }`}
                               >
                                 {answer.text}
                               </button>
