@@ -12,6 +12,13 @@ import { Quiz } from "../../../models/Quiz";
 import AreYouSureModal from "../../ReusableComponents/AreYouSureModal";
 
 interface Props {
+  answersDropdown: boolean;
+  questionTypeDropdown: boolean;
+  selectedNumberOfAnswers: string;
+  selectedQuestionType: string;
+  setAnswersDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+  setQuestionTypeDropdown: React.Dispatch<React.SetStateAction<boolean>>;
+  createQuizModal: boolean;
   // eslint-disable-next-line no-unused-vars
   setCreateQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

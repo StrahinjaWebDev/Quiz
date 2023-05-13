@@ -14,6 +14,8 @@ export const appContext = React.createContext<{
   handleLogout?: () => void;
   guest?: boolean;
   setGuest?: React.Dispatch<React.SetStateAction<boolean>>;
+  // eslint-disable-next-line no-unused-vars
+  setSelectedCard?: (card: Quiz) => void;
 }>({});
 
 const AppProvider = ({ children }: any) => {
@@ -51,7 +53,9 @@ const AppProvider = ({ children }: any) => {
   };
 
   return (
-    <appContext.Provider value={{ user, setUser, cardData, quizes, selectedCard, handleSelectQuiz, handleLogout, guest, setGuest }}>
+    <appContext.Provider
+      value={{ user, setUser, cardData, quizes, selectedCard, handleSelectQuiz, handleLogout, guest, setGuest, setSelectedCard }}
+    >
       {children}
     </appContext.Provider>
   );

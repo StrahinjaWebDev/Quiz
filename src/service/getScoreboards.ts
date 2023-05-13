@@ -8,9 +8,9 @@ interface ResponseType<T> {
   error?: string;
 }
 
-const getScoreboards = async (): Promise<ResponseType<Scoreboard[]>> => {
+const getScoreboards = async (id: string): Promise<ResponseType<Scoreboard[]>> => {
   try {
-    const { data, status }: AxiosResponse<Scoreboard[]> = await ApiClient.get<Scoreboard[]>("/scoreboards");
+    const { data, status }: AxiosResponse<Scoreboard[]> = await ApiClient.get<Scoreboard[]>(`/scoreboards/${id}`);
 
     const response: ResponseType<Scoreboard[]> = { success: true, data };
     return response;
