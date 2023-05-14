@@ -21,7 +21,6 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const [finishQuiz, setFinishQuiz] = useState(false);
   const [score, setScore] = useState(0);
   const [seconds, setSeconds] = useState(selectedCard.time);
-  const [minutes] = useState(Math.floor(seconds / 60));
 
   const { quizes, setSelectedCard } = useContext(appContext);
 
@@ -43,13 +42,14 @@ const UserPreQuiz = ({ selectedCard }: any) => {
       text: answer,
       correct: correct,
     };
-
-    if (checkedAnswers.find((question) => question.id === id)) {
-      setCheckedAnswers((prev) => prev.filter((question) => question.id !== id));
-      setHighlightedAnswerId((prev) => prev.filter((answerId) => answerId !== id));
-    } else {
-      setCheckedAnswers((prev) => [...prev, checkedAnswer]);
-      setHighlightedAnswerId((prev) => [...prev, id]);
+    if (answer) {
+      if (checkedAnswers.find((question) => question.id === id)) {
+        setCheckedAnswers((prev) => prev.filter((question) => question.id !== id));
+        setHighlightedAnswerId((prev) => prev.filter((answerId: string) => answerId !== id));
+      } else {
+        setCheckedAnswers((prev) => [...prev, checkedAnswer]);
+        setHighlightedAnswerId((prev) => [...prev, id]);
+      }
     }
   };
 
@@ -93,9 +93,14 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     }
   }, [seconds]);
 
-  // console.log(score);
-  console.log(seconds);
-  console.log(minutes);
+  const formatTime = (seconds: number) => {
+    let minutes = Math.floor(seconds / 60);
+    let extraSeconds = Number(seconds % 60);
+    minutes = minutes < 10 ? 0 + minutes : minutes;
+    extraSeconds = extraSeconds < 10 ? 0 + extraSeconds : extraSeconds;
+
+    return `${minutes}:${extraSeconds}`;
+  };
 
   return (
     <>
@@ -106,17 +111,15 @@ const UserPreQuiz = ({ selectedCard }: any) => {
             className="h-[25em] w-[40em] juctify-center items-center bg-secondary rounded-[15px] flex flex-col justify-around"
           >
             <Instruction />
-            <h1 className="text-3xl">{selectedCard.name}</h1>
-            <p className="text-base">{selectedCard.description}</p>
-            <span className="text-xl">Time to finish the quiz: {selectedCard.time}</span>
+            <h1 className="text-3xl font-bold">{selectedCard.name}</h1>
+            <p className="text-base font-medium">{selectedCard.description}</p>
+            <span className="text-xl font-light">Time to finish the quiz: {formatTime(seconds)}</span>
             <Button primary label="Start" onClick={() => setStartQuiz(!startQuiz)} />
             <Button onClick={() => setSelectedCard && setSelectedCard(!selectedCard)} secondary label="Go back" />
           </div>
         ) : (
-          <div className="flex flex-col gap-12 min-h-[100vh] mt-12">
-            <p className="flex justify-center items-center text-secondary text-3xl font-bold">
-              Your time left is {minutes} minutes and {seconds} seconds.
-            </p>
+          <div className="flex flex-col gap-12 min-h-[100vh] mt-12  items-center ">
+            <p className="flex justify-center items-center text-secondary text-3xl font-bold">Your time left is {formatTime(seconds)}.</p>
             {question &&
               question.map((question: Question) => (
                 <div className="flex justify-center items-center h-[18em] w-[40em] bg-secondary" key={question.id}>

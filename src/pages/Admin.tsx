@@ -36,6 +36,7 @@ const Admin = ({ admin }: any) => {
   const [answersDropdown, setAnswersDropdown] = useState(false);
   const [selectedNumberOfAnswers] = useState("");
   const [areYouSure, setAreYouSure] = useState(false);
+  const [isNewUserAdmin, setIsNewUserAdmin] = useState(false);
 
   const { cardData, handleSelectQuiz = () => {}, selectedCard } = useContext(appContext);
 
@@ -79,7 +80,7 @@ const Admin = ({ admin }: any) => {
     const newUser = {
       username: addUsername,
       password: addPassword,
-      admin: false,
+      admin: isNewUserAdmin,
     };
     getPostUser(newUser).then((response) => {
       if (response.success) {
@@ -168,6 +169,7 @@ const Admin = ({ admin }: any) => {
                   setOpenAddUserModal={(state: boolean) => handleAddUserModal(state)}
                   areYouSure={areYouSure}
                   setAreYouSure={setAreYouSure}
+                  setIsNewUserAdmin={setIsNewUserAdmin}
                 />
               )}
             </div>
@@ -203,9 +205,8 @@ const Admin = ({ admin }: any) => {
                 {cardData?.map((card) => (
                   <button key={card.id} onClick={() => handleSelectQuiz(card)}>
                     <div className="h-[12em] w-[100%] justify-around items-center bg-secondary rounded-[15px] flex flex-col">
-                      <span className="text-2xl">{card.name}</span>
-                      <p className="text-sm">{card.description}</p>
-                      <span>Time to finish the quiz: {card.time}</span>
+                      <span className="text-2xl font-bold">{card.name}</span>
+                      <p className="text-sm font-thin">{card.description}</p>
                     </div>
                   </button>
                 ))}

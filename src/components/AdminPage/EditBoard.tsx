@@ -59,11 +59,13 @@ const EditBoard = ({ users, setUsers }: Props) => {
           </div>
         ))}
         {openUserEditModal && (
-          <div className="absolute bg-main h-[20vh] w-[55vw] flex flex-col rounded-xl items-center gap-5 text-secondary">
-            <p className="font-semibold">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
-            <div className="flex justify-around  items-center w-[100%] gap-2">
-              <Input onChange={handlePasswordChange} value={password} primary placeholder="Input password here..."></Input>
-              <button onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}>Change password</button>
+          <div className="absolute bg-main h-[13vh] w-[50vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white ">
+            <p className="font-semibold text-3xl">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
+            <div className="flex justify-around  items-center w-[100%] gap-2 mt-3">
+              <p className="text-secondary font-semibold text-sm">New password: </p>
+              <Input onChange={handlePasswordChange} value={password} primary placeholder="Input new password here..."></Input>
+              <Button secondary onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)} label="Submit" />
+
               {areYouSureModalUserEdit && (
                 <AreYouSureModal
                   message="Are you sure you want to edit user password?"
@@ -72,7 +74,7 @@ const EditBoard = ({ users, setUsers }: Props) => {
                 />
               )}
             </div>
-            <button className="absolute right-4 text-xl" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
+            <button className="absolute right-4 text-xl text-red-500" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
               X
             </button>
           </div>

@@ -8,8 +8,7 @@ interface Props {
 }
 
 const EditQuizQuestions = ({ quizQuestions }: Props) => {
-  const [question, setQuestion] = useState("");
-
+  const [, setQuestion] = useState("");
 
   return (
     <div>

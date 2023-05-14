@@ -13,27 +13,20 @@ const Instruction = () => {
     <div className="flex flex-row h-[2em] w-[10em] items-center gap-6 mt-4 justify-center">
       <button onClick={handleInstructions}>Instructions</button>
       {instructions === true && (
-        <div className="absolute bg-third top-[10em] rounded-lg flex flex-col w-[18em]   gap-10">
-          <div className="flex gap-4  justify-center">
-            <span>In this quiz you will have 10:30 minutes to finish it, you have two types of help:</span>
-            <button className="text-xl w-[2em] h-[2em] " onClick={handleInstructions}>
+        <div className="absolute bg-third top-1/3 left-1/2 transfor -translate-y-1/2 -translate-x-1/3 rounded-lg flex flex-col w-[20em]  justify-around items-center gap-4">
+          <div className="flex gap-4  justify-around">
+            <span className="text-base font-medium ml-3">In this quiz you have two types of help:</span>
+            <button className="text-xl w-[2em] h-[2em] mr-3  text-red-500 font-semibold" onClick={handleInstructions}>
               X
             </button>
           </div>
-          <div className="flex">
-            <span>
-              <FaStarHalfAlt />
-              Half/Half - hides two incorrect answers
-            </span>
+          <div className="flex items-center gap-3">
+            <FaStarHalfAlt size={"1.4em"} />
+            <span>Half/Half - hides two incorrect answers</span>
           </div>
-          <div className="flex">
-            <p>
-              <BsLightbulb />
-              Hint - gives you a hint to right answers
-            </p>
-          </div>
-          <div className="flex">
-            <p>Time - time left until end of the quiz</p>
+          <div className="flex items-center gap-3">
+            <BsLightbulb size={"1.4em"} />
+            <p>Hint - gives you a hint to right answers</p>
           </div>
         </div>
       )}

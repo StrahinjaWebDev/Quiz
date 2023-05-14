@@ -10,7 +10,8 @@ interface Props {
   setCategory: (event: string) => void;
   // eslint-disable-next-line no-unused-vars
   setDescription: (event: string) => void;
-  setCreateQuizModal: React.Dispatch<React.SetStateAction<boolean>>;
+  // eslint-disable-next-line no-unused-vars
+  setCreateQuizModal: (isOpen: boolean) => void;
 }
 
 const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription, setCreateQuizModal }: Props) => {
@@ -18,7 +19,7 @@ const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription, setCr
     <div className="flex flex-col ml-12 mt-8 gap-4">
       <div className="flex justify-between">
         <p className="text-4xl text-main font-medium">General Information</p>
-        <button className="text-4xl text-red-500 mr-3 mb-4 font-bold" onClick={() => setCreateQuizModal()}>
+        <button className="text-4xl text-red-500 mr-3 mb-4 font-bold" onClick={() => setCreateQuizModal(false)}>
           X
         </button>
       </div>

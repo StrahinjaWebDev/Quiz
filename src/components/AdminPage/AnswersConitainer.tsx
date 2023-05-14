@@ -12,7 +12,7 @@ interface Props {
 const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
   const setAnswerText = (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
     setAnswers((prev) => {
-      let newArray = prev.map((answer) => {
+      let newArray = prev.map((answer: Answers) => {
         if (answer.id === id) {
           return {
             ...answer,
@@ -47,7 +47,6 @@ const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
       return newArray;
     });
   };
-
 
   return (
     <div className="flex flex-col items-center">

@@ -22,7 +22,6 @@ const End = ({ score }: Props) => {
     getScoreboard();
   }, []);
 
-  console.log(scoreboard);
   return (
     <div className="flex flex-row gap-[10em]">
       <div className="w-[25em] h-[27em] bg-secondary rounded-[60px] gap-3 flex justify-center">
