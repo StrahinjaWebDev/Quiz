@@ -48,7 +48,6 @@ const AnswersConitainer = ({ answers, setAnswers, selectedType }: Props) => {
     });
   };
 
-  console.log(answers);
 
   return (
     <div className="flex flex-col items-center">

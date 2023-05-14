@@ -49,7 +49,7 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
       if (response.success) {
         setQuizzes(initialQuizzes.map((q) => (q.id === quizId ? updatedQuiz : q)));
       } else {
-        console.log(response.error);
+        alert(response.error);
       }
     }
   };
@@ -62,7 +62,7 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
       if (response.success) {
         setQuizzes(initialQuizzes.map((q) => (q.id === quizId ? updatedQuiz : q)));
       } else {
-        console.log(response.error);
+        alert(response.error);
       }
     }
   };

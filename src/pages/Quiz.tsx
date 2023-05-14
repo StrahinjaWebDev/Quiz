@@ -19,6 +19,9 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const [inputValue, setInputValue] = useState("");
   const [highlightedAnswerId, setHighlightedAnswerId] = useState("");
   const [finishQuiz, setFinishQuiz] = useState(false);
+  const [score, setScore] = useState(0);
+  const [seconds, setSeconds] = useState(selectedCard.time);
+  const [minutes] = useState(Math.floor(seconds / 60));
 
   const { quizes, setSelectedCard } = useContext(appContext);
 
@@ -53,7 +56,8 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const handleEndQuiz = () => {
     endQuiz(checkedAnswers).then((res) => {
       if (res.success) {
-        alert("sent");
+        console.log("sent");
+        setScore(res.data);
         setFinishQuiz(true);
       } else {
         alert(res.error);
@@ -74,6 +78,25 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     questions();
   }, []);
 
+  useEffect(() => {
+    if (startQuiz === true) {
+      const interval = setInterval(() => {
+        setSeconds((prevSeconds: number) => prevSeconds - 1);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [startQuiz]);
+
+  useEffect(() => {
+    if (seconds === 0) {
+      handleEndQuiz();
+    }
+  }, [seconds]);
+
+  // console.log(score);
+  console.log(seconds);
+  console.log(minutes);
+
   return (
     <>
       {!finishQuiz ? (
@@ -91,6 +114,9 @@ const UserPreQuiz = ({ selectedCard }: any) => {
           </div>
         ) : (
           <div className="flex flex-col gap-12 min-h-[100vh] mt-12">
+            <p className="flex justify-center items-center text-secondary text-3xl font-bold">
+              Your time left is {minutes} minutes and {seconds} seconds.
+            </p>
             {question &&
               question.map((question: Question) => (
                 <div className="flex justify-center items-center h-[18em] w-[40em] bg-secondary" key={question.id}>
@@ -130,7 +156,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
           </div>
         )
       ) : (
-        <End />
+        <End score={score} />
       )}
     </>
   );

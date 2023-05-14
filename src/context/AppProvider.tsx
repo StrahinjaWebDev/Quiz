@@ -54,7 +54,18 @@ const AppProvider = ({ children }: any) => {
 
   return (
     <appContext.Provider
-      value={{ user, setUser, cardData, quizes, selectedCard, handleSelectQuiz, handleLogout, guest, setGuest, setSelectedCard }}
+      value={{
+        user,
+        setUser,
+        cardData,
+        quizes,
+        selectedCard,
+        handleSelectQuiz,
+        handleLogout,
+        guest,
+        setGuest,
+        setSelectedCard,
+      }}
     >
       {children}
     </appContext.Provider>
