@@ -16,14 +16,16 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
   const [questionsDropdown, setQuestionsDropdown] = useState(false);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
   const [time, setTime] = useState(0);
+  const [questionName, setQuestionName] = useState("");
+  const [type, setType] = useState("");
+  const [hint, setHint] = useState("");
 
   const getQuiz = async () => {
     const quiz = await getQuizById(quizId);
     setQuizData(quiz.data);
   };
-
-  console.log(name);
 
   useEffect(() => {
     if (quizData && quizData.name && quizData.category && quizData.time) {
@@ -42,12 +44,29 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
       await putQuiz(quizId, {
         id: quizData.id,
         active: quizData.active,
-        category: quizData.category,
-        description: quizData.description,
+        category: category,
+        description: description,
         name: name,
-        time: quizData.time,
-        questions: quizData.questions,
+        time: time,
+        questions: quizQuestions.map((question) => {
+          return {
+            id: question.id,
+            quizId: question.quizId,
+            type: question.type,
+            text: question.text,
+            hint: question.hint,
+            answers: question.answers.map((answer) => {
+              return {
+                id: answer.id,
+                questionId: answer.questionId,
+                text: answer.text,
+                correct: answer.correct,
+              };
+            }),
+          };
+        }),
       });
+
       getQuiz();
     }
   };
@@ -63,15 +82,15 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
             </div>
             <div className="flex items-start flex-col pl-3">
               <label htmlFor="quizzCategory">Quizz category</label>
-              <Input id="quizzCategory" defaultValue={quizData.category} primary />
+              <Input onChange={(e) => setCategory(e.target.value)} id="quizzCategory" defaultValue={quizData.category} primary />
             </div>
             <div className="flex items-start flex-col pl-3">
               <label htmlFor="quizzDescription">Quizz description</label>
-              <Input id="quizzDescription" defaultValue={quizData.description} primary />
+              <Input onChange={(e) => setDescription(e.target.value)} id="quizzDescription" defaultValue={quizData.description} primary />
             </div>
             <div className="flex items-start flex-col pl-3">
               <label htmlFor="quizzTime">Quizz time</label>
-              <Input id="quizzTime" defaultValue={quizData.time} primary />
+              <Input onChange={(e) => setTime(e.target.value)} id="quizzTime" defaultValue={quizData.time} primary />
             </div>
             <div className="flex w-full justify-start ml-4">
               <Button onClick={saveSettings} primary label="Save" />
@@ -85,7 +104,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
             <div key={question.id} className="flex flex-col gap-3 pt-2 ">
               <div className="flex items-start flex-col pl-3">
                 <label htmlFor="name">Qustion name</label>
-                <Input id="name" defaultValue={question.text} primary />
+                <Input onChange={(e) => setQuestionName(e.target.value)} id="name" defaultValue={question.text} primary />
               </div>
               <div className="flex flex-col items-center gap-4">
                 <div className="flex items-end gap-3">
