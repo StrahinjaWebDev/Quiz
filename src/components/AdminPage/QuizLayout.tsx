@@ -83,7 +83,7 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
               <Input placeholder="Input new quiz name..." primary value={quizName} onChange={(e) => setQuizName(e.target.value)} />
               <Button primary label="Submit" onClick={handleNewQuizName} />
             </div>
-            <div>{<EditQuizQuestions quizQuestions={quizQuestions} />}</div>
+            <div>{<EditQuizQuestions quizId={editQuizModalId} quizQuestions={quizQuestions} />}</div>
           </div>
         </div>
       )}
