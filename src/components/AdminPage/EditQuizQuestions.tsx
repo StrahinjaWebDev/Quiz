@@ -22,6 +22,8 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
   const [type, setType] = useState("");
   const [hint, setHint] = useState("");
 
+  const [questions, setQuestions] = useState(quizQuestions);
+
   const getQuiz = async () => {
     const quiz = await getQuizById(quizId);
     setQuizData(quiz.data);
@@ -48,7 +50,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
         description: description,
         name: name,
         time: time,
-        questions: quizQuestions.map((question) => {
+        questions: quizQuestions?.map((question) => {
           return {
             id: question.id,
             quizId: question.quizId,
@@ -70,6 +72,67 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
       getQuiz();
     }
   };
+
+  const handleQuestionText = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newQuestions = questions?.map((question) => {
+      if (question.id !== id) return question;
+      else
+        return {
+          ...question,
+          text: e.target.value,
+        };
+    });
+    setQuestions(newQuestions);
+  };
+
+  const handleQuestionType = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newQuestions = questions?.map((question) => {
+      if (question.id !== id) return question;
+      else
+        return {
+          ...question,
+          type: e.target.value,
+        };
+    });
+    setQuestions(newQuestions);
+  };
+
+  const handleQuestionHint = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const newQuestions = questions?.map((question) => {
+      if (question.id !== id) return question;
+      else
+        return {
+          ...question,
+          hint: e.target.value,
+        };
+    });
+    setQuestions(newQuestions);
+  };
+
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const questionId = questions?.find((question) => question.id === id);
+    const newQuestions = questions?.map((question) => {
+      if (question.id !== questionId) return question;
+      else {
+        const newAnswers = question.answers.map((answer) => {
+          if (answer.id !== id) return answer;
+          else {
+            return {
+              ...answer,
+              text: e.target.value,
+            };
+          }
+        });
+        return {
+          ...question,
+          answers: newAnswers,
+        };
+      }
+    });
+    setQuestions(newQuestions);
+  };
+
+  console.log(questions);
 
   return (
     <div>
@@ -104,13 +167,18 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
             <div key={question.id} className="flex flex-col gap-3 pt-2 ">
               <div className="flex items-start flex-col pl-3">
                 <label htmlFor="name">Qustion name</label>
-                <Input onChange={(e) => setQuestionName(e.target.value)} id="name" defaultValue={question.text} primary />
+                <Input onChange={(e) => question.id && handleQuestionText(e, question.id)} id="name" defaultValue={question.text} primary />
               </div>
               <div className="flex flex-col items-center gap-4">
                 <div className="flex items-end gap-3">
                   <div className="flex flex-col items-start gap-1">
                     <label htmlFor="type">Question type</label>
-                    <Input id="type" defaultValue={question.type} primary />
+                    <Input
+                      onChange={(e) => question.id && handleQuestionType(e, question.id)}
+                      id="type"
+                      defaultValue={question.type}
+                      primary
+                    />
                   </div>
                   <Button primary label="Change" />
                 </div>
@@ -118,7 +186,12 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
                 <div className="flex items-end gap-3">
                   <div className="flex flex-col items-start gap-1">
                     <label htmlFor="hint">Question hint</label>
-                    <Input id="hint" defaultValue={question.hint} primary />
+                    <Input
+                      onChange={(e) => question.id && handleQuestionHint(e, question.id)}
+                      id="hint"
+                      defaultValue={question.hint}
+                      primary
+                    />
                   </div>
                   <Button primary label="Change" />
                 </div>
@@ -128,7 +201,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
                   <p className="font-semibold text-main">Answers</p>
                   {question.answers.map((answer) => (
                     <div className="flex gap-3" key={answer.id}>
-                      <Input defaultValue={answer.text} primary />
+                      <Input defaultValue={answer.text} onChange={(e) => handleAnswerChange(e, answer.id)} primary />
                       <div className="max-w-1/2">
                         <Button primary label="Change" />
                       </div>

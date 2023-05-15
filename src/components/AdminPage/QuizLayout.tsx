@@ -78,12 +78,7 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
       {editQuizModal && id === editQuizModalId && (
         <div className="absolute flex justify-center w-[90%] h-[60%] bg-third top-1/2 left-1/2	transform -translate-x-1/2 -translate-y-1/2 rounded-xl overflow-y-auto">
           <div className="w-4/5 mt-7 flex flex-col items-center ">
-            <div className="flex gap-4 items-center">
-              <p className="text-xl font-serif">Edit: {name}</p>
-              <Input placeholder="Input new quiz name..." primary value={quizName} onChange={(e) => setQuizName(e.target.value)} />
-              <Button primary label="Submit" onClick={handleNewQuizName} />
-            </div>
-            <div>{<EditQuizQuestions quizId={editQuizModalId} quizQuestions={quizQuestions} />}</div>
+            <div>{quizQuestions && <EditQuizQuestions quizId={editQuizModalId} quizQuestions={quizQuestions} />}</div>
           </div>
         </div>
       )}
