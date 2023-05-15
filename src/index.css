@@ -1,4 +1,7 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--secondary) var(--primary);
@@ -20,9 +23,6 @@
   border: 3px solid var(--primary);
 }
 
-@tailwind components;
-@tailwind utilities;
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -35,6 +35,11 @@
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
   }
+}
+
+body, html, .app, #root {
+  height: 100%;
+  width: 100%;
 }
 
 body {

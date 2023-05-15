@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Button from "../../ReusableComponents/Button";
 import { postQuizzes } from "../../../service/postQuestions";
 import CreateQuizHeader from "../CreateQuizHeader";
@@ -10,6 +11,7 @@ import { Question } from "../../../models/Question";
 import { Answers } from "../../../models/Answers";
 import { Quiz } from "../../../models/Quiz";
 import AreYouSureModal from "../../ReusableComponents/AreYouSureModal";
+import AddUserModal from "./AddUserModal";
 
 interface Props {
   answersDropdown: boolean;
@@ -66,7 +68,6 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
       }
     });
   };
-  //? validacija i question dodavanje u niz stejt
 
   const addQuestion = () => {
     const newQuestion = {
@@ -116,17 +117,6 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
     return isValid;
   };
 
-  //? const some = (array, dispatch) => {
-  // ?  for (let i = 0; i < array.length; i++) {
-  //  ?   if (dispatch(array[i])) return true;
-  //   ?}
-  //   ?return false;
-  // ?};
-
-  // ?useEffect(() => {
-  //  ? console.log(some([1, 2, 3, 4], (item) => item === 2));
-  // ?}, []);
-
   useEffect(() => {
     let array = [];
     for (let i = 0; i < numOfAnswers; i++) {
@@ -149,8 +139,8 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
         setCreateQuizModal={setCreateQuizModal}
       />
       <div className="flex justify-center mt-10">
-        <div className="w-[90%] h-full flex flex-col bg-main items-center gap-4">
-          <div className="text-xl flex gap-4  mt-8">
+        <div className="w-[94%] h-full flex flex-col bg-main items-center gap-4 pb-12">
+          <div className="text-xl flex gap-4 mt-8">
             <p className="text-white text-4xl ">Questions & Anwers</p>
             <p className="text-secondary text-4xl " onClick={addQuestion}>
               Add question:
@@ -166,7 +156,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
               />
             )}
           </div>
-          <div className="flex flex-col gap-2 items-center">
+          <div className="flex flex-col max-w-full gap-2 items-center">
             <label className="text-gray-500 dark:text-gray-300 font-bold text-2xl">Question ({numOfQuestions})</label>
             <div className="flex flex-col gap-4">
               <QuestionInfo
@@ -188,14 +178,16 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
         </div>
       </div>
       <div className="w-full h-[4em] flex justify-center items-center pb-3">
-        <Button onClick={() => setAddQuizModal(!addQuizModal)} primary label="Create quiz" />
-        {addQuizModal && (
-          <AreYouSureModal
-            message="Are you sure you want to add a quiz?"
-            onConfirm={handleAddQuiz}
-            onCancel={() => setAddQuizModal(!addQuizModal)}
-          />
-        )}
+        {selectedType !== "" && <Button onClick={() => setAddQuizModal(!addQuizModal)} primary label="Create quiz" />}
+        {addQuizModal &&
+          createPortal(
+            <AreYouSureModal
+              message="Are you sure you want to add a quiz"
+              onConfirm={handleAddQuiz}
+              onCancel={() => setAddQuizModal(!addQuizModal)}
+            />,
+            document.body
+          )}
       </div>
     </div>
   );

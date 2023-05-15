@@ -19,7 +19,7 @@ const CreateQuizHeader = ({ setName, setTime, setCategory, setDescription, setCr
     <div className="flex flex-col ml-12 mt-8 gap-4">
       <div className="flex justify-between">
         <p className="text-4xl text-main font-medium">General Information</p>
-        <button className="text-4xl text-red-500 mr-3 mb-4 font-bold" onClick={() => setCreateQuizModal(false)}>
+        <button className="text-4xl text-red-500 mr-10 mb-4 font-bold" onClick={() => setCreateQuizModal(false)}>
           X
         </button>
       </div>

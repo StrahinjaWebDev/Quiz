@@ -19,8 +19,8 @@ const QuestionInfo = ({ setSelectedType, selectedType, setQuestionText, setHint,
 
   return (
     <>
-      <div className="flex flex-row gap-4 text-secondary text-lg font-extralight  items-center justify-between mt-6">
-        <div className="flex gap-3 items-center justify-between ">
+      <div className="flex gap-4 text-secondary text-lg font-extralight items-center justify-between mt-6">
+        <div className="flex gap-3 items-center justify-between">
           <label htmlFor="radio-input">Single choice</label>
           <input type="radio" name="type" value="Single" checked={selectedType === "Single"} onChange={handleOptionChange}></input>
         </div>
@@ -33,30 +33,33 @@ const QuestionInfo = ({ setSelectedType, selectedType, setQuestionText, setHint,
           <input type="radio" name="type" value="Text" checked={selectedType === "Text"} onChange={handleOptionChange}></input>
         </div>
       </div>
-
-      {selectedType !== "Text" && (
-        <div className="flex flex-row justify-between items-center mt-6">
-          {[1, 2, 3, 4, 5, 6].map((value) => (
-            <div key={value} className="flex flex-row text-xl font-mono text-secondary">
-              <div className="flex flex-row gap-2 items-center justify-center">
-                <label>{value}</label>
-                <input type="radio" name="numOfAnswers" value={value} onChange={handleCheckBoxChange} />
-              </div>
+      {selectedType !== "" && (
+        <div className="flex flex-col">
+          {selectedType !== "Text" && (
+            <div className="flex justify-between items-center mt-6 ">
+              {[1, 2, 3, 4, 5, 6].map((value) => (
+                <div key={value} className="flex text-xl font-mono text-secondary">
+                  <div className="flex  gap-2 items-center justify-center">
+                    <label>{value}</label>
+                    <input type="radio" name="numOfAnswers" value={value} onChange={handleCheckBoxChange} />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
+          <div className="flex  gap-6 items-center mt-4">
+            <label className="text-gray-500 dark:text-gray-300 font-bold text-xl">Question: </label>
+            <Input
+              value={questionText}
+              primary
+              placeholder=" Input your question text here..."
+              onChange={(event) => setQuestionText(event.target.value)}
+            />
+            <label className="text-gray-500 dark:text-gray-300 font-bold text-xl">Hint: </label>
+            <Input value={hint} primary placeholder=" Input your hint here..." onChange={(event) => setHint(event.target.value)} />
+          </div>
         </div>
       )}
-      <div className="flex flex-row gap-6 items-center mt-4">
-        <label className="text-gray-500 dark:text-gray-300 font-bold text-xl">Question: </label>
-        <Input
-          value={questionText}
-          primary
-          placeholder=" Input your question text here..."
-          onChange={(event) => setQuestionText(event.target.value)}
-        />
-        <label className="text-gray-500 dark:text-gray-300 font-bold text-xl">Hint: </label>
-        <Input value={hint} primary placeholder=" Input your hint here..." onChange={(event) => setHint(event.target.value)} />
-      </div>
     </>
   );
 };
