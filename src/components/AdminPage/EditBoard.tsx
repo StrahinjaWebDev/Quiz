@@ -59,9 +59,9 @@ const EditBoard = ({ users, setUsers }: Props) => {
           </div>
         ))}
         {openUserEditModal && (
-          <div className="absolute bg-main h-[10em] w-[50vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white ">
-            <p className="font-semibold text-3xl">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
-            <div className="flex justify-around  items-center w-[100%] gap-2 mt-3">
+          <div className="absolute bg-main min-h-[13em] w-[25em] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white ">
+            <div className=" justify-around  items-center w-[100%]  mt-3 flex flex-col gap-4">
+              <p className="font-semibold text-3xl">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
               <p className="text-secondary font-semibold text-sm">New password: </p>
               <Input onChange={handlePasswordChange} value={password} primary placeholder="Input new password here..."></Input>
               <Button secondary onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)} label="Submit" />

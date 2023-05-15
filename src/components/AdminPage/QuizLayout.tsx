@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Question } from "../../models/Question";
 import Button from "../ReusableComponents/Button";
 import { deleteQuiz } from "../../service/deleteQuiz";

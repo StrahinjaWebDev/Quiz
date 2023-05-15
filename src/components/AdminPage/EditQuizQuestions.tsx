@@ -8,37 +8,50 @@ interface Props {
 }
 
 const EditQuizQuestions = ({ quizQuestions }: Props) => {
-  const [, setQuestion] = useState("");
+  const [question, setQuestion] = useState("");
 
   return (
     <div>
       {quizQuestions &&
         quizQuestions.map((question: Question) => (
-          <div key={question.id} className="flex flex-row gap-3 ">
-            <div className="flex flex-col   border-white border-2">
-              <p>{question.text}</p>
-              <div className="flex justify-between">
-                <Input primary onChange={(event) => setQuestion(event.target.value)} />
+          <div key={question.id} className="flex flex-col gap-3 pt-10 ">
+            <div className="flex items-start flex-col pl-3">
+              <label htmlFor="name">Qustion name</label>
+              <Input id="name" defaultValue={question.text} primary />
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-end gap-3">
+                <div className="flex flex-col items-start gap-1">
+                  <label htmlFor="type">Question type</label>
+                  <Input id="type" defaultValue={question.type} primary onChange={(event) => setQuestion(event.target.value)} />
+                </div>
                 <Button primary label="Change" />
               </div>
-              <p>{question.type}</p>
-              <div className="flex  justify-between">
+
+              <div className="flex items-end gap-3">
+                <div className="flex flex-col items-start gap-1">
+                  <label htmlFor="hint">Question hint</label>
+                  <Input id="hint" defaultValue={question.hint} primary />
+                </div>
+                <Button primary label="Change" />
+              </div>
+
+              <div className="flex items-center gap-3">
                 <Input primary />
                 <Button primary label="Change" />
               </div>
-              <p>{question.hint}</p>
-              <div className="flex gap-3 justify-between">
-                <Input primary />
-                <Button primary label="Change" />
-              </div>
-              <p>
-                {question.answers.map((answer, index) => (
-                  <span key={index}>{answer.text}</span>
+            </div>
+            <div>
+              <div className="flex flex-col ml-10 gap-3">
+                <p className="font-semibold text-main">Answers</p>
+                {question.answers.map((answer) => (
+                  <div className="flex gap-3" key={answer.id}>
+                    <Input defaultValue={answer.text} primary />
+                    <div className="max-w-1/2">
+                      <Button primary label="Change" />
+                    </div>
+                  </div>
                 ))}
-              </p>
-              <div className="flex gap-3 justify-between">
-                <Input primary />
-                <Button primary label="Change" />
               </div>
             </div>
           </div>
