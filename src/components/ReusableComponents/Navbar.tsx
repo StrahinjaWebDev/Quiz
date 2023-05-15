@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { appContext } from "../../context/AppProvider";
 import Button from "./Button";
+import { postInvite } from "../../service/postInvite";
+import { Invite } from "../../models/Invite";
 
 interface INavbar {
   showMailIcon?: boolean;
@@ -10,7 +12,7 @@ interface INavbar {
 const Navbar = ({ showMailIcon }: INavbar) => {
   const [seeInvitations, setSeeInvitations] = useState(false);
 
-  const { handleLogout, guest, setGuest } = useContext(appContext);
+  const { handleLogout, guest, setGuest, invites } = useContext(appContext);
 
   const handleIvnitations = () => {
     setSeeInvitations(!seeInvitations);
@@ -43,12 +45,20 @@ const Navbar = ({ showMailIcon }: INavbar) => {
                 X
               </button>
               <h1 className="text-3xl flex justify-center desktop:text-5xl">Invitations</h1>
-              <div className="flex flex-row mt-12 w-[100%] justify-center">
-                <p className="w-[80%] text-xl">User invited you to play Football player quiz</p>
-                <div className="flex gap-8">
-                  <button className="text-3xl text-red-500">✓</button>
-                  <button className="text-3xl text-green-600">X</button>
-                </div>
+              <div className="flex flex-row mt-12 w-[100%] justify-around">
+                {invites?.map((invites) => {
+                  return (
+                    <div key={invites.id} className="flex flex-row justify-around gap-12">
+                      <p className="text-xl flex justify-center items-center">
+                        {invites?.username} invited you to play {invites.quizName}
+                      </p>
+                      <div className="flex gap-8">
+                        <button className="text-3xl text-red-500">✓</button>
+                        <button className="text-3xl text-green-600">X</button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

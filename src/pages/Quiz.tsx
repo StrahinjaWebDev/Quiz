@@ -7,11 +7,9 @@ import { FaStarHalfAlt } from "react-icons/fa";
 import { Question } from "../models/Question";
 import { appContext } from "../context/AppProvider";
 import { Answers } from "../models/Answers";
-import { endQuiz } from "../service/endQuiz";
 import QuestionTypes from "../components/QuizPage/QuestionTypes";
 import End from "./End";
 import axios from "axios";
-import ApiClient from "../hooks/globalFetch";
 
 const UserPreQuiz = ({ selectedCard }: any) => {
   const [startQuiz, setStartQuiz] = useState(false);
@@ -19,10 +17,10 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const [checkedAnswers, setCheckedAnswers] = useState<Answers[] | []>([]);
   const [hint, setHint] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const [highlightedAnswerId, setHighlightedAnswerId] = useState("");
   const [finishQuiz, setFinishQuiz] = useState(false);
   const [score, setScore] = useState(0);
   const [seconds, setSeconds] = useState(selectedCard.time);
+  const [halfHelpUsed, setHalfHelpUsed] = useState(false);
 
   const { quizes, setSelectedCard, user } = useContext(appContext);
 
@@ -37,7 +35,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     }
   };
 
-  const handleCheckedAnswer = (answer: string, id: string, questionId: string, correct: boolean) => {
+  const handleCheckedAnswer = (answer: string, id: string, questionId: string, correct: boolean, type: string) => {
     const checkedAnswer: Answers = {
       id: id,
       questionId: questionId,
@@ -45,12 +43,14 @@ const UserPreQuiz = ({ selectedCard }: any) => {
       correct: correct,
     };
     if (answer) {
+      if (type === "Single") {
+        setCheckedAnswers((prev) => prev.filter((question) => question.questionId !== questionId));
+      }
+
       if (checkedAnswers.find((question) => question.id === id)) {
         setCheckedAnswers((prev) => prev.filter((question) => question.id !== id));
-        setHighlightedAnswerId((prev) => prev.filter((answerId: string) => answerId !== id));
       } else {
         setCheckedAnswers((prev) => [...prev, checkedAnswer]);
-        setHighlightedAnswerId((prev) => [...prev, id]);
       }
     }
   };
@@ -71,6 +71,21 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const handleInputSubmit = () => {
     setCheckedAnswers((prev) => [...prev, inputValue]);
     setInputValue("");
+  };
+
+  const halfHelp = (qestionAnswers: Answers[]) => {
+    let correctAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct === true);
+    let incorrectAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct !== true);
+    let halfLength = Math.floor(incorrectAnswers.length / 2);
+    let randomIncorrectAnswers = incorrectAnswers.slice(0, Math.floor(halfLength));
+    let randomNum = Math.floor(Math.random() * 2);
+    let answers;
+    if (randomNum === 1) {
+      answers = [...correctAnswers, ...randomIncorrectAnswers];
+    } else {
+      answers = [...randomIncorrectAnswers, ...correctAnswers];
+    }
+    return answers;
   };
 
   useEffect(() => {
@@ -137,7 +152,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                           <button>
                             <BsLightbulb onClick={() => handleShowHint(question.id)} size={"1.7em"} />
                           </button>
-                          <button>
+                          <button onClick={() => halfHelp(question.answers)}>
                             <FaStarHalfAlt size={"1.7em"} />
                           </button>
 
@@ -148,10 +163,10 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                         <QuestionTypes
                           question={question}
                           handleCheckedAnswer={handleCheckedAnswer}
-                          highlightedAnswerId={highlightedAnswerId}
                           inputValue={inputValue}
                           handleInputSubmit={handleInputSubmit}
                           setInputValue={setInputValue}
+                          checkedAnswers={checkedAnswers}
                         />
                       </div>
                     </div>

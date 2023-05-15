@@ -1,6 +1,6 @@
 import ApiClient from "../hooks/globalFetch";
 import { AxiosResponse, AxiosError } from "axios";
-import { Invites } from "../models/Invite";
+import { Invite } from "../models/Invite";
 
 interface ResponseType<T> {
   success: Boolean;
@@ -8,15 +8,15 @@ interface ResponseType<T> {
   error?: string;
 }
 
-const getInvites = async (): Promise<ResponseType<Invites[]>> => {
+const getInvites = async (inviteId: string): Promise<ResponseType<Invite[]>> => {
   try {
-    const { data, status }: AxiosResponse<Invites[]> = await ApiClient.get<Invites[]>("/invites");
+    const { data, status }: AxiosResponse<Invite[]> = await ApiClient.get<Invite[]>(`/invites/invited/${inviteId}`);
 
-    const response: ResponseType<Invites[]> = { success: true, data };
+    const response: ResponseType<Invite[]> = { success: true, data };
     return response;
   } catch (error) {
     const { message } = error as AxiosError;
-    const response: ResponseType<Invites[]> = { success: false, error: message };
+    const response: ResponseType<Invite[]> = { success: false, error: message };
     return response;
   }
 };
