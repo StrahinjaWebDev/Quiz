@@ -1,6 +1,5 @@
 import ApiClient from "../hooks/globalFetch";
 import { AxiosResponse, AxiosError } from "axios";
-import { User } from "../models/User";
 import { Answers } from "../models/Answers";
 interface ResponseType<T> {
   success: Boolean;

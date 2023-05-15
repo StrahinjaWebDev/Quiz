@@ -59,7 +59,7 @@ const EditBoard = ({ users, setUsers }: Props) => {
           </div>
         ))}
         {openUserEditModal && (
-          <div className="absolute bg-main h-[13vh] w-[50vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white ">
+          <div className="absolute bg-main h-[10em] w-[50vw] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white ">
             <p className="font-semibold text-3xl">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
             <div className="flex justify-around  items-center w-[100%] gap-2 mt-3">
               <p className="text-secondary font-semibold text-sm">New password: </p>

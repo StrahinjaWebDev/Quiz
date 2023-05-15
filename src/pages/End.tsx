@@ -4,18 +4,37 @@ import { getScoreboards } from "../service/getScoreboards";
 import { Scoreboard } from "../models/Scoreboard";
 import Input from "../components/ReusableComponents/Input";
 import Button from "../components/ReusableComponents/Button";
+import { postInvite } from "../service/postInvite";
 
 interface Props {
   score: number;
 }
 const End = ({ score }: Props) => {
   const [scoreboard, setScoreboard] = useState<Scoreboard[] | []>([]);
+  const [inviteUsername, setInviteUsername] = useState("");
 
   const { user, selectedCard } = useContext(appContext);
 
   const getScoreboard = async () => {
     const scoreboards = await getScoreboards(selectedCard.id);
     setScoreboard(scoreboards.data);
+  };
+
+  const handleInvite = () => {
+    const inviteUser = {
+      userId: user?.id,
+      quizId: selectedCard?.id,
+      username: inviteUsername,
+    };
+    console.log(inviteUser);
+    postInvite(inviteUser).then((res) => {
+      if (res.success) {
+        console.log("sent");
+        console.log(res);
+      } else {
+        alert(res.error);
+      }
+    });
   };
 
   useEffect(() => {
@@ -31,9 +50,9 @@ const End = ({ score }: Props) => {
             {user?.username} you’ve scored {score} of right answers on this quiz! Go on, call your friend to play with you and see who’s
             better!
           </p>
-          <Input primary placeholder="Enter friends username..." />
+          <Input primary placeholder="Enter friends username..." onChange={(event) => setInviteUsername(event.target.value)} />
           <div className="flex flex-row">
-            <Button primary label="Invite" />
+            <Button primary label="Invite" onClick={handleInvite} />
             <Button secondary label="Back to quizzes" />
           </div>
         </div>

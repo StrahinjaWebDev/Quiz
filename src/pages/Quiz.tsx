@@ -10,6 +10,8 @@ import { Answers } from "../models/Answers";
 import { endQuiz } from "../service/endQuiz";
 import QuestionTypes from "../components/QuizPage/QuestionTypes";
 import End from "./End";
+import axios from "axios";
+import ApiClient from "../hooks/globalFetch";
 
 const UserPreQuiz = ({ selectedCard }: any) => {
   const [startQuiz, setStartQuiz] = useState(false);
@@ -22,7 +24,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const [score, setScore] = useState(0);
   const [seconds, setSeconds] = useState(selectedCard.time);
 
-  const { quizes, setSelectedCard } = useContext(appContext);
+  const { quizes, setSelectedCard, user } = useContext(appContext);
 
   const questions = async () => {
     const question = await getQuestions(selectedCard.id);
@@ -53,16 +55,17 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     }
   };
 
-  const handleEndQuiz = () => {
-    endQuiz(checkedAnswers).then((res) => {
-      if (res.success) {
-        console.log("sent");
-        setScore(res.data);
-        setFinishQuiz(true);
-      } else {
-        alert(res.error);
-      }
-    });
+  const handleEndQuiz = async () => {
+    try {
+      const response = await axios.post(`https://quizzywebapi.azurewebsites.net/api/quizzes/ended`, checkedAnswers, {
+        params: { quizId: selectedCard.id, userId: user?.id },
+      });
+      setScore(response.data);
+      setFinishQuiz(true);
+      return response;
+    } catch (error) {
+      return error;
+    }
   };
 
   const handleInputSubmit = () => {
@@ -119,7 +122,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
           </div>
         ) : (
           <div className="flex flex-col gap-12 min-h-[100vh] mt-12  items-center ">
-            <p className="flex justify-center items-center text-secondary text-3xl font-bold">Your time left is {formatTime(seconds)}.</p>
+            <p className="flex justify-center items-center text-secondary text-3xl font-bold">Your time left is {formatTime(seconds)} </p>
             {question &&
               question.map((question: Question) => (
                 <div className="flex justify-center items-center h-[18em] w-[40em] bg-secondary" key={question.id}>
