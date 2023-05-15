@@ -76,6 +76,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
       answers: answers,
     };
 
+    console.log(validation(newQuestion));
     if (validation(newQuestion)) {
       setQuestions((prev) => [...prev, newQuestion]);
       setNumOfQuestions((prev) => prev + 1);
@@ -93,9 +94,16 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
 
   const validation = (question: Question) => {
     let isValid = true;
-    if (question.text === "" || question.hint === "" || question.type === "" || question.answers.length === 0) {
+
+    if (
+      question.text === "" ||
+      question.hint === "" ||
+      question.type === "" ||
+      (selectedType !== "Text" ? question.answers.length === 0 : false)
+    ) {
       isValid = false;
     }
+
     question.answers.forEach((answer) => {
       if (answer.text === "") {
         isValid = false;
@@ -103,7 +111,8 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
     });
 
     let hasCorrectAnswer = question.answers.some((answer) => answer.correct === true);
-    if (!hasCorrectAnswer) isValid = false;
+
+    if (selectedType !== "Text") if (!hasCorrectAnswer) isValid = false;
     return isValid;
   };
 

@@ -45,7 +45,6 @@ const QuestionTypes = ({
     if (isHelpUsed) {
       setCurrentQuestion(halfHelp(currentQuestion));
     }
-    console.log(currentQuestion);
   }, [isHelpUsed]);
 
   return (
