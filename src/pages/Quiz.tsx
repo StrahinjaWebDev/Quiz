@@ -20,7 +20,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const [finishQuiz, setFinishQuiz] = useState(false);
   const [score, setScore] = useState(0);
   const [seconds, setSeconds] = useState(selectedCard.time);
-  const [halfHelpUsed, setHalfHelpUsed] = useState(false);
+  const [isHelpUsed, setIsHelpUsed] = useState(false);
 
   const { quizes, setSelectedCard, user } = useContext(appContext);
 
@@ -73,24 +73,9 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     setInputValue("");
   };
 
-  const halfHelp = (qestionAnswers: Answers[]) => {
-    let correctAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct === true);
-    let incorrectAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct !== true);
-    let halfLength = Math.floor(incorrectAnswers.length / 2);
-    let randomIncorrectAnswers = incorrectAnswers.slice(0, Math.floor(halfLength));
-    let randomNum = Math.floor(Math.random() * 2);
-    let answers;
-    if (randomNum === 1) {
-      answers = [...correctAnswers, ...randomIncorrectAnswers];
-    } else {
-      answers = [...randomIncorrectAnswers, ...correctAnswers];
-    }
-    return answers;
+  const useHalfHelp = (answerId: string) => {
+    setIsHelpUsed(true);
   };
-
-  useEffect(() => {
-    quizes?.();
-  }, []);
 
   useEffect(() => {
     questions();
@@ -152,8 +137,8 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                           <button>
                             <BsLightbulb onClick={() => handleShowHint(question.id)} size={"1.7em"} />
                           </button>
-                          <button onClick={() => halfHelp(question.answers)}>
-                            <FaStarHalfAlt size={"1.7em"} />
+                          <button>
+                            <FaStarHalfAlt size={"1.7em"} onClick={() => useHalfHelp(question.answers.id)} />
                           </button>
 
                           {hint === question.id && <p className="text-sm">{question.hint}</p>}
@@ -167,6 +152,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
                           handleInputSubmit={handleInputSubmit}
                           setInputValue={setInputValue}
                           checkedAnswers={checkedAnswers}
+                          isHelpUsed={isHelpUsed}
                         />
                       </div>
                     </div>

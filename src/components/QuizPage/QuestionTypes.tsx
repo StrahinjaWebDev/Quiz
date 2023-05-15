@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Question } from "../../models/Question";
 import { Answers } from "../../models/Answers";
 import Input from "../ReusableComponents/Input";
@@ -12,12 +12,45 @@ interface Props {
   inputValue: string;
   handleInputSubmit: () => void;
   checkedAnswers: Answers;
+  isHelpUsed: boolean;
 }
 
-const QuestionTypes = ({ question, handleCheckedAnswer, setInputValue, inputValue, handleInputSubmit, checkedAnswers }: Props) => {
+const QuestionTypes = ({
+  question,
+  handleCheckedAnswer,
+  setInputValue,
+  inputValue,
+  handleInputSubmit,
+  checkedAnswers,
+  isHelpUsed,
+}: Props) => {
+  const [currentQuestion, setCurrentQuestion] = useState(question.answers);
+
+  const halfHelp = (qestionAnswers: Answers[]) => {
+    let correctAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct === true);
+    let incorrectAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct !== true);
+    let halfLength = Math.floor(incorrectAnswers.length / 2);
+    let randomIncorrectAnswers = incorrectAnswers.slice(0, Math.floor(halfLength));
+    let randomNum = Math.floor(Math.random() * 2);
+    let answers;
+    if (randomNum === 1) {
+      answers = [...correctAnswers, ...randomIncorrectAnswers];
+    } else {
+      answers = [...randomIncorrectAnswers, ...correctAnswers];
+    }
+    return answers;
+  };
+
+  useEffect(() => {
+    if (isHelpUsed) {
+      setCurrentQuestion(halfHelp(currentQuestion));
+    }
+    console.log(currentQuestion);
+  }, [isHelpUsed]);
+
   return (
     <>
-      {question.answers.map((answer: Answers) => {
+      {currentQuestion.map((answer: Answers) => {
         return (
           <div className="pl-12 flex" key={answer.id}>
             {question.type === "Multiple" && (
