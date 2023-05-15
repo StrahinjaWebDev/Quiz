@@ -7,7 +7,7 @@ import { Quiz } from "../../models/Quiz";
 import { putQuiz } from "../../service/putQuiz";
 
 interface Props {
-  quizQuestions: Question[];
+  quizQuestions: Question[] | undefined | null;
   quizId: string;
 }
 

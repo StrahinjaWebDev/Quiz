@@ -125,11 +125,11 @@ const Admin = ({ admin }: any) => {
   }, [openQuizModalId]);
 
   return (
-    <>
+    <div className="w-screen h-screen overflow-y-hidden">
       {admin && (
         <>
           <Navbar showMailIcon={false} />
-          <div className="w-screen min-h-[70vh] justify-center items-center mt-1">
+          <div className="w-full min-h-[70%] justify-center items-center mt-1">
             <BoardSelection activeBoard={activeBoard} setActiveBoard={setActiveBoard} />
             <div className="flex mt-12 tablet:mt-0 gap-3 items-center desktop:ml-[10em]">
               {activeBoard === "Create" && (
@@ -174,22 +174,25 @@ const Admin = ({ admin }: any) => {
               )}
             </div>
             {activeBoard === "Create" && (
-              <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
-                <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto ">
-                  {quizzes.map((quiz) => (
-                    <QuizLayout
-                      active={quiz.active}
-                      id={quiz.id}
-                      name={quiz.name}
-                      quizQuestions={quizQuestions}
-                      quizzes={quizzes}
-                      setQuizQuestions={setQuizQuestions}
-                      setQuizzes={setQuizzes}
-                      key={quiz.id}
-                    />
-                  ))}
+              <div className="w-full flex justify-center items-center mt-3">
+                <div className="w-[80%] border h-[35em] px-8 flex-col flex bg-secondary pt-20 rounded-3xl items-center justify-center overflow-y-auto">
+                  {quizzes.map(
+                    (quiz) =>
+                      quiz.name &&
+                      quiz.id && (
+                        <QuizLayout
+                          active={quiz.active}
+                          id={quiz.id}
+                          name={quiz.name}
+                          quizQuestions={quizQuestions}
+                          quizzes={quizzes}
+                          setQuizQuestions={setQuizQuestions}
+                          setQuizzes={setQuizzes}
+                          key={quiz.id}
+                        />
+                      )
+                  )}
                 </div>
-                <p></p>
               </div>
             )}
             {activeBoard === "Edit" && <EditBoard setUsers={setUsers} users={users} />}
@@ -217,7 +220,7 @@ const Admin = ({ admin }: any) => {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 };
 
