@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Question } from "../../models/Question";
 import Button from "../ReusableComponents/Button";
 import { deleteQuiz } from "../../service/deleteQuiz";
-import Input from "../ReusableComponents/Input";
 import { Quiz as IQuiz } from "../../models/Quiz";
 import { getQuestions } from "../../service/getQuestions";
 import { putQuiz } from "../../service/putQuiz";
@@ -24,7 +23,6 @@ interface Props {
 const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, setQuizzes, setQuizQuestions }: Props) => {
   const [editQuizModal, setEditQuizModal] = useState(false);
   const [editQuizModalId, setEditQuizModalId] = useState("");
-  const [quizName, setQuizName] = useState("");
 
   const handleDeleteQuiz = async (quizId: string) => {
     await deleteQuiz(quizId);
@@ -52,23 +50,6 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
         alert(response.error);
       }
     }
-  };
-
-  const handleEditQuizName = async (quizId: string, newName: string) => {
-    const quiz = initialQuizzes.find((q) => q.id === quizId);
-    if (quiz) {
-      const updatedQuiz = { ...quiz, name: newName };
-      const response = await putQuiz(quizId, updatedQuiz);
-      if (response.success) {
-        setQuizzes(initialQuizzes.map((q) => (q.id === quizId ? updatedQuiz : q)));
-      } else {
-        alert(response.error);
-      }
-    }
-  };
-
-  const handleNewQuizName = () => {
-    handleEditQuizName(id, quizName);
   };
 
   return (

@@ -18,9 +18,6 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [time, setTime] = useState(0);
-  const [questionName, setQuestionName] = useState("");
-  const [type, setType] = useState("");
-  const [hint, setHint] = useState("");
 
   const [questions, setQuestions] = useState(quizQuestions);
 
@@ -180,7 +177,6 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
                       primary
                     />
                   </div>
-                  <Button primary label="Change" />
                 </div>
 
                 <div className="flex items-end gap-3">
@@ -193,7 +189,6 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
                       primary
                     />
                   </div>
-                  <Button primary label="Change" />
                 </div>
               </div>
               <div>
@@ -202,9 +197,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
                   {question.answers.map((answer) => (
                     <div className="flex gap-3" key={answer.id}>
                       <Input defaultValue={answer.text} onChange={(e) => handleAnswerChange(e, answer.id)} primary />
-                      <div className="max-w-1/2">
-                        <Button primary label="Change" />
-                      </div>
+                      <div className="max-w-1/2"></div>
                     </div>
                   ))}
                 </div>
