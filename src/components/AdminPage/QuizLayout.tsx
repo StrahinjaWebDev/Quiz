@@ -53,7 +53,7 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
   };
 
   return (
-    <div className="flex w-1/2 items-center gap-10 mt-5">
+    <div className="flex w-1/2 items-center gap-10 mt-8 ">
       <p className="text-sm text-main med:text-xl w-[30%] font-medium">{name}</p>
       <Button onClick={() => handleEditQuizModal(id)} label="Edit" primary />
       {editQuizModal && id === editQuizModalId && (

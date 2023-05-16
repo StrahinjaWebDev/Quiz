@@ -11,7 +11,6 @@ import { Question } from "../../../models/Question";
 import { Answers } from "../../../models/Answers";
 import { Quiz } from "../../../models/Quiz";
 import AreYouSureModal from "../../ReusableComponents/AreYouSureModal";
-import AddUserModal from "./AddUserModal";
 
 interface Props {
   answersDropdown: boolean;
@@ -44,6 +43,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
   const [addQuestionModal, setAddQuestionModal] = useState(false);
   const [numOfQuestions, setNumOfQuestions] = useState(0);
   const [addQuizModal, setAddQuizModal] = useState(false);
+  console.log(numOfAnswers);
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(e.target.value);
@@ -89,6 +89,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
   const clearAll = () => {
     setAnswers([]);
     setHint("");
+    setNumOfAnswers(0);
     setSelectedType("");
     setQuestionText("");
   };
