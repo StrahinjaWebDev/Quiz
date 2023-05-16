@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { User } from "../../models/User";
 import Button from "../ReusableComponents/Button";
 import Input from "../ReusableComponents/Input";
 import { deleteUser } from "../../service/deleteUser";
 import { putUser } from "../../service/putUser";
 import AreYouSureModal from "../ReusableComponents/AreYouSureModal";
+import { createPortal } from "react-dom";
 
 interface Props {
   users: User[];
@@ -17,10 +18,15 @@ const EditBoard = ({ users, setUsers }: Props) => {
   const [openUserEditModal, setOpenUserEditModal] = useState(false);
   const [password, setPassword] = useState("");
   const [areYouSureModalUserEdit, setAreYouSureModalUserEdit] = useState(false);
+  const [isClosing] = useState(false);
 
   const handleOpenEditUserEditModal = (userId: string) => {
     setSelectedUserId(userId);
     setOpenUserEditModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenUserEditModal(false);
   };
 
   const handleDeleteUser = async (userId: string) => {
@@ -48,6 +54,15 @@ const EditBoard = ({ users, setUsers }: Props) => {
     setAreYouSureModalUserEdit(!areYouSureModalUserEdit);
   };
 
+  useEffect(() => {
+    if (isClosing) {
+      setTimeout(() => {
+        setAreYouSureModalUserEdit(true);
+        setAreYouSureModalUserEdit(false);
+      }, 200); 
+    }
+  }, [isClosing]);
+
   return (
     <div className="w-screen h-[50vh] flex justify-center items-center mt-3 ">
       <div className="w-[80vw] h-[100%] flex-col flex bg-secondary rounded-[60px] items-center overflow-y-auto scroll-smooth">
@@ -59,22 +74,28 @@ const EditBoard = ({ users, setUsers }: Props) => {
           </div>
         ))}
         {openUserEditModal && (
-          <div className="absolute bg-main min-h-[13em] w-[25em] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white ">
+          <div
+            className={`absolute transform animation-forwards ${
+              !isClosing ? "animate-[appearScale_0.2s_ease]" : "animate-[dissAppearScale_0.2s_ease]"
+            } bg-main min-h-[13em] w-[25em] flex flex-col rounded-xl items-center gap-5 text-secondary border-2 border-white`}
+          >
             <div className=" justify-around  items-center w-[100%]  mt-3 flex flex-col gap-4">
               <p className="font-semibold text-3xl">Name: {users.find((user) => user.id === selectedUserId)?.username}</p>
               <p className="text-secondary font-semibold text-sm">New password: </p>
               <Input onChange={handlePasswordChange} value={password} primary placeholder="Input new password here..."></Input>
               <Button secondary onClick={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)} label="Submit" />
 
-              {areYouSureModalUserEdit && (
-                <AreYouSureModal
-                  message="Are you sure you want to edit user password?"
-                  onCancel={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}
-                  onConfirm={handleEditPassword}
-                />
-              )}
+              {areYouSureModalUserEdit &&
+                createPortal(
+                  <AreYouSureModal
+                    message="Are you sure you want to edit user password?"
+                    onCancel={() => setAreYouSureModalUserEdit(!areYouSureModalUserEdit)}
+                    onConfirm={handleEditPassword}
+                  />,
+                  document.body
+                )}
             </div>
-            <button className="absolute right-4 text-xl text-red-500" onClick={() => setOpenUserEditModal(!openUserEditModal)}>
+            <button className="absolute right-4 text-xl text-red-500" onClick={closeModal}>
               X
             </button>
           </div>

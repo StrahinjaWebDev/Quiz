@@ -9,9 +9,10 @@ import { putQuiz } from "../../service/putQuiz";
 interface Props {
   quizQuestions: Question[] | undefined | null;
   quizId: string;
+  setEditQuizModalId: () => void;
 }
 
-const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
+const EditQuizQuestions = ({ quizQuestions, quizId, setEditQuizModalId }: Props) => {
   const [quizData, setQuizData] = useState<Quiz | undefined>({});
   const [questionsDropdown, setQuestionsDropdown] = useState(false);
   const [name, setName] = useState("");
@@ -39,17 +40,16 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
   }, []);
 
   const saveSettings = async () => {
-    let putModel = {
-      id: quizData.id,
-      active: quizData.active,
-      category: category,
-      description: description,
-      name: name,
-      time: time,
-      questions: questions,
-    };
-    console.log(putModel);
     if (quizData) {
+      let putModel: Quiz = {
+        id: quizData.id,
+        active: quizData.active,
+        category: category,
+        description: description,
+        name: name,
+        time: time,
+        questions: questions,
+      };
       await putQuiz(quizId, putModel);
       getQuiz();
     }
@@ -115,43 +115,56 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
 
   return (
     <div>
-      <div className="flex flex-col items-start py-10">
+      <div className="flex flex-col items-center py-10">
         {quizData && quizData.name && quizData.category && (
           <div className="flex flex-col items-center gap-3">
+            <button className="absolute right-5 top-5 text-4xl font-bold text-red-500" onClick={() => setEditQuizModalId(!quizId)}>
+              X
+            </button>
             <div className="flex items-start flex-col pl-3">
-              <label htmlFor="quizzName">Quizz name</label>
+              <label className="text-main font-bold" htmlFor="quizzName">
+                Quizz name
+              </label>
               <Input onChange={(e) => setName(e.target.value)} id="quizzName" defaultValue={quizData.name} primary />
             </div>
             <div className="flex items-start flex-col pl-3">
-              <label htmlFor="quizzCategory">Quizz category</label>
+              <label className="text-main font-semibold" htmlFor="quizzCategory">
+                Quizz category
+              </label>
               <Input onChange={(e) => setCategory(e.target.value)} id="quizzCategory" defaultValue={quizData.category} primary />
             </div>
             <div className="flex items-start flex-col pl-3">
-              <label htmlFor="quizzDescription">Quizz description</label>
+              <label className="text-main font-medium" htmlFor="quizzDescription">
+                Quizz description
+              </label>
               <Input onChange={(e) => setDescription(e.target.value)} id="quizzDescription" defaultValue={quizData.description} primary />
             </div>
             <div className="flex items-start flex-col pl-3">
-              <label htmlFor="quizzTime">Quizz time</label>
+              <label className="text-main font-normal" htmlFor="quizzTime">
+                Quizz time
+              </label>
               <Input onChange={(e) => setTime(e.target.value)} id="quizzTime" defaultValue={quizData.time} primary />
             </div>
-            <div className="flex w-full justify-start ml-4">
+            <div className="flex w-full justify-center ml-4">
               <Button onClick={saveSettings} primary label="Save" />
             </div>
           </div>
         )}
-        <button onClick={() => setQuestionsDropdown(!questionsDropdown)}>Questions </button>
+        <div className="mt-12 ml-5">
+          <Button label="Questions" primary onClick={() => setQuestionsDropdown(!questionsDropdown)} />
+        </div>
         {quizQuestions &&
           questionsDropdown &&
           quizQuestions.map((question: Question) => (
-            <div key={question.id} className="flex flex-col gap-3 pt-2 ">
-              <div className="flex items-start flex-col pl-3">
+            <div key={question.id} className="flex  items-center gap-3 pt-2 ">
+              <div className="flex items-start flex-col pl-3 text-main font-medium">
                 <label htmlFor="name">Qustion name</label>
                 <Input onChange={(e) => question.id && handleQuestionText(e, question.id)} id="name" defaultValue={question.text} primary />
               </div>
               <div className="flex flex-col items-center gap-4">
                 <div className="flex items-end gap-3">
                   <div className="flex flex-col items-start gap-1">
-                    <label htmlFor="type">Question type</label>
+                    <label className="text-main font-medium" htmlFor="type">Question type</label>
                     <Input
                       onChange={(e) => question.id && handleQuestionType(e, question.id)}
                       id="type"
@@ -163,7 +176,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
 
                 <div className="flex items-end gap-3">
                   <div className="flex flex-col items-start gap-1">
-                    <label htmlFor="hint">Question hint</label>
+                    <label className="text-main font-medium" htmlFor="hint">Question hint</label>
                     <Input
                       onChange={(e) => question.id && handleQuestionHint(e, question.id)}
                       id="hint"

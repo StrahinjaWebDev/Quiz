@@ -19,7 +19,7 @@ const AreYouSureModal = ({ message, onConfirm, onCancel: close }: Props) => {
   }, [isClosing]);
 
   return (
-    <div className="fixed h-screen w-screen left-0 top-0 flex justify-center items-center">
+    <div className="fixed h-screen w-screen  left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 flex justify-center items-center">
       <div
         className={`absolute transform animation-forwards bg-secondary min-h-[8em] w-[15em] flex flex-col rounded-2xl justify-center items-center 
         ${!isClosing ? "animate-[appearScale_0.2s_ease]" : "animate-[dissAppearScale_0.2s_ease]"}

@@ -52,13 +52,17 @@ const QuizLayout = ({ id, name, quizQuestions, active, quizzes: initialQuizzes, 
   };
 
   return (
-    <div className="flex w-1/2 items-center gap-10 mt-8 ">
+    <div className="flex w-[90%] items-center gap-10 mt-8  justify-between">
       <p className="text-sm text-main med:text-xl w-[30%] font-medium">{name}</p>
       <Button onClick={() => handleEditQuizModal(id)} label="Edit" primary />
       {editQuizModal && id === editQuizModalId && (
         <div className="absolute flex justify-center w-[90%] h-[60%] bg-third top-1/2 left-1/2	transform -translate-x-1/2 -translate-y-1/2 rounded-xl overflow-y-auto">
-          <div className="w-4/5 mt-7 flex flex-col items-center ">
-            <div>{quizQuestions && <EditQuizQuestions quizId={editQuizModalId} quizQuestions={quizQuestions} />}</div>
+          <div className="w-4/5 mt-7 flex flex-col items-center justify-between ">
+            <div>
+              {quizQuestions && (
+                <EditQuizQuestions setEditQuizModalId={setEditQuizModal} quizId={editQuizModalId} quizQuestions={quizQuestions} />
+              )}
+            </div>
           </div>
         </div>
       )}

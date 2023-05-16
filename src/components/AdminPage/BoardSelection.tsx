@@ -16,14 +16,14 @@ const BoardSelection = ({ activeBoard, setActiveBoard }: Props) => {
         style={{ color: activeBoard === "Create" ? "#155263" : "white" }}
         onClick={() => setActiveBoard("Create")}
       >
-        Create quiz
+        Quizzes
       </button>
       <button
         style={{ color: activeBoard === "Edit" ? "#155263" : "white" }} //TODO: conditional classNames
         className="text-white  bg-secondary  hover:opacity-90 text-sm tablet:text-xl py-2 px-2 desktop:w-[7em]  rounded-[60px]"
         onClick={() => setActiveBoard("Edit")}
       >
-        Edit Users
+        Users
       </button>
     </div>
   );

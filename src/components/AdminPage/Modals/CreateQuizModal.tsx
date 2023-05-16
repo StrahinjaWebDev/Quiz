@@ -43,7 +43,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
   const [addQuestionModal, setAddQuestionModal] = useState(false);
   const [numOfQuestions, setNumOfQuestions] = useState(0);
   const [addQuizModal, setAddQuizModal] = useState(false);
-  console.log(numOfAnswers);
+  const [isClosing] = useState(false);
 
   const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = Number(e.target.value);
@@ -74,14 +74,23 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
       type: selectedType,
       text: questionText,
       hint: hint,
-      answers: answers,
+      answers:
+        selectedType === "Text"
+          ? [
+              {
+                id: uuid(),
+                text: writtenAnswer,
+                correct: true,
+              },
+            ]
+          : answers,
     };
 
-    console.log(validation(newQuestion));
     if (validation(newQuestion)) {
       setQuestions((prev) => [...prev, newQuestion]);
       setNumOfQuestions((prev) => prev + 1);
       setAddQuestionModal(false);
+      console.log(newQuestion);
       clearAll();
     }
   };
@@ -92,6 +101,7 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
     setNumOfAnswers(0);
     setSelectedType("");
     setQuestionText("");
+    setWrittenAnswer("");
   };
 
   const validation = (question: Question) => {
@@ -130,8 +140,28 @@ const CreateQuizModal = ({ setCreateQuizModal }: Props) => {
     setAnswers(array);
   }, [numOfAnswers]);
 
+  useEffect(() => {
+    setNumOfAnswers(0);
+    setAnswers([]);
+    setQuestionText("");
+    setHint("");
+  }, [selectedType]);
+
+  useEffect(() => {
+    if (isClosing) {
+      setTimeout(() => {
+        setCreateQuizModal(true);
+        setCreateQuizModal(false);
+      }, 200);
+    }
+  }, [isClosing]);
+
   return (
-    <div className="w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto">
+    <div
+      className={`w-[90vw] h-[90vh] bg-secondary absolute top-1/2 left-1/2 transform  -translate-x-1/2 -translate-y-1/2 rounded-xl  overflow-y-auto  ${
+        !isClosing ? "animate-[appearScale_0.2s_ease]" : "animate-[dissAppearScale_0.2s_ease]"
+      }`}
+    >
       <CreateQuizHeader
         setCategory={setCategory}
         setDescription={setDescription}

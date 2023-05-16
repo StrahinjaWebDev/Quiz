@@ -174,8 +174,8 @@ const Admin = ({ admin }: any) => {
               )}
             </div>
             {activeBoard === "Create" && (
-              <div className="w-full flex justify-center items-center mt-3">
-                <div className="w-[80%] border h-[35em] flex-col flex bg-secondary pt-20 rounded-3xl items-center justify-center overflow-y-auto">
+              <div className="w-full flex justify-center items-center mt-3 ">
+                <div className="w-[80%] border h-[25em] flex-col flex bg-secondary  rounded-[60px] items-center  overflow-y-auto">
                   {quizzes.map(
                     (quiz) =>
                       quiz.name &&
