@@ -7,6 +7,7 @@ interface IInputProps extends React.HTMLAttributes<HTMLInputElement> {
   value?: string;
   // eslint-disable-next-line no-unused-vars
   onChange?: (e: any) => void;
+  type?: string;
 }
 
 const Input = ({ value, primary, placeholder, onChange, ...props }: IInputProps) => {

@@ -2,8 +2,8 @@ import React from "react";
 import Input from "../ReusableComponents/Input";
 
 interface Props {
-  value: string;
-  isSelected: boolean;
+  value?: string;
+  isSelected?: boolean;
   // eslint-disable-next-line no-unused-vars
   onTextChange: (text: string) => void;
   // eslint-disable-next-line no-unused-vars

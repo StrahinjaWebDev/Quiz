@@ -7,45 +7,36 @@ interface Props {
   question: Question;
   // eslint-disable-next-line no-unused-vars
   handleCheckedAnswer: (answer: string, id: string, questionId: string, correct: boolean, type: string) => void;
-  highlightedAnswerId: string;
   setInputValue: React.Dispatch<React.SetStateAction<string>>;
   inputValue: string;
   handleInputSubmit: () => void;
-  checkedAnswers: Answers;
+  checkedAnswers: Answers[];
   isHelpUsed: boolean;
 }
 
-const QuestionTypes = ({
-  question,
-  handleCheckedAnswer,
-  setInputValue,
-  inputValue,
-  handleInputSubmit,
-  checkedAnswers,
-  isHelpUsed,
-}: Props) => {
+const QuestionTypes = ({ question, handleCheckedAnswer, setInputValue, inputValue, handleInputSubmit, checkedAnswers }: Props) => {
   const [currentQuestion, setCurrentQuestion] = useState(question.answers);
 
-  const halfHelp = (qestionAnswers: Answers[]) => {
-    let correctAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct === true);
-    let incorrectAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct !== true);
-    let halfLength = Math.floor(incorrectAnswers.length / 2);
-    let randomIncorrectAnswers = incorrectAnswers.slice(0, Math.floor(halfLength));
-    let randomNum = Math.floor(Math.random() * 2);
-    let answers;
-    if (randomNum === 1) {
-      answers = [...correctAnswers, ...randomIncorrectAnswers];
-    } else {
-      answers = [...randomIncorrectAnswers, ...correctAnswers];
-    }
-    return answers;
-  };
+  // const halfHelp = (qestionAnswers: Answers[]) => {
+  //   let correctAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct === true);
+  //   let incorrectAnswers = qestionAnswers.filter((answer: { correct: boolean }) => answer.correct !== true);
+  //   let halfLength = Math.floor(incorrectAnswers.length / 2);
+  //   let randomIncorrectAnswers = incorrectAnswers.slice(0, Math.floor(halfLength));
+  //   let randomNum = Math.floor(Math.random() * 2);
+  //   let answers;
+  //   if (randomNum === 1) {
+  //     answers = [...correctAnswers, ...randomIncorrectAnswers];
+  //   } else {
+  //     answers = [...randomIncorrectAnswers, ...correctAnswers];
+  //   }
+  //   return answers;
+  // };
 
-  useEffect(() => {
-    if (isHelpUsed) {
-      setCurrentQuestion(halfHelp(currentQuestion));
-    }
-  }, [isHelpUsed]);
+  // useEffect(() => {
+  //   if (isHelpUsed) {
+  //     setCurrentQuestion(halfHelp(currentQuestion));
+  //   }
+  // }, [isHelpUsed]);
 
   return (
     <>
@@ -63,10 +54,10 @@ const QuestionTypes = ({
               </button>
             )}
             {question.type === "Text" && (
-              <div className="flex">
+              <div className="flex mt-12 items-center">
                 <Input primary placeholder="Type in your answer" value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
 
-                <button onClick={handleInputSubmit} className="border-2 border-black border-dotted h-1/3">
+                <button onClick={handleInputSubmit} className=" border-black border-dotted h-1/3">
                   Submit
                 </button>
               </div>

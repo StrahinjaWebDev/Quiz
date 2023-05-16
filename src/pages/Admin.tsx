@@ -125,7 +125,7 @@ const Admin = ({ admin }: any) => {
   }, [openQuizModalId]);
 
   return (
-    <div className="w-screen h-screen overflow-y-hidden">
+    <div className="w-screen h-screen ">
       {admin && (
         <>
           <Navbar showMailIcon={false} />

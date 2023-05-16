@@ -53,7 +53,7 @@ const SignIn = ({ onGuestClick }: Props) => {
         <div className="w-[24em] tablet:w-[38em] h-[24.7em] tablet:h-[27em] bg-secondary rounded-[60px] flex flex-col items-center gap-6 justify-center ">
           <h1 className="pl-3 tablet:pl-0 text-main text-4xl pb-12 font-semibold">Number 1. online quiz in the world</h1>
           <Input onChange={handleUsernameChange} value={username} primary placeholder="Enter username..." />
-          <Input onChange={handlePasswordChange} value={password} primary placeholder="Enter a password..." />
+          <Input type="password" onChange={handlePasswordChange} value={password} primary placeholder="Enter a password..." />
           {error && (
             <div className="flex flex-col gap-2 items-center justify-center h-[2em]">
               <p className="text-red-500 text-[1em] font-medium">Wrong username or password!</p>

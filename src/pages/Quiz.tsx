@@ -22,7 +22,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
   const [seconds, setSeconds] = useState(selectedCard.time);
   const [isHelpUsed, setIsHelpUsed] = useState(false);
 
-  const { quizes, setSelectedCard, user } = useContext(appContext);
+  const { setSelectedCard, user } = useContext(appContext);
 
   const questions = async () => {
     const question = await getQuestions(selectedCard.id);
@@ -73,7 +73,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     setInputValue("");
   };
 
-  const useHalfHelp = (answerId: string) => {
+  const useHalfHelp = () => {
     setIsHelpUsed(true);
   };
 
@@ -109,10 +109,7 @@ const UserPreQuiz = ({ selectedCard }: any) => {
     <>
       {!finishQuiz ? (
         !startQuiz ? (
-          <div
-            key={selectedCard.id}
-            className="h-[25em] w-[40em] juctify-center items-center bg-secondary rounded-[15px] flex flex-col justify-around"
-          >
+          <div key={selectedCard.id} className="h-[25em] w-[40em]  items-center bg-secondary rounded-[15px] flex flex-col justify-around">
             <Instruction />
             <h1 className="text-3xl font-bold">{selectedCard.name}</h1>
             <p className="text-base font-medium">{selectedCard.description}</p>
@@ -121,30 +118,30 @@ const UserPreQuiz = ({ selectedCard }: any) => {
             <Button onClick={() => setSelectedCard && setSelectedCard(!selectedCard)} secondary label="Go back" />
           </div>
         ) : (
-          <div className="flex flex-col gap-12 min-h-[100vh] mt-12  items-center ">
+          <div className="flex flex-col gap-12 min-h-[100vh] mt-12 items-center overflow-y-auto">
             <p className="flex justify-center items-center text-secondary text-3xl font-bold">Your time left is {formatTime(seconds)} </p>
             {question &&
               question.map((question: Question) => (
-                <div className="flex justify-center items-center h-[18em] w-[40em] bg-secondary" key={question.id}>
+                <div className="flex justify-center items-center h-[18em] w-[40em] bg-secondary " key={question.id}>
                   <div className="w-[80%] h-[80%]">
                     <div className="w-[100%] h-[25%]">
                       <p className="text-2xl font-semibold">{selectedCard.name}</p>
                     </div>
-                    <div className="w-[100%] h-[75%] bg-white">
+                    <div className="w-[100%] h-[80%] flex flex-col justify-between bg-white items-center">
                       <div className="h-[30%] w-[100%] flex justify-around pt-2">
                         <p className="text-xl font-semibold">{question.text}</p>
                         <div className="flex gap-4 ">
                           <button>
                             <BsLightbulb onClick={() => handleShowHint(question.id)} size={"1.7em"} />
                           </button>
-                          <button>
-                            <FaStarHalfAlt size={"1.7em"} onClick={() => useHalfHelp(question.answers.id)} />
-                          </button>
+                          {/* <button>
+                            <FaStarHalfAlt size={"1.7em"} onClick={() => useHalfHelp()} />
+                          </button> */}
 
                           {hint === question.id && <p className="text-sm">{question.hint}</p>}
                         </div>
                       </div>
-                      <div className="h-[65%] w[100%]  grid grid-cols-2 gap-2">
+                      <div className="h-[65%] w[100%]  grid grid-cols-3 gap-2">
                         <QuestionTypes
                           question={question}
                           handleCheckedAnswer={handleCheckedAnswer}
