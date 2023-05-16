@@ -4,7 +4,6 @@ import Button from "../ReusableComponents/Button";
 import { deleteQuiz } from "../../service/deleteQuiz";
 import { Quiz as IQuiz } from "../../models/Quiz";
 import { getQuestions } from "../../service/getQuestions";
-import { putQuiz } from "../../service/putQuiz";
 import EditQuizQuestions from "./EditQuizQuestions";
 import { patchActivateQuiz } from "../../service/patchActivateQuiz";
 

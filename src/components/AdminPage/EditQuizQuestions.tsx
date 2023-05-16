@@ -39,33 +39,18 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
   }, []);
 
   const saveSettings = async () => {
+    let putModel = {
+      id: quizData.id,
+      active: quizData.active,
+      category: category,
+      description: description,
+      name: name,
+      time: time,
+      questions: questions,
+    };
+    console.log(putModel);
     if (quizData) {
-      await putQuiz(quizId, {
-        id: quizData.id,
-        active: quizData.active,
-        category: category,
-        description: description,
-        name: name,
-        time: time,
-        questions: quizQuestions?.map((question) => {
-          return {
-            id: question.id,
-            quizId: question.quizId,
-            type: question.type,
-            text: question.text,
-            hint: question.hint,
-            answers: question.answers.map((answer) => {
-              return {
-                id: answer.id,
-                questionId: answer.questionId,
-                text: answer.text,
-                correct: answer.correct,
-              };
-            }),
-          };
-        }),
-      });
-
+      await putQuiz(quizId, putModel);
       getQuiz();
     }
   };
@@ -106,8 +91,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
     setQuestions(newQuestions);
   };
 
-  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const questionId = questions?.find((question) => question.id === id);
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>, id: string, questionId: string) => {
     const newQuestions = questions?.map((question) => {
       if (question.id !== questionId) return question;
       else {
@@ -128,8 +112,6 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
     });
     setQuestions(newQuestions);
   };
-
-  console.log(questions);
 
   return (
     <div>
@@ -196,7 +178,7 @@ const EditQuizQuestions = ({ quizQuestions, quizId }: Props) => {
                   <p className="font-semibold text-main">Answers</p>
                   {question.answers.map((answer) => (
                     <div className="flex gap-3" key={answer.id}>
-                      <Input defaultValue={answer.text} onChange={(e) => handleAnswerChange(e, answer.id)} primary />
+                      <Input defaultValue={answer.text} onChange={(e) => handleAnswerChange(e, answer.id, question.id)} primary />
                       <div className="max-w-1/2"></div>
                     </div>
                   ))}
